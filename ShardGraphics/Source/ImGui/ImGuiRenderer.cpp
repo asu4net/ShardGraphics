@@ -36,16 +36,80 @@ namespace Shard::Graphics
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         ImGuizmo::BeginFrame();
+
+        static bool dockSpaceOpen = true;
+        static bool fullscreen = true;
+        static bool padding = false;
+        static ImGuiDockNodeFlags dockSpaceFlags = ImGuiDockNodeFlags_None;
         
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+        if (fullscreen)
+        {
+            const ImGuiViewport* viewport = ImGui::GetMainViewport();
+            ImGui::SetNextWindowPos(viewport->WorkPos);
+            ImGui::SetNextWindowSize(viewport->WorkSize);
+            ImGui::SetNextWindowViewport(viewport->ID);
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+            windowFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
+                ImGuiWindowFlags_NoMove;
+            windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+        }
+        else
+        {
+            dockSpaceFlags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
+        }
+        
+        if (dockSpaceFlags & ImGuiDockNodeFlags_PassthruCentralNode)
+            windowFlags |= ImGuiWindowFlags_NoBackground;
+        
+        if (!padding)
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
         for (const auto& widget : m_widgets)
         {
             ImGui::Begin(widget->GetName(), widget->opened, widget->flags);
             widget->OnUpdate();
             ImGui::End();
         }
-        
-        ImGuiIO& io = ImGui::GetIO();
 
+        //---------------------------------------------------------
+        // ImGui Dock Space Begin
+        //---------------------------------------------------------
+        
+        ImGui::Begin("Shard Graphics", &dockSpaceOpen, windowFlags);
+
+        if (!padding)
+            ImGui::PopStyleVar();
+
+        if (fullscreen)
+            ImGui::PopStyleVar(2);
+
+        // Submit the DockSpace
+        ImGuiIO& io = ImGui::GetIO();
+        if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+        {
+            const ImGuiID dockSpaceId = ImGui::GetID("ShardGraphicsDockSpace");
+            ImGui::DockSpace(dockSpaceId, ImVec2(0.0f, 0.0f), dockSpaceFlags);
+        }
+        else
+        {
+            printf("Docking disabled");
+        }
+        
+        for (const auto& widget : m_dockSpaceWidgets)
+        {
+            ImGui::Begin(widget->GetName(), widget->opened, widget->flags);
+            widget->OnUpdate();
+            ImGui::End();
+        }
+
+        ImGui::End();
+
+        //---------------------------------------------------------
+        // ImGui Dock Space End
+        //---------------------------------------------------------
+        
         if (!m_window.expired())
         {
             const auto window = m_window.lock();
@@ -68,9 +132,10 @@ namespace Shard::Graphics
     void ImGuiRenderer::Finalize()
     {
         for (const auto& widget : m_widgets)
-        {
             widget->OnDestroy();
-        }
+
+        for (const auto& widget : m_dockSpaceWidgets)
+            widget->OnDestroy();
         
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();

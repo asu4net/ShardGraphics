@@ -9,7 +9,7 @@ int main()
     window->Initialize();
     
     ImGuiRenderer& imGuiRenderer = ImGuiRenderer::CreateSingleton();
-    ImGuiRenderer::GetInstance().Initialize(window);
+    imGuiRenderer.Initialize(window);
 
     imGuiRenderer.PushWidget("Test Widget").lock()->UpdateEvent().Add([]()
     {

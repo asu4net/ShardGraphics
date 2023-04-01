@@ -20,7 +20,10 @@ namespace Shard::Graphics
         std::weak_ptr<T> PushWidget(TArgs&& ...args)
         {
             std::shared_ptr<T> widget = std::make_shared<T>(std::forward<TArgs>(args)...);
-            m_widgets.push_back(widget);
+            if (widget->IsInDockSpace())
+                m_dockSpaceWidgets.push_back(widget);
+            else
+                m_widgets.push_back(widget);
             widget->OnCreate();
             return widget;
         }
@@ -44,5 +47,6 @@ namespace Shard::Graphics
     private:
         std::weak_ptr<Window> m_window;
         std::vector<std::shared_ptr<ImGuiWidget>> m_widgets;
+        std::vector<std::shared_ptr<ImGuiWidget>> m_dockSpaceWidgets;
     };
 }

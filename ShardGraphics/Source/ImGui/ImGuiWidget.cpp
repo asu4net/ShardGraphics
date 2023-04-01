@@ -2,10 +2,11 @@
 
 namespace Shard::Graphics
 {
-    ImGuiWidget::ImGuiWidget(const char* name, bool* opened, const ImGuiWindowFlags flags)
+    ImGuiWidget::ImGuiWidget(const char* name, bool* opened, const ImGuiWindowFlags flags, const bool dockSpaceWidget)
         : flags(flags)
         , opened(opened)
         , m_name(name)
+        , m_dockSpaceWidget(dockSpaceWidget)
     {
     }
 

@@ -14,11 +14,12 @@ namespace Shard::Graphics
         ImGuiWindowFlags flags;
         bool* opened = nullptr;
         
-        ImGuiWidget(const char* name = "ImGuiWidget",  bool* opened = nullptr, ImGuiWindowFlags flags = 0);
+        ImGuiWidget(const char* name = "ImGuiWidget",  bool* opened = nullptr, ImGuiWindowFlags flags = 0, bool dockSpaceWidget = true);
         
         virtual ~ImGuiWidget() = default; 
         
         const char* GetName() const { return m_name; }
+        bool IsInDockSpace() const { return m_dockSpaceWidget; }
         
         FWidgetCreateEvent& CreateEvent() { return m_widgetCreateEvent; }
         FWidgetUpdateEvent& UpdateEvent() { return m_widgetUpdateEvent; }
@@ -33,5 +34,6 @@ namespace Shard::Graphics
         FWidgetUpdateEvent m_widgetUpdateEvent;
         FWidgetDestroyEvent m_widgetDestroyEvent;
         const char* m_name;
+        const bool m_dockSpaceWidget;
     };
 }
