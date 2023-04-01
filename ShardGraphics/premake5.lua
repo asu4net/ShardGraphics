@@ -13,7 +13,7 @@ project "ShardGraphics"
     {
         "%{prj.location}/Source/**.h",
         "%{prj.location}/Source/**.cpp",
-        "%{prj.location}/ThirdParty/ShardCore/Source/**.h",
+        "%{prj.location}/ThirdParty/ShardCore/ShardCore/Source/**.h",
         "%{prj.location}/ThirdParty/glm/Source/**.h",
         "%{prj.location}/ThirdParty/glm/Source/**.cpp",
         "%{prj.location}/ThirdParty/glm/Source/**.hpp",
@@ -28,7 +28,7 @@ project "ShardGraphics"
     includedirs
     {
         "%{prj.location}/Source",
-        "%{prj.location}/ThirdParty/ShardCore/Source",
+        "%{prj.location}/ThirdParty/ShardCore/ShardCore/Source",
         "%{prj.location}/ThirdParty/glm/Source",
         "%{prj.location}/ThirdParty/glad/Source",
         "%{prj.location}/ThirdParty/glad/Source",

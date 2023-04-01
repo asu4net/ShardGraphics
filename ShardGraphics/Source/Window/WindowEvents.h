@@ -1,15 +1,15 @@
 ﻿#pragma once
-#include "Delegates/MulticastDelegate.h"
+#include "ShardCore.h"
 #include "Maths.h"
 
 struct GLFWwindow;
 
 namespace Shard::Graphics
 {
-    DECLARE_EVENT(class WindowEvents, WindowBeginCreateEvent);
-    DECLARE_EVENT(class WindowEvents, WindowEndCreateEvent);
-    DECLARE_EVENT(class WindowEvents, WindowBeginDestroyEvent);
-    DECLARE_EVENT(class WindowEvents, WindowEndDestroyEvent);
+    DECLARE_EVENT(class WindowEvents, WindowBeginInitializeEvent);
+    DECLARE_EVENT(class WindowEvents, WindowEndInitializeEvent);
+    DECLARE_EVENT(class WindowEvents, WindowBeginFinalizeEvent);
+    DECLARE_EVENT(class WindowEvents, WindowEndFinalizeEvent);
     DECLARE_EVENT_TWO_PARAM(class WindowEvents, WindowResizeEvent, int, width, int, height)
     DECLARE_EVENT(class WindowEvents, WindowCloseEvent);
     DECLARE_EVENT_TWO_PARAM(class WindowEvents, WindowKeyPressedEvent, int, key, bool, repeat)
@@ -25,9 +25,9 @@ namespace Shard::Graphics
         WindowEvents() = default;
         ~WindowEvents()
         {
-            beginCreateEvent.RemoveAll();
-            beginDestroyEvent.RemoveAll();
-            endDestroyEvent.RemoveAll();
+            beginInitializeEvent.RemoveAll();
+            beginFinalizeEvent.RemoveAll();
+            endFinalizeEvent.RemoveAll();
             resizeEvent.RemoveAll();
             closeEvent.RemoveAll();
             keyPressedEvent.RemoveAll();
@@ -38,10 +38,10 @@ namespace Shard::Graphics
             scrollEvent.RemoveAll();
         }
         
-        WindowBeginCreateEvent beginCreateEvent;
-        WindowEndCreateEvent endCreateEvent;
-        WindowBeginDestroyEvent beginDestroyEvent;
-        WindowEndDestroyEvent endDestroyEvent;
+        WindowBeginInitializeEvent beginInitializeEvent;
+        WindowEndInitializeEvent endInitializeEvent;
+        WindowBeginFinalizeEvent beginFinalizeEvent;
+        WindowEndFinalizeEvent endFinalizeEvent;
         WindowResizeEvent resizeEvent;
         WindowCloseEvent closeEvent;
         WindowKeyPressedEvent keyPressedEvent;
@@ -52,10 +52,10 @@ namespace Shard::Graphics
         WindowScrollEvent scrollEvent;
         
     protected:
-        void CallBeginCreateEvent() { beginCreateEvent.Broadcast(); }
-        void CallEndCreateEvent() { endCreateEvent.Broadcast(); }
-        void CallBeginDestroyEvent() { beginDestroyEvent.Broadcast(); }
-        void CallEndDestroyEvent() { endDestroyEvent.Broadcast(); }
+        void CallBeginInitializeEvent() { beginInitializeEvent.Broadcast(); }
+        void CallEndInitializeEvent() { endInitializeEvent.Broadcast(); }
+        void CallBeginFinalizeEvent() { beginFinalizeEvent.Broadcast(); }
+        void CallEndFinalizeEvent() { endFinalizeEvent.Broadcast(); }
         void CallResizeEvent(const int width, const int height) { resizeEvent.Broadcast(width, height); }
         void CallCloseEvent() { closeEvent.Broadcast(); }
         void CallKeyPressedEvent(const int key, const bool repeat) { keyPressedEvent.Broadcast(key, repeat); }

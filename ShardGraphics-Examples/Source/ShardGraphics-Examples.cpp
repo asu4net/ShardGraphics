@@ -5,10 +5,11 @@ using namespace Shard;
 
 int main()
 {
-    const auto window = InstantiateWindow();
-    window->Create();
-    ImGuiRenderer imGuiRenderer;
-    imGuiRenderer.Create(window);
+    const auto window = Window::Create();
+    window->Initialize();
+    
+    ImGuiRenderer& imGuiRenderer = ImGuiRenderer::CreateSingleton();
+    ImGuiRenderer::GetInstance().Initialize(window);
 
     imGuiRenderer.PushWidget("Test Widget").lock()->UpdateEvent().Add([]()
     {
@@ -21,6 +22,9 @@ int main()
         imGuiRenderer.Update();
         window->Update();
     }
+
+    imGuiRenderer.Finalize();
+    ImGuiRenderer::DestroySingleton();
     
-    window->Destroy();
+    window->Finalize();
 }

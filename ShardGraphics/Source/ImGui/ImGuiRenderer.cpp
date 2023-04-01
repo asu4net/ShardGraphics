@@ -13,7 +13,7 @@ namespace Shard::Graphics
     {
     }
 
-    void ImGuiRenderer::Create(const std::shared_ptr<Window>& window)
+    void ImGuiRenderer::Initialize(const std::shared_ptr<Window>& window)
     {
         m_window = window;
         IMGUI_CHECKVERSION();
@@ -65,7 +65,7 @@ namespace Shard::Graphics
         }
     }
 
-    void ImGuiRenderer::Destroy()
+    void ImGuiRenderer::Finalize()
     {
         for (const auto& widget : m_widgets)
         {

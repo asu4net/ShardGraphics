@@ -2,17 +2,19 @@
 #include <memory>
 #include <vector>
 #include "ImGuiWidget.h"
+#include <ShardCore.h>
 
 namespace Shard::Graphics
 {
     class Window;
     
-    class ImGuiRenderer
+    class ImGuiRenderer : public Singleton<ImGuiRenderer>
     {
     public:
         ImGuiConfigFlags configFlags;
         
         ImGuiRenderer();
+        ImGuiRenderer(ImGuiRenderer&& other) = delete;
         
         template<typename T, typename ...TArgs>
         std::weak_ptr<T> PushWidget(TArgs&& ...args)
@@ -35,9 +37,9 @@ namespace Shard::Graphics
             
         }
         
-        void Create(const std::shared_ptr<Window>& window);
+        void Initialize(const std::shared_ptr<Window>& window);
         void Update();
-        void Destroy();
+        void Finalize();
         
     private:
         std::weak_ptr<Window> m_window;

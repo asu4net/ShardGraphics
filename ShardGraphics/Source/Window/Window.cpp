@@ -4,21 +4,21 @@
 
 namespace Shard::Graphics
 {
-    std::shared_ptr<Window> InstantiateWindow()
-    {
-        return std::make_shared<Window>();
-    }
-    
     void Window::Update()
     {
         glfwPollEvents();
         m_context->SwapBuffers();
     }
-    
-    void Window::Create(const Configuration& config)
+
+    std::shared_ptr<Window> Window::Create()
+    {
+        return std::make_shared<Window>();
+    }
+
+    void Window::Initialize(const Configuration& config)
     {
         assert(!m_created && "Window already created!");
-        Events().CallBeginCreateEvent();
+        Events().CallBeginInitializeEvent();
         m_config = config;
         
         assert(glfwInit() && "GLFW initialisation failed!");
@@ -47,17 +47,17 @@ namespace Shard::Graphics
         
         SetWindowCallbacks();
         
-        Events().CallEndCreateEvent();
+        Events().CallEndInitializeEvent();
         m_created = true;
     }
     
-    void Window::Destroy()
+    void Window::Finalize()
     {
-        Events().CallBeginDestroyEvent();
+        Events().CallBeginFinalizeEvent();
         assert(m_created && "You're trying to destroy an uncreated window!");
         glfwDestroyWindow(m_windowHandler);
         m_created = false;
-        Events().CallEndDestroyEvent();
+        Events().CallEndFinalizeEvent();
     }
 
     bool Window::KeepOpened()

@@ -10,7 +10,6 @@
 namespace Shard::Graphics
 {
     class Context;
-    std::shared_ptr<class Window> InstantiateWindow();
     
     class Window
     {
@@ -29,8 +28,10 @@ namespace Shard::Graphics
         
         virtual ~Window() = default;
         
-        virtual void Create(const Configuration& config = {});
-        virtual void Destroy();
+        static std::shared_ptr<Window> Create();
+        
+        virtual void Initialize(const Configuration& config = {});
+        virtual void Finalize();
         
         virtual void Update();
         
@@ -63,7 +64,7 @@ namespace Shard::Graphics
         Configuration m_config;
         bool m_created = false;
         bool m_keepWindowOpened = true;
-        
+
         virtual void SetWindowCallbacks();
     };
 }

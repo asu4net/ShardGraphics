@@ -32,6 +32,7 @@ project "ShardGraphics-Examples"
     {
         "%{prj.name}/Source",
         "ShardGraphics/Source",
+        "ShardGraphics/Thirdparty/ShardCore/ShardCore/Source",
         "ShardGraphics/Thirdparty/glm/Source",
         "ShardGraphics/Thirdparty/imgui/Source",
         "ShardGraphics/Thirdparty/imguizmo/Source"
