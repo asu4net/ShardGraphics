@@ -1,0 +1,3 @@
+[submodule "ShardGraphics/ThirdParty/ShardCore"]
+	path = ShardGraphics/ThirdParty/ShardCore
+	url = https://github.com/asu4net/ShardCore.git
