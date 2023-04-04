@@ -5,6 +5,7 @@ namespace Shard::Graphics
     ImGuiWidget::ImGuiWidget(const char* name, bool* opened, const ImGuiWindowFlags flags, const bool dockSpaceWidget)
         : flags(flags)
         , opened(opened)
+        , enabled(true)
         , m_name(name)
         , m_dockSpaceWidget(dockSpaceWidget)
     {

@@ -12,7 +12,8 @@ namespace Shard::Graphics
     {
     public:
         ImGuiWindowFlags flags;
-        bool* opened = nullptr;
+        bool* opened;
+        bool enabled;
         
         ImGuiWidget(const char* name = "ImGuiWidget",  bool* opened = nullptr, ImGuiWindowFlags flags = 0, bool dockSpaceWidget = true);
         
