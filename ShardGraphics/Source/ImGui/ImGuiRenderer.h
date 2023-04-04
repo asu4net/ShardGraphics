@@ -17,28 +17,23 @@ namespace Shard::Graphics
         ImGuiRenderer(ImGuiRenderer&& other) = delete;
         
         template<typename T, typename ...TArgs>
-        std::weak_ptr<T> PushWidget(TArgs&& ...args)
+        std::shared_ptr<T> CreateRootWidget(TArgs&& ...args)
         {
+            if (m_rootWidget)
+                DestroyRootWidget();
             std::shared_ptr<T> widget = std::make_shared<T>(std::forward<TArgs>(args)...);
-            if (widget->IsInDockSpace())
-                m_dockSpaceWidgets.push_back(widget);
-            else
-                m_widgets.push_back(widget);
-            widget->OnCreate();
+            m_rootWidget = widget;
+            widget->Create();
             return widget;
         }
-
+        
         template<typename ...TArgs>
-        std::weak_ptr<ImGuiWidget> PushWidget(TArgs&& ...args)
+        std::shared_ptr<ImGuiWidget> CreateRootWidget(TArgs&& ...args)
         {
-            return PushWidget<ImGuiWidget>(std::forward<TArgs>(args)...);
+            return CreateRootWidget<ImGuiWidget>(std::forward<TArgs>(args)...);
         }
 
-        //TODO PopWidget
-        void PopWidget(const std::weak_ptr<ImGuiWidget>& widget)
-        {
-            
-        }
+        void DestroyRootWidget();
         
         void Initialize(const std::shared_ptr<Window>& window);
         void Update();
@@ -46,7 +41,6 @@ namespace Shard::Graphics
         
     private:
         std::weak_ptr<Window> m_window;
-        std::vector<std::shared_ptr<ImGuiWidget>> m_widgets;
-        std::vector<std::shared_ptr<ImGuiWidget>> m_dockSpaceWidgets;
+        std::shared_ptr<ImGuiWidget> m_rootWidget;
     };
 }

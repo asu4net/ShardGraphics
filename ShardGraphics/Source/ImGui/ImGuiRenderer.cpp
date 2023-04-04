@@ -13,6 +13,14 @@ namespace Shard::Graphics
     {
     }
 
+    void ImGuiRenderer::DestroyRootWidget()
+    {
+        if (!m_rootWidget) return;
+        m_rootWidget->Destroy();
+        m_rootWidget.reset();
+        m_rootWidget = nullptr;
+    }
+
     void ImGuiRenderer::Initialize(const std::shared_ptr<Window>& window)
     {
         m_window = window;
@@ -98,13 +106,7 @@ namespace Shard::Graphics
         //     printf("Docking disabled");
         // }
         //
-        for (const auto& widget : m_dockSpaceWidgets)
-        {
-            if (!widget->enabled) continue;
-            ImGui::Begin(widget->GetName(), widget->opened, widget->flags);
-            widget->OnUpdate();
-            ImGui::End();
-        }
+        m_rootWidget->Update();
         //
         // ImGui::End();
 
@@ -133,12 +135,7 @@ namespace Shard::Graphics
 
     void ImGuiRenderer::Finalize()
     {
-        for (const auto& widget : m_widgets)
-            widget->OnDestroy();
-
-        for (const auto& widget : m_dockSpaceWidgets)
-            widget->OnDestroy();
-        
+        m_rootWidget->Destroy();
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();

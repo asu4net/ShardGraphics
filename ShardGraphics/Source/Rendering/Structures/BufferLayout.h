@@ -15,7 +15,14 @@ namespace Shard::Graphics
             : m_stride(0)
             , m_elements(elements)
         {
-            CalculateOffsetsAndStride();
+            uint32_t offset = 0;
+            m_stride = 0;
+            for (auto& element : m_elements)
+            {
+                element.offset = offset;
+                offset += element.size;
+                m_stride += element.size;
+            }
         }
         
         const std::vector<BufferElement>& GetElements() const { return m_elements; }
@@ -29,17 +36,5 @@ namespace Shard::Graphics
     private:
         uint32_t m_stride;
         std::vector<BufferElement> m_elements;
-
-        void CalculateOffsetsAndStride()
-        {
-            uint32_t offset = 0;
-            m_stride = 0;
-            for (auto& element : m_elements)
-            {
-                element.offset = offset;
-                offset += element.size;
-                m_stride += element.size;
-            }
-        }
     };
 }

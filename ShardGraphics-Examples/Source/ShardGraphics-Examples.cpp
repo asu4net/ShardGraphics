@@ -14,7 +14,7 @@ int main()
     ImGuiRenderer& imGuiRenderer = ImGuiRenderer::CreateSingleton();
     imGuiRenderer.Initialize(window);
     
-    imGuiRenderer.PushWidget("Test Widget").lock()->UpdateEvent().Add([]()
+    imGuiRenderer.CreateRootWidget("Test Widget")->UpdateEvent().Add([]()
     {
        ImGui::Button("My button"); 
     });
