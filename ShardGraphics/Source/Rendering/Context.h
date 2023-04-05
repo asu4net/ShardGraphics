@@ -21,6 +21,6 @@ namespace Shard::Graphics
         void SetViewport(int width, int height);
 
     private:
-        void* m_windowHandler = nullptr;
+        void* m_WindowHandler = nullptr;
     };
 }

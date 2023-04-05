@@ -15,10 +15,10 @@ namespace Shard::Graphics
         void Bind() const;
         void Unbind() const;
 
-        uint32_t GetCount() const { return m_count; }
+        uint32_t GetCount() const { return m_Count; }
     
     private:
-        uint32_t m_bufferId;
-        uint32_t m_count;
+        uint32_t m_BufferId;
+        uint32_t m_Count;
     };
 }

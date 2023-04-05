@@ -11,7 +11,7 @@ namespace Shard::Graphics
     class ImGuiRenderer : public Singleton<ImGuiRenderer>
     {
     public:
-        ImGuiConfigFlags configFlags;
+        ImGuiConfigFlags ConfigFlags;
         
         ImGuiRenderer();
         ImGuiRenderer(ImGuiRenderer&& other) = delete;
@@ -19,10 +19,10 @@ namespace Shard::Graphics
         template<typename T, typename ...TArgs>
         std::shared_ptr<T> CreateRootWidget(TArgs&& ...args)
         {
-            if (m_rootWidget)
+            if (m_RootWidget)
                 DestroyRootWidget();
             std::shared_ptr<T> widget = std::make_shared<T>(std::forward<TArgs>(args)...);
-            m_rootWidget = widget;
+            m_RootWidget = widget;
             widget->Create();
             return widget;
         }
@@ -40,7 +40,7 @@ namespace Shard::Graphics
         void Finalize();
         
     private:
-        std::weak_ptr<Window> m_window;
-        std::shared_ptr<ImGuiWidget> m_rootWidget;
+        std::weak_ptr<Window> m_Window;
+        std::shared_ptr<ImGuiWidget> m_RootWidget;
     };
 }

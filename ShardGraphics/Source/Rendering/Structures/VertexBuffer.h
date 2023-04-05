@@ -18,10 +18,10 @@ namespace Shard::Graphics
         void Unbind() const;
         
         void SetLayout(const BufferLayout& bufferLayout);
-        const BufferLayout& GetLayout() const { return m_layout; }
+        const BufferLayout& GetLayout() const { return m_Layout; }
     
     private:
-        uint32_t m_bufferId;
-        BufferLayout m_layout;
+        uint32_t m_BufferId;
+        BufferLayout m_Layout;
     };
 }

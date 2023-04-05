@@ -7,7 +7,7 @@ namespace Shard::Graphics
     void Window::Update()
     {
         glfwPollEvents();
-        m_context->SwapBuffers();
+        m_Context->SwapBuffers();
     }
 
     std::shared_ptr<Window> Window::Create()
@@ -17,83 +17,83 @@ namespace Shard::Graphics
 
     void Window::Initialize(const Configuration& config)
     {
-        assert(!m_created && "Window already created!");
+        assert(!m_bCreated && "Window already created!");
         Events().CallBeginInitializeEvent();
-        m_config = config;
+        m_Config = config;
         
         assert(glfwInit() && "GLFW initialisation failed!");
         
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_config.openglMajorVersion);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, m_config.openglMinorVersion);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_Config.OpenGlMajorVersion);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, m_Config.OpenGlMinorVersion);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
         
-        m_windowHandler = glfwCreateWindow(m_config.width, m_config.height, m_config.title.c_str(), nullptr, nullptr);
-        assert(m_windowHandler && "Window creation failed!");
+        m_WindowHandler = glfwCreateWindow(m_Config.Width, m_Config.Height, m_Config.Title.c_str(), nullptr, nullptr);
+        assert(m_WindowHandler && "Window creation failed!");
         
-        m_context = InstantiateContext(m_windowHandler);
-        glfwMakeContextCurrent(m_windowHandler);
+        m_Context = InstantiateContext(m_WindowHandler);
+        glfwMakeContextCurrent(m_WindowHandler);
         
-        m_context->Initialize();
+        m_Context->Initialize();
         
-        SetVSync(config.vSync);
-        m_context->SetViewport(m_config.width, m_config.height);
+        SetVSync(config.VSync);
+        m_Context->SetViewport(m_Config.Width, m_Config.Height);
 
-        Events().resizeEvent.Add([&](const int width, const int height)
+        Events().ResizeEvent.Add([&](const int width, const int height)
         {
-            m_config.width = width;
-            m_config.height = height;
+            m_Config.Width = width;
+            m_Config.Height = height;
         });
         
         SetWindowCallbacks();
         
         Events().CallEndInitializeEvent();
-        m_created = true;
+        m_bCreated = true;
     }
     
     void Window::Finalize()
     {
         Events().CallBeginFinalizeEvent();
-        assert(m_created && "You're trying to destroy an uncreated window!");
-        glfwDestroyWindow(m_windowHandler);
-        m_created = false;
+        assert(m_bCreated && "You're trying to destroy an uncreated window!");
+        glfwDestroyWindow(m_WindowHandler);
+        m_bCreated = false;
         Events().CallEndFinalizeEvent();
     }
 
     bool Window::KeepOpened()
     {
-        return !glfwWindowShouldClose(m_windowHandler) && m_keepWindowOpened;
+        return !glfwWindowShouldClose(m_WindowHandler) && m_KeepWindowOpened;
     }
 
     void Window::SetVSync(const bool enabled)
     {
         glfwSwapInterval(enabled ? 1 : 0);
-        m_config.vSync = enabled;
+        m_Config.VSync = enabled;
     }
 
     void Window::SetTitle(const std::string& title)
     {
-        m_config.title = title;
-        glfwSetWindowTitle(m_windowHandler, title.c_str());
+        m_Config.Title = title;
+        glfwSetWindowTitle(m_WindowHandler, title.c_str());
     }
     
     void Window::SetCursorMode(const CursorMode mode)
     {
-        m_config.cursorMode = mode;
+        m_Config.CursorMode = mode;
 		
-        switch (m_config.cursorMode)
+        switch (m_Config.CursorMode)
         {
         case CursorMode::Normal:
-            glfwSetInputMode(m_windowHandler, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            glfwSetInputMode(m_WindowHandler, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             return;
         case CursorMode::Disabled:
-            glfwSetInputMode(m_windowHandler, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            glfwSetInputMode(m_WindowHandler, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             return;
         case CursorMode::Hidden:
-            glfwSetInputMode(m_windowHandler, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+            glfwSetInputMode(m_WindowHandler, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
             return;
         case CursorMode::Captured:
-            glfwSetInputMode(m_windowHandler, GLFW_CURSOR, GLFW_CURSOR_CAPTURED);
+            glfwSetInputMode(m_WindowHandler, GLFW_CURSOR, GLFW_CURSOR_CAPTURED);
         }
     }
     
@@ -118,11 +118,11 @@ namespace Shard::Graphics
 
     void Window::SetWindowCallbacks()
     {
-        glfwSetWindowUserPointer(m_windowHandler, &m_events);
+        glfwSetWindowUserPointer(m_WindowHandler, &m_Events);
         
-        glfwSetWindowSizeCallback(m_windowHandler, WindowSizeCallback);
-        glfwSetWindowCloseCallback(m_windowHandler, WindowCloseCallback);
-        glfwSetKeyCallback(m_windowHandler, [](GLFWwindow* windowHandler, const int key, const int scanCode, const int action, const int mods)
+        glfwSetWindowSizeCallback(m_WindowHandler, WindowSizeCallback);
+        glfwSetWindowCloseCallback(m_WindowHandler, WindowCloseCallback);
+        glfwSetKeyCallback(m_WindowHandler, [](GLFWwindow* windowHandler, const int key, const int scanCode, const int action, const int mods)
         {
             switch (action)
             {
@@ -136,12 +136,12 @@ namespace Shard::Graphics
                 WindowKeyPressedCallback(windowHandler, key, true);
             }
         });
-        glfwSetCursorPosCallback(m_windowHandler, [](GLFWwindow* windowHandler, const double xPos, const double yPos)
+        glfwSetCursorPosCallback(m_WindowHandler, [](GLFWwindow* windowHandler, const double xPos, const double yPos)
         {
             const glm::vec2 cursorPosition = {static_cast<float>(xPos), static_cast<float>(yPos)};
             WindowCursorPosCallback(windowHandler, cursorPosition);
         });
-        glfwSetMouseButtonCallback(m_windowHandler, [](GLFWwindow* windowHandler, const int button, const int action, const int mods)
+        glfwSetMouseButtonCallback(m_WindowHandler, [](GLFWwindow* windowHandler, const int button, const int action, const int mods)
         {
             switch (action)
             {
@@ -155,7 +155,7 @@ namespace Shard::Graphics
                 WindowMouseButtonPressedCallback(windowHandler, button, true);
             }
         });
-        glfwSetScrollCallback(m_windowHandler, [](GLFWwindow* windowHandler, const double xOffset, const double yOffset)
+        glfwSetScrollCallback(m_WindowHandler, [](GLFWwindow* windowHandler, const double xOffset, const double yOffset)
         {
             const glm::vec2 offset = {static_cast<float>(xOffset), static_cast<float>(yOffset)};
             WindowScrollCallback(windowHandler, offset);

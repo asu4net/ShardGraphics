@@ -26,7 +26,7 @@ namespace Shard::Graphics
     }
 
     Context::Context(void* windowHandler)
-        : m_windowHandler(windowHandler)
+        : m_WindowHandler(windowHandler)
     {
     }
 
@@ -43,7 +43,7 @@ namespace Shard::Graphics
 
     void Context::SwapBuffers()
     {
-        glfwSwapBuffers(GetGlfWwindow(m_windowHandler));
+        glfwSwapBuffers(GetGlfWwindow(m_WindowHandler));
     }
 
     void Context::SetViewport(const int width, const int height)

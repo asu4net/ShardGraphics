@@ -9,21 +9,21 @@ namespace Shard::Graphics
     }
 
     VertexBuffer::VertexBuffer(const float* vertices, const uint32_t size)
-        : m_bufferId(0)
+        : m_BufferId(0)
     {
-        glCreateBuffers(1, &m_bufferId);
+        glCreateBuffers(1, &m_BufferId);
         Bind();
         glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
     }
 
     VertexBuffer::~VertexBuffer()
     {
-        glDeleteBuffers(1, &m_bufferId);
+        glDeleteBuffers(1, &m_BufferId);
     }
 
     void VertexBuffer::Bind() const
     {
-        glBindBuffer(GL_ARRAY_BUFFER, m_bufferId);
+        glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
     }
 
     void VertexBuffer::Unbind() const
@@ -33,6 +33,6 @@ namespace Shard::Graphics
 
     void VertexBuffer::SetLayout(const BufferLayout& bufferLayout)
     {
-        m_layout = bufferLayout;
+        m_Layout = bufferLayout;
     }
 }

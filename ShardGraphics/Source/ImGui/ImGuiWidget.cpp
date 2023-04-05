@@ -3,47 +3,47 @@
 namespace Shard::Graphics
 {
     ImGuiWidget::ImGuiWidget(const char* name, bool* opened, const ImGuiWindowFlags flags)
-        : flags(flags)
-        , opened(opened)
-        , enabled(true)
-        , m_name(name)
+        : Flags(flags)
+        , Opened(opened)
+        , Enabled(true)
+        , m_Name(name)
     {
-        m_beginDelegate = {[](const ImGuiWidget* widget)
+        m_BeginDelegate = {[](const ImGuiWidget* widget)
         {
-            ImGui::Begin(widget->GetName(), widget->opened, widget->flags);
+            ImGui::Begin(widget->GetName(), widget->Opened, widget->Flags);
         }};
-        m_endDelegate = {[&](){ ImGui::End(); }};
+        m_EndDelegate = {[&](){ ImGui::End(); }};
     }
 
     void ImGuiWidget::ClearBeginEndDelegates()
     {
-        m_beginDelegate.Clear();
-        m_endDelegate.Clear();
+        m_BeginDelegate.Clear();
+        m_EndDelegate.Clear();
     }
 
     void ImGuiWidget::Create()
     {
         OnCreate();
-        m_widgetCreateEvent.Broadcast();
+        m_WidgetCreateEvent.Broadcast();
     }
 
     void ImGuiWidget::Update()
     {
-        if (!enabled) return;
-        m_beginDelegate(this);
+        if (!Enabled) return;
+        m_BeginDelegate(this);
         OnUpdate();
-        m_widgetUpdateEvent.Broadcast();
-        for (const auto& child : m_childWidgets)
+        m_WidgetUpdateEvent.Broadcast();
+        for (const auto& child : m_ChildWidgets)
             child->Update();
-        m_endDelegate();
+        m_EndDelegate();
     }
     
     void ImGuiWidget::Destroy()
     {
         OnDestroy();
         ClearBeginEndDelegates();
-        m_widgetDestroyEvent.Broadcast();
-        m_widgetUpdateEvent.RemoveAll();
+        m_WidgetDestroyEvent.Broadcast();
+        m_WidgetUpdateEvent.RemoveAll();
     }
 
     void ImGuiWidget::OnCreate() {}

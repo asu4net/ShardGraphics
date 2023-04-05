@@ -13,6 +13,6 @@ namespace Shard::Graphics
         void Unbind() const;
         
     private:
-        uint32_t m_shaderId;
+        uint32_t m_ShaderId;
     };
 }

@@ -3,5 +3,5 @@
 
 namespace glm::colors
 {
-    constexpr vec4 greyColor{.2f, .2f, .2f, 1};
+    constexpr vec4 GreyColor{.2f, .2f, .2f, 1};
 }

@@ -6,6 +6,7 @@
 #include "Structures/IndexBuffer.h"
 #include "Structures/Shader.h"
 #include "Structures/VertexBuffer.h"
+#include "Structures/VertexArray.h"
 
 namespace Shard::Graphics
 {
@@ -20,10 +21,10 @@ namespace Shard::Graphics
         /// TEST TRIANGLE
         ////////////////////////
         
-        uint32_t m_vertexArray = 0;
+        std::shared_ptr<VertexArray> m_VertexArray;
+        std::shared_ptr<VertexBuffer> m_VertexBuffer;
+        std::shared_ptr<IndexBuffer> m_IndexBuffer;
         
-        std::unique_ptr<VertexBuffer> m_vertexBuffer;
-        std::unique_ptr<IndexBuffer> m_indexBuffer;
-        std::unique_ptr<Shader> m_shader;
+        std::unique_ptr<Shader> m_Shader;
     };
 }

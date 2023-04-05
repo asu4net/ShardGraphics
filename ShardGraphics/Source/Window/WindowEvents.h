@@ -25,45 +25,45 @@ namespace Shard::Graphics
         WindowEvents() = default;
         ~WindowEvents()
         {
-            beginInitializeEvent.RemoveAll();
-            beginFinalizeEvent.RemoveAll();
-            endFinalizeEvent.RemoveAll();
-            resizeEvent.RemoveAll();
-            closeEvent.RemoveAll();
-            keyPressedEvent.RemoveAll();
-            keyReleasedEvent.RemoveAll();
-            cursorPosEvent.RemoveAll();
-            mouseButtonPressedEvent.RemoveAll();
-            mouseButtonReleasedEvent.RemoveAll();
-            scrollEvent.RemoveAll();
+            BeginInitializeEvent.RemoveAll();
+            BeginFinalizeEvent.RemoveAll();
+            EndFinalizeEvent.RemoveAll();
+            ResizeEvent.RemoveAll();
+            CloseEvent.RemoveAll();
+            KeyPressedEvent.RemoveAll();
+            KeyReleasedEvent.RemoveAll();
+            CursorPosEvent.RemoveAll();
+            MouseButtonPressedEvent.RemoveAll();
+            MouseButtonReleasedEvent.RemoveAll();
+            ScrollEvent.RemoveAll();
         }
         
-        WindowBeginInitializeEvent beginInitializeEvent;
-        WindowEndInitializeEvent endInitializeEvent;
-        WindowBeginFinalizeEvent beginFinalizeEvent;
-        WindowEndFinalizeEvent endFinalizeEvent;
-        WindowResizeEvent resizeEvent;
-        WindowCloseEvent closeEvent;
-        WindowKeyPressedEvent keyPressedEvent;
-        WindowKeyReleasedEvent keyReleasedEvent;
-        WindowCursorPosEvent cursorPosEvent;
-        WindowMouseButtonPressedEvent mouseButtonPressedEvent;
-        WindowMouseButtonReleasedEvent mouseButtonReleasedEvent;
-        WindowScrollEvent scrollEvent;
+        WindowBeginInitializeEvent BeginInitializeEvent;
+        WindowEndInitializeEvent EndInitializeEvent;
+        WindowBeginFinalizeEvent BeginFinalizeEvent;
+        WindowEndFinalizeEvent EndFinalizeEvent;
+        WindowResizeEvent ResizeEvent;
+        WindowCloseEvent CloseEvent;
+        WindowKeyPressedEvent KeyPressedEvent;
+        WindowKeyReleasedEvent KeyReleasedEvent;
+        WindowCursorPosEvent CursorPosEvent;
+        WindowMouseButtonPressedEvent MouseButtonPressedEvent;
+        WindowMouseButtonReleasedEvent MouseButtonReleasedEvent;
+        WindowScrollEvent ScrollEvent;
         
     protected:
-        void CallBeginInitializeEvent() { beginInitializeEvent.Broadcast(); }
-        void CallEndInitializeEvent() { endInitializeEvent.Broadcast(); }
-        void CallBeginFinalizeEvent() { beginFinalizeEvent.Broadcast(); }
-        void CallEndFinalizeEvent() { endFinalizeEvent.Broadcast(); }
-        void CallResizeEvent(const int width, const int height) { resizeEvent.Broadcast(width, height); }
-        void CallCloseEvent() { closeEvent.Broadcast(); }
-        void CallKeyPressedEvent(const int key, const bool repeat) { keyPressedEvent.Broadcast(key, repeat); }
-        void CallKeyReleasedEvent(const int key) { keyReleasedEvent.Broadcast(key); }
-        void CallCursorPosEvent(const glm::vec2& pos) { cursorPosEvent.Broadcast(pos); }
-        void CallMouseButtonPressedEvent(const int mouseButton, const bool repeat) { mouseButtonPressedEvent.Broadcast(mouseButton, repeat); }
-        void CallMouseButtonReleasedEvent(const int mouseButton) { mouseButtonReleasedEvent.Broadcast(mouseButton); }
-        void CallScrollEvent(const glm::vec2& offset) { scrollEvent.Broadcast(offset); }
+        void CallBeginInitializeEvent() { BeginInitializeEvent.Broadcast(); }
+        void CallEndInitializeEvent() { EndInitializeEvent.Broadcast(); }
+        void CallBeginFinalizeEvent() { BeginFinalizeEvent.Broadcast(); }
+        void CallEndFinalizeEvent() { EndFinalizeEvent.Broadcast(); }
+        void CallResizeEvent(const int width, const int height) { ResizeEvent.Broadcast(width, height); }
+        void CallCloseEvent() { CloseEvent.Broadcast(); }
+        void CallKeyPressedEvent(const int key, const bool repeat) { KeyPressedEvent.Broadcast(key, repeat); }
+        void CallKeyReleasedEvent(const int key) { KeyReleasedEvent.Broadcast(key); }
+        void CallCursorPosEvent(const glm::vec2& pos) { CursorPosEvent.Broadcast(pos); }
+        void CallMouseButtonPressedEvent(const int mouseButton, const bool repeat) { MouseButtonPressedEvent.Broadcast(mouseButton, repeat); }
+        void CallMouseButtonReleasedEvent(const int mouseButton) { MouseButtonReleasedEvent.Broadcast(mouseButton); }
+        void CallScrollEvent(const glm::vec2& offset) { ScrollEvent.Broadcast(offset); }
 
         friend void WindowSizeCallback(GLFWwindow*, int, int);
         friend void WindowCloseCallback(GLFWwindow*);

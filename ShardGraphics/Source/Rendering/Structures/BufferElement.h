@@ -6,30 +6,30 @@ namespace Shard::Graphics
 {
     struct BufferElement
     {
-        ShaderDataType type;
-        std::string name;
-        bool normalized;
-        uint32_t size;
-        uint32_t offset;
+        ShaderDataType Type;
+        std::string Name;
+        bool Normalized;
+        uint32_t Size;
+        uint32_t Offset;
         
         BufferElement()
-            : type(ShaderDataType::None)
-            , normalized(false)
-            , size(0)
-            , offset(0)
+            : Type(ShaderDataType::None)
+            , Normalized(false)
+            , Size(0)
+            , Offset(0)
         {}
         
         BufferElement(const ShaderDataType type, const std::string& name, const bool normalized = false)
-            : type(type)
-            , name(name)
-            , normalized(normalized)
-            , size(ShaderDataTypeToSize(type))
-            , offset(0)
+            : Type(type)
+            , Name(name)
+            , Normalized(normalized)
+            , Size(ShaderDataTypeToSize(type))
+            , Offset(0)
         {}
 
         uint32_t GetComponentCount() const
         {
-            switch (type)
+            switch (Type)
             {
             case ShaderDataType::None:   return 0;
             case ShaderDataType::Float:  return 1;

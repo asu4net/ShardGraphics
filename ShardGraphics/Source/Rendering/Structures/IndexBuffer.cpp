@@ -9,22 +9,22 @@ namespace Shard::Graphics
     }
 
     IndexBuffer::IndexBuffer(const uint32_t* indices, const uint32_t count)
-        : m_bufferId(0)
-        , m_count(count)
+        : m_BufferId(0)
+        , m_Count(count)
     {
-        glCreateBuffers(1, &m_bufferId);
+        glCreateBuffers(1, &m_BufferId);
         Bind();
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
     }
 
     IndexBuffer::~IndexBuffer()
     {
-        glDeleteBuffers(1, &m_bufferId);
+        glDeleteBuffers(1, &m_BufferId);
     }
 
     void IndexBuffer::Bind() const
     {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_bufferId);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_BufferId);
     }
 
     void IndexBuffer::Unbind() const

@@ -9,21 +9,21 @@
 namespace Shard::Graphics
 {
     ImGuiRenderer::ImGuiRenderer()
-        : configFlags(0)
+        : ConfigFlags(0)
     {
     }
 
     void ImGuiRenderer::DestroyRootWidget()
     {
-        if (!m_rootWidget) return;
-        m_rootWidget->Destroy();
-        m_rootWidget.reset();
-        m_rootWidget = nullptr;
+        if (!m_RootWidget) return;
+        m_RootWidget->Destroy();
+        m_RootWidget.reset();
+        m_RootWidget = nullptr;
     }
 
     void ImGuiRenderer::Initialize(const std::shared_ptr<Window>& window)
     {
-        m_window = window;
+        m_Window = window;
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
@@ -31,7 +31,7 @@ namespace Shard::Graphics
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-        io.ConfigFlags |= configFlags;
+        io.ConfigFlags |= ConfigFlags;
         GLFWwindow* windowHandler = static_cast<GLFWwindow*>(window->GetHandler());
         ImGui_ImplGlfw_InitForOpenGL(windowHandler, true);
         ImGui_ImplOpenGL3_Init("#version 410");
@@ -106,7 +106,7 @@ namespace Shard::Graphics
         //     printf("Docking disabled");
         // }
         //
-        m_rootWidget->Update();
+        m_RootWidget->Update();
         //
         // ImGui::End();
 
@@ -114,9 +114,9 @@ namespace Shard::Graphics
         // ImGui Dock Space End
         //---------------------------------------------------------
         ImGuiIO& io = ImGui::GetIO();
-        if (!m_window.expired())
+        if (!m_Window.expired())
         {
-            const auto window = m_window.lock();
+            const auto window = m_Window.lock();
             io.DisplaySize = { window->GetWidth(), window->GetHeight() };
         }
 
@@ -135,7 +135,7 @@ namespace Shard::Graphics
 
     void ImGuiRenderer::Finalize()
     {
-        m_rootWidget->Destroy();
+        m_RootWidget->Destroy();
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();

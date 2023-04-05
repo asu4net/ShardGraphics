@@ -12,27 +12,27 @@ namespace Shard::Graphics
     class ImGuiWidget
     {
     public:
-        ImGuiWindowFlags flags;
-        bool* opened;
-        bool enabled;
+        ImGuiWindowFlags Flags;
+        bool* Opened;
+        bool Enabled;
         
         ImGuiWidget(const char* name = "ImGuiWidget", bool* opened = nullptr, ImGuiWindowFlags flags = 0);
         
         virtual ~ImGuiWidget() = default; 
         
-        const char* GetName() const { return m_name; }
+        const char* GetName() const { return m_Name; }
         
-        Delegate<void(ImGuiWidget*)> GetBeginDelegate() const { return m_beginDelegate; }
-        Delegate<void()> GetEndDelegate() const { return m_endDelegate; }
+        Delegate<void(ImGuiWidget*)> GetBeginDelegate() const { return m_BeginDelegate; }
+        Delegate<void()> GetEndDelegate() const { return m_EndDelegate; }
 
-        void SetBeginDelegate(const Delegate<void(ImGuiWidget*)>& beginDelegate) { m_beginDelegate = beginDelegate; }
-        void SetEndDelegate(const Delegate<void()>& endDelegate) { m_endDelegate = endDelegate; }
+        void SetBeginDelegate(const Delegate<void(ImGuiWidget*)>& beginDelegate) { m_BeginDelegate = beginDelegate; }
+        void SetEndDelegate(const Delegate<void()>& endDelegate) { m_EndDelegate = endDelegate; }
         
         void ClearBeginEndDelegates();
         
-        FWidgetCreateEvent& CreateEvent() { return m_widgetCreateEvent; }
-        FWidgetUpdateEvent& UpdateEvent() { return m_widgetUpdateEvent; }
-        FWidgetDestroyEvent& DestroyEvent() { return m_widgetDestroyEvent; }
+        FWidgetCreateEvent& CreateEvent() { return m_WidgetCreateEvent; }
+        FWidgetUpdateEvent& UpdateEvent() { return m_WidgetUpdateEvent; }
+        FWidgetDestroyEvent& DestroyEvent() { return m_WidgetDestroyEvent; }
 
         void Create();
         void Update();
@@ -42,7 +42,7 @@ namespace Shard::Graphics
         std::shared_ptr<T> PushWidget(TArgs&& ...args)
         {
             std::shared_ptr<T> widget = std::make_shared<T>(std::forward<TArgs>(args)...);
-            m_childWidgets.push_back(widget);
+            m_ChildWidgets.push_back(widget);
             widget->Create();
             return widget;
         }
@@ -59,12 +59,12 @@ namespace Shard::Graphics
         virtual void OnDestroy();
     
     private:
-        const char* m_name;
-        Delegate<void(ImGuiWidget*)> m_beginDelegate;
-        Delegate<void()> m_endDelegate;
-        FWidgetCreateEvent m_widgetCreateEvent;
-        FWidgetUpdateEvent m_widgetUpdateEvent;
-        FWidgetDestroyEvent m_widgetDestroyEvent;
-        std::vector<std::shared_ptr<ImGuiWidget>> m_childWidgets;
+        const char* m_Name;
+        Delegate<void(ImGuiWidget*)> m_BeginDelegate;
+        Delegate<void()> m_EndDelegate;
+        FWidgetCreateEvent m_WidgetCreateEvent;
+        FWidgetUpdateEvent m_WidgetUpdateEvent;
+        FWidgetDestroyEvent m_WidgetDestroyEvent;
+        std::vector<std::shared_ptr<ImGuiWidget>> m_ChildWidgets;
     };
 }
