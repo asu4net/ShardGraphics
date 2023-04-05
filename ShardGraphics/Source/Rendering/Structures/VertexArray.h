@@ -11,7 +11,7 @@ namespace Shard::Graphics
     class VertexArray
     {
     public:
-        static std::shared_ptr<VertexArray> Create();
+        static VertexArray* Create();
         
         VertexArray();
         ~VertexArray();

@@ -3,9 +3,9 @@
 
 namespace Shard::Graphics
 {
-    std::shared_ptr<IndexBuffer> IndexBuffer::Create(const uint32_t* indices, uint32_t count)
+    IndexBuffer* IndexBuffer::Create(const uint32_t* indices, const uint32_t count)
     {
-        return std::make_shared<IndexBuffer>(indices, count);
+        return new IndexBuffer(indices, count);
     }
 
     IndexBuffer::IndexBuffer(const uint32_t* indices, const uint32_t count)

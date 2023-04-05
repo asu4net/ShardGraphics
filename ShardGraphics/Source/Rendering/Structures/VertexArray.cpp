@@ -1,6 +1,7 @@
 ﻿#include "VertexArray.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include <cassert>
 #include <glad/glad.h>
 
 namespace Shard::Graphics
@@ -25,9 +26,9 @@ namespace Shard::Graphics
         }
     }
     
-    std::shared_ptr<VertexArray> VertexArray::Create()
+    VertexArray* VertexArray::Create()
     {
-        return std::make_shared<VertexArray>();
+        return new VertexArray();
     }
 
     VertexArray::VertexArray()
@@ -52,6 +53,8 @@ namespace Shard::Graphics
 
     void VertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
     {
+        assert(!vertexBuffer->GetLayout().GetElements().empty() && "Vertex buffer has no layout!");
+        
         glBindVertexArray(m_VertexArrayId);
         vertexBuffer->Bind();
         uint32_t index = 0;

@@ -9,7 +9,7 @@ namespace Shard::Graphics
     class VertexBuffer
     {
     public:
-        static std::shared_ptr<VertexBuffer> Create(const float* vertices, uint32_t size);
+        static VertexBuffer* Create(const float* vertices, uint32_t size);
         
         VertexBuffer(const float* vertices, uint32_t size);
         ~VertexBuffer();

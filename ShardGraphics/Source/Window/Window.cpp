@@ -10,9 +10,9 @@ namespace Shard::Graphics
         m_Context->SwapBuffers();
     }
 
-    std::shared_ptr<Window> Window::Create()
+    Window* Window::Create()
     {
-        return std::make_shared<Window>();
+        return new Window();
     }
 
     void Window::Initialize(const Configuration& config)

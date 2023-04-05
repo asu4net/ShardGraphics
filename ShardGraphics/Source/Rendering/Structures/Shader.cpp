@@ -5,6 +5,11 @@
 
 namespace Shard::Graphics
 {
+    Shader* Shader::Create(const std::string& vertexSource, const std::string& fragmentSource)
+    {
+        return new Shader(vertexSource, fragmentSource);
+    }
+
     Shader::Shader(const std::string& vertexSource, const std::string& fragmentSource)
         : m_ShaderId(0)
     {
