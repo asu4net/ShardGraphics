@@ -15,18 +15,31 @@ int main()
     ImGuiRenderer& imGuiRenderer = ImGuiRenderer::CreateSingleton();
     imGuiRenderer.Initialize(window);
     
-    imGuiRenderer.CreateRootWidget("Test Widget")->UpdateEvent().Add([]()
+    imGuiRenderer.CreateRootWidget("Camera")->UpdateEvent().Add([]()
     {
        ImGui::Button("My button"); 
     });
+
+    constexpr CameraConfiguration cameraConfiguration{
+        Projection::Orthographic,
+        1
+    };
+    const Transform cameraTransform { {0.3f, 0.3, 0.f} };
+    
+    RenderCamera renderCamera = {
+        cameraConfiguration,
+        cameraTransform,
+        window->GetAspect()
+    };
     
     while (window->KeepOpened())
     {
         renderer2D.SetClearColor(window->GetBackgroundColor());
         renderer2D.Clear();
+        renderer2D.SetRenderCamera(renderCamera);
         renderer2D.DrawPrimitive(PrimitiveType::Triangle, {}, glm::LightRedColor);
-        renderer2D.Update();
         
+        renderer2D.Update();
         imGuiRenderer.Update();
         window->Update();
     }

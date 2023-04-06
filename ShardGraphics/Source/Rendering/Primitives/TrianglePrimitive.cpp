@@ -65,11 +65,11 @@ namespace Shard::Graphics
         delete[] m_VertexData;
     }
 
-    void TrianglePrimitive::SetVertexData(const Transform& transform, const glm::vec4& color)
+    void TrianglePrimitive::SetVertexData(const glm::mat4 mvpMatrix, const glm::vec4& color)
     {
-        m_VertexData[0] = { glm::mat4(transform) * glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f), color };
-        m_VertexData[1] = { glm::mat4(transform) * glm::vec4( 0.5f, -0.5f, 0.0f, 1.0f), color };
-        m_VertexData[2] = { glm::mat4(transform) * glm::vec4( 0.0f,  0.5f, 0.0f, 1.0f), color };
+        m_VertexData[0] = { mvpMatrix * glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f), color };
+        m_VertexData[1] = { mvpMatrix * glm::vec4( 0.5f, -0.5f, 0.0f, 1.0f), color };
+        m_VertexData[2] = { mvpMatrix * glm::vec4( 0.0f,  0.5f, 0.0f, 1.0f), color };
         m_VertexBuffer->SetData(m_VertexData, static_cast<uint32_t>(VertexDataCount * sizeof(float)));
     }
 

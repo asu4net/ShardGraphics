@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <array>
 #include <memory>
-#include "Maths.h"
+#include "Math/Math.h"
 
 namespace Shard::Graphics
 {
@@ -34,7 +34,7 @@ namespace Shard::Graphics
         TrianglePrimitive();
         ~TrianglePrimitive();
 
-        void SetVertexData(const Transform& transform, const glm::vec4& color);
+        void SetVertexData(const glm::mat4 mvpMatrix, const glm::vec4& color);
         
         const std::shared_ptr<Shader>& GetShader() const { return m_Shader; }
         std::shared_ptr<RenderCommand> CreateRenderCommand();

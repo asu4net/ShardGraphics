@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "ShardCore.h"
-#include "Maths.h"
+#include "Math/Math.h"
 
 struct GLFWwindow;
 

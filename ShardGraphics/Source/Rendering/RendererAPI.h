@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <memory>
 #include <glm/glm.hpp>
-#include "Maths.h"
+#include "Math.h"
 
 namespace Shard::Graphics
 {

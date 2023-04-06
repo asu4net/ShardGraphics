@@ -1,10 +1,9 @@
-﻿#pragma once
+#pragma once
 #include <glm/glm.hpp>
-#include "glm/gtx/quaternion.hpp"
+#include <glm/gtx/quaternion.hpp>
 
 namespace glm
 {
-
     /////////////////////////
     /// COLORS
     ////////////////////////
@@ -49,23 +48,4 @@ namespace glm
     ////////////////////////
 
     constexpr mat4 IdentityMatrix = mat4(1);
-}
-
-namespace Shard
-{
-    struct Transform
-    {
-        glm::vec3 Position = glm::ZeroVector;
-        glm::vec3 Rotation = glm::ZeroVector;
-        glm::vec3 Scale = glm::OneVector;
-
-        explicit operator glm::mat4() const
-        {
-            glm::mat4 transform = glm::IdentityMatrix;
-            transform = glm::translate(transform, Position);
-            transform *= glm::toMat4(glm::quat(Rotation));
-            transform = glm::scale(transform, Scale);
-            return transform;
-        }
-    };
 }

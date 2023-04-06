@@ -2,7 +2,7 @@
 #include <memory>
 #include <string>
 #include "WindowEvents.h"
-#include "Maths.h"
+#include "Math/Math.h"
 
 //TODO: Add controller support
 //TODO: Add window icon support
