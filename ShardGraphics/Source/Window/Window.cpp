@@ -1,6 +1,6 @@
 ﻿#include "Window.h"
 #include <glfw/glfw3.h>
-#include "Rendering/Context.h"
+#include "Rendering/RenderingContext.h"
 
 namespace Shard::Graphics
 {
@@ -37,7 +37,6 @@ namespace Shard::Graphics
         m_Context->Initialize();
         
         SetVSync(config.VSync);
-        m_Context->SetViewport(m_Config.Width, m_Config.Height);
 
         Events().ResizeEvent.Add([&](const int width, const int height)
         {

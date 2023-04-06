@@ -117,7 +117,7 @@ namespace Shard::Graphics
         if (!m_Window.expired())
         {
             const auto window = m_Window.lock();
-            io.DisplaySize = { window->GetWidth(), window->GetHeight() };
+            io.DisplaySize = {static_cast<float>(window->GetWidth()), static_cast<float>(window->GetHeight())};
         }
 
         ImGui::Render();

@@ -1,4 +1,4 @@
-﻿#include "Context.h"
+﻿#include "RenderingContext.h"
 #include <cassert>
 #include "glad/glad.h"
 #include <glfw/glfw3.h>
@@ -9,8 +9,8 @@ namespace Shard::Graphics
     static void APIENTRY OnDebugMessageCallback(GLenum source, GLenum type, unsigned int id, GLenum severity,
             GLsizei length, const char* message, const void* userParam)
     {
-        if (!Context::EnableDebugMessages) return;
-        Context::OnDebugMessage(message);
+        if (!RenderingContext::EnableDebugMessages) return;
+        RenderingContext::OnDebugMessage(message);
     }
 #endif
 
@@ -20,17 +20,17 @@ namespace Shard::Graphics
         return glfWwindowHandler;
     }
     
-    std::shared_ptr<Context> InstantiateContext(void* windowHandler)
+    std::shared_ptr<RenderingContext> InstantiateContext(void* windowHandler)
     {
-        return std::make_shared<Context>(windowHandler);
+        return std::make_shared<RenderingContext>(windowHandler);
     }
 
-    Context::Context(void* windowHandler)
+    RenderingContext::RenderingContext(void* windowHandler)
         : m_WindowHandler(windowHandler)
     {
     }
 
-    void Context::Initialize()
+    void RenderingContext::Initialize()
     {
         assert(gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)) && "Failed to initialize glad!");
         
@@ -41,13 +41,8 @@ namespace Shard::Graphics
 #endif
     }
 
-    void Context::SwapBuffers()
+    void RenderingContext::SwapBuffers()
     {
         glfwSwapBuffers(GetGlfWwindow(m_WindowHandler));
-    }
-
-    void Context::SetViewport(const int width, const int height)
-    {
-        glViewport(0, 0, width, height);
     }
 }

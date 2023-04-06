@@ -39,6 +39,7 @@ namespace Shard::Graphics
 
     VertexArray::~VertexArray()
     {
+        glDeleteVertexArrays(1, &m_VertexArrayId);
     }
 
     void VertexArray::Bind() const
@@ -68,17 +69,17 @@ namespace Shard::Graphics
                 ShaderDataTypeToOpenGlBaseType(element.Type),
                 element.Normalized ? GL_TRUE : GL_FALSE,
                 bufferLayout.GetStride(),
-                reinterpret_cast<const void*>(element.Offset)
+                reinterpret_cast<void*>(static_cast<intptr_t>(element.Offset))
                 );
             index++;
         }
         m_VertexBuffers.push_back(vertexBuffer);
     }
     
-    void VertexArray::AddIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+    void VertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
     {
         glBindVertexArray(m_VertexArrayId);
         indexBuffer->Bind();
-        m_IndexBuffers.push_back(indexBuffer);
+        m_IndexBuffer = indexBuffer;
     }
 }
