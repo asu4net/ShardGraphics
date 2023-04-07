@@ -6,15 +6,7 @@
 
 namespace Shard::Graphics
 {
-    struct RenderCamera
-    {
-        CameraConfiguration Configuration = {};
-        Transform ViewTransform = {};
-        float AspectRatio = 1280.f / 720.f;
-        bool bAutoSetMatrices = true;
-        glm::mat4 ProjectionMatrix = glm::IdentityMatrix;
-        glm::mat4 ViewMatrix = glm::IdentityMatrix;
-    };
+    class Camera;
     
     class Renderer2D : public Singleton<Renderer2D>
     {
@@ -26,14 +18,19 @@ namespace Shard::Graphics
         void Update();
         void Finalize();
 
-        void SetRenderCamera(const RenderCamera& renderCamera);
+        void Begin(const Camera& renderCamera);
         void SetClearColor(const glm::vec4 clearColor);
         void Clear();
         void SetViewPort(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
         void DrawPrimitive(PrimitiveType type, const Transform& transform = {}, const glm::vec4& color = glm::WhiteColor);
 
     private:
-        RenderCamera m_RenderCamera;
+        struct SceneData
+        {
+            glm::mat4 ProjectionViewMatrix;
+        };
+        
+        SceneData m_SceneData;
         std::unique_ptr<RenderCommandQueue> m_CommandQueue;
         std::unique_ptr<TrianglePrimitive> m_TrianglePrimitive;
     };

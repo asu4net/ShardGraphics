@@ -1,6 +1,5 @@
-#include <iostream>
-#include <ostream>
 #include <ShardGraphics.h>
+#include "Rendering/Camera.h"
 
 using namespace Shard::Graphics;
 using namespace Shard;
@@ -21,24 +20,16 @@ int main()
     {
        ImGui::Button("My button"); 
     });
-
-    constexpr CameraConfiguration cameraConfiguration{
-        Projection::Perspective,
-        1
-    };
-    Transform cameraTransform { {0.0f, 0.0, -3.f} };
     
-    RenderCamera renderCamera = {
-        cameraConfiguration,
-        cameraTransform,
-        window->GetAspect()
-    };
 
+    Camera camera;
+    
+    
     bool pause = false;
     
     window->Events().KeyPressedEvent.Add([&](const int key, bool)
     {
-        Transform& camTransform = renderCamera.ViewTransform;
+        Transform& camTransform = camera.ViewTransform;
         constexpr float camSpeed = 0.06f;
         
         if (key == KEY_LEFT)
@@ -66,11 +57,12 @@ int main()
     {
         window->PollEvents();
         if (pause) continue;
+
         renderer2D.SetClearColor(window->GetBackgroundColor());
         renderer2D.Clear();
-        std::cout << renderCamera.ViewTransform.Position.z << "\n";
-        renderer2D.SetRenderCamera(renderCamera);
-        
+
+        camera.UpdateMatrix();
+        renderer2D.Begin(camera);
         renderer2D.DrawPrimitive(PrimitiveType::Triangle, triangleTransform, glm::LightRedColor);
         
         renderer2D.Update();

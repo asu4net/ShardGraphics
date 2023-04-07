@@ -1,4 +1,5 @@
 ﻿#include "Renderer2D.h"
+#include "Camera.h"
 #include "RenderCommand.h"
 #include "RenderCommandQueue.h"
 #include "Data/VertexArray.h"
@@ -22,14 +23,9 @@ namespace Shard::Graphics
     {
     }
 
-    void Renderer2D::SetRenderCamera(const RenderCamera& renderCamera)
+    void Renderer2D::Begin(const Camera& renderCamera)
     {
-        m_RenderCamera = renderCamera;
-
-        if (!m_RenderCamera.bAutoSetMatrices) return;
-        const auto& config = m_RenderCamera.Configuration;
-        m_RenderCamera.ProjectionMatrix = config.CalculateProjectionMatrix(renderCamera.AspectRatio);
-        m_RenderCamera.ViewMatrix = config.CalculateViewMatrix(renderCamera.ViewTransform);
+        m_SceneData.ProjectionViewMatrix = renderCamera.ProjectionViewMatrix();
     }
 
     void Renderer2D::SetClearColor(const glm::vec4 clearColor)
@@ -49,7 +45,7 @@ namespace Shard::Graphics
 
     void Renderer2D::DrawPrimitive(const PrimitiveType type, const Transform& transform, const glm::vec4& color)
     {
-        const glm::mat4 mvpMatrix = m_RenderCamera.ProjectionMatrix * m_RenderCamera.ViewMatrix * glm::mat4(transform);
+        const glm::mat4 mvpMatrix = m_SceneData.ProjectionViewMatrix * glm::mat4(transform);
         
         switch (type)
         {
