@@ -3,6 +3,8 @@
 #include <vector>
 #include <glad/glad.h>
 
+#include "glm/gtc/type_ptr.hpp"
+
 namespace Shard::Graphics
 {
     Shader* Shader::Create(const std::string& vertexSource, const std::string& fragmentSource)
@@ -111,6 +113,12 @@ namespace Shard::Graphics
     Shader::~Shader()
     {
         glDeleteProgram(m_ShaderId);
+    }
+
+    void Shader::SetUniformMat4(const char* uniformName, const glm::mat4& mat)
+    {
+        const uint32_t id = glGetUniformLocation(m_ShaderId, uniformName);
+        glUniformMatrix4fv(id, 1, false, glm::value_ptr(mat));
     }
 
     void Shader::Bind() const

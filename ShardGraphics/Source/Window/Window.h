@@ -56,6 +56,8 @@ namespace Shard::Graphics
         virtual float GetAspect() const { return static_cast<float>(GetWidth()) / static_cast<float>(GetHeight()); }
 
         void* GetHandler() const { return m_WindowHandler; }
+
+        virtual void PollEvents() const;
         
     private:
         std::shared_ptr<RenderingContext> m_Context;

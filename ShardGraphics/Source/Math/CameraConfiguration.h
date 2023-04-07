@@ -10,11 +10,13 @@ struct CameraConfiguration
     float Size = 3.f;
     float Fov = 85.f;
     float NearPlane = -100.f;
-    float FarPlane = 100.f;
+    float FarPlane = 1000.f;
 
     glm::mat4 CalculateViewMatrix(const Transform& transform) const
     {
-       return glm::lookAt(transform.Position, (transform.Position - transform.Forward()), transform.Up());
+        glm::vec3 cameraPosition = transform.Position;
+        cameraPosition.z *= -1;
+        return glm::lookAt(cameraPosition, (cameraPosition - transform.Forward()), transform.Up());
     }
 
     glm::mat4 CalculateProjectionMatrix(const float aspectRatio) const
@@ -22,7 +24,7 @@ struct CameraConfiguration
         switch (Projection)
         {
         case Projection::Perspective: 
-            return glm::perspective(glm::radians(Fov), aspectRatio, 0.f, FarPlane);
+            return glm::perspective(glm::radians(Fov), aspectRatio, 0.1f, FarPlane);
         case Projection::Orthographic:
             {
                 const float aspect = aspectRatio;

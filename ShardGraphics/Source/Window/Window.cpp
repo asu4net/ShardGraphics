@@ -6,8 +6,12 @@ namespace Shard::Graphics
 {
     void Window::Update()
     {
-        glfwPollEvents();
         m_Context->SwapBuffers();
+    }
+
+    void Window::PollEvents() const
+    {
+        glfwPollEvents();
     }
 
     Window* Window::Create()

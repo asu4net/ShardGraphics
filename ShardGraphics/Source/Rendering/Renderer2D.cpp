@@ -54,8 +54,9 @@ namespace Shard::Graphics
         switch (type)
         {
             case PrimitiveType::Triangle:
-                m_TrianglePrimitive->SetVertexData(mvpMatrix, color);
+                //m_TrianglePrimitive->SetVertexData(mvpMatrix, color);
                 m_TrianglePrimitive->GetShader()->Bind();
+                m_TrianglePrimitive->GetShader()->SetUniformMat4("u_MvpMatrix", mvpMatrix);
                 m_CommandQueue->Submit(m_TrianglePrimitive->CreateRenderCommand());
             return;
         }
