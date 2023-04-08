@@ -50,9 +50,7 @@ namespace Shard::Graphics
         switch (type)
         {
         case PrimitiveType::Triangle:
-                //m_TrianglePrimitive->SetVertexData(mvpMatrix, color);
                 m_CommandQueue->Submit<SetUniformMat4Command>(m_TrianglePrimitive->GetShader(), "u_MvpMatrix", mvpMatrix);
-                m_CommandQueue->Submit<SetUniformVec4Command>(m_TrianglePrimitive->GetShader(), "u_Color", color);
                 m_CommandQueue->Submit<DrawElementsCommand>(m_TrianglePrimitive->GetVertexArray());
             return;
         }

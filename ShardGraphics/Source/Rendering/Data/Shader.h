@@ -8,10 +8,11 @@ namespace Shard::Graphics
     class Shader
     {
     public:
-        static Shader* Create(const std::string& vertexSource, const std::string& fragmentSource);
-        Shader(const std::string& vertexSource, const std::string& fragmentSource);
+        static Shader* Create(const std::string& fileLocation);
+        Shader(const std::string& fileLocation);
         ~Shader();
-        
+
+        void ReadFromFile(const std::string& fileLocation, std::string& vertexSource, std::string& fragmentSource);
         void SetUniformMat4(const char* uniformName, const glm::mat4& mat) const;
         void SetUniformVec4(const char* uniformName, const glm::vec4& vec) const;
         

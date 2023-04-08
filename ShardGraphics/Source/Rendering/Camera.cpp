@@ -4,7 +4,7 @@ namespace Shard::Graphics
 {
     Camera::Camera(const Projection startProjection)
         : CurrentProjection(startProjection)
-        , ViewTransform({glm::ForwardVector * -2.f })
+        , ViewTransform({glm::ForwardVector * -1.f })
         , Size(3.f)
         , Fov(85.f)
         , NearPlane(0.1f)

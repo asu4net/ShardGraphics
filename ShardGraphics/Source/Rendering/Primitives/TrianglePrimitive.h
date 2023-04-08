@@ -33,8 +33,6 @@ namespace Shard::Graphics
         
         TrianglePrimitive();
         ~TrianglePrimitive();
-
-        void SetVertexData(const glm::mat4 mvpMatrix, const glm::vec4& color);
         
         const std::shared_ptr<Shader>& GetShader() const { return m_Shader; }
         const std::shared_ptr<VertexArray>& GetVertexArray() const { return m_VertexArray; }

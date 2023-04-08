@@ -1,5 +1,6 @@
 ﻿#include "Shader.h"
 #include <cassert>
+#include <fstream>
 #include <vector>
 #include <glad/glad.h>
 
@@ -7,14 +8,17 @@
 
 namespace Shard::Graphics
 {
-    Shader* Shader::Create(const std::string& vertexSource, const std::string& fragmentSource)
+    Shader* Shader::Create(const std::string& fileLocation)
     {
-        return new Shader(vertexSource, fragmentSource);
+        return new Shader(fileLocation);
     }
 
-    Shader::Shader(const std::string& vertexSource, const std::string& fragmentSource)
+    Shader::Shader(const std::string& fileLocation)
         : m_ShaderId(0)
     {
+        std::string vertexSource, fragmentSource;
+        ReadFromFile(fileLocation, vertexSource, fragmentSource);
+        
         // Create an empty vertex shader handle
         const GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
@@ -113,6 +117,52 @@ namespace Shard::Graphics
     Shader::~Shader()
     {
         glDeleteProgram(m_ShaderId);
+    }
+    
+    void Shader::ReadFromFile(const std::string& fileLocation, std::string& vertexSource, std::string& fragmentSource)
+    {
+        static std::string content;
+        std::ifstream fileStream(fileLocation, std::ios::in);
+
+        if (!fileStream.is_open())
+        {
+            printf("Failed to read %s! File doesn't exist.", fileLocation.c_str());
+            return;
+        }
+        
+        std::string line;
+
+        enum class ShaderType { None, Vertex, Fragment };
+        ShaderType currentShader = ShaderType::None;
+        
+        while (!fileStream.eof())
+        {
+            std::getline(fileStream, line);
+
+            if (line.find("#type") != std::string::npos)
+            {
+                if (line.find("vertex") != std::string::npos)
+                {
+                    currentShader = ShaderType::Vertex;
+                    continue;
+                }
+
+                if (line.find("fragment") != std::string::npos)
+                {
+                    currentShader = ShaderType::Fragment;
+                    continue;
+                }
+            }
+
+            switch (currentShader)
+            {
+            case ShaderType::None: continue;
+            case ShaderType::Vertex: vertexSource.append(line + "\n"); continue;
+            case ShaderType::Fragment: fragmentSource.append(line + "\n"); continue;
+            }
+        }
+
+        fileStream.close();
     }
 
     void Shader::SetUniformMat4(const char* uniformName, const glm::mat4& mat) const

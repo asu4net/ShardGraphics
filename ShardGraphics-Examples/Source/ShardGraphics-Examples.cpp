@@ -1,3 +1,4 @@
+#include <iostream>
 #include <ShardGraphics.h>
 #include "ImGui/Widgets/Vector3Widget.h"
 #include "Rendering/Camera.h"
@@ -60,8 +61,8 @@ int main()
         camera.UpdateMatrix();
         renderer2D.Begin(camera);
         
-        renderer2D.DrawPrimitive(PrimitiveType::Triangle, triangleTransform, glm::LightRedColor);
-        renderer2D.DrawPrimitive(PrimitiveType::Triangle, {}, glm::LightBlueColor);
+        renderer2D.DrawPrimitive(PrimitiveType::Triangle, triangleTransform);
+        renderer2D.DrawPrimitive(PrimitiveType::Triangle, {});
         
         renderer2D.Update();
         imGuiRenderer.Update();
