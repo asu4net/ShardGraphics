@@ -1,13 +1,37 @@
 #pragma once
 #include "Defaults.h"
 #include "Utils.h"
+#include "glm/gtx/matrix_decompose.hpp"
 
 struct Transform
 {
-    glm::vec3 Position = glm::ZeroVector;
-    glm::quat Rotation = glm::IdentityQuaternion;
-    glm::vec3 Scale = glm::OneVector;
+    glm::vec3 Position;
+    glm::quat Rotation;
+    glm::vec3 Scale;
+    
+    Transform()
+        : Position(glm::ZeroVector)
+        , Rotation(glm::IdentityQuaternion)
+        , Scale(glm::OneVector)
+    {}
 
+    Transform(const glm::vec3 position, const glm::quat& rotation = glm::IdentityQuaternion, const glm::vec3& scale = glm::OneVector)
+        : Position(position)
+        , Rotation(rotation)
+        , Scale(scale)
+    {
+    }
+    
+    Transform(const glm::mat4& transform)
+        : Position()
+        , Rotation()
+        , Scale()
+    {
+        glm::vec3 skew;
+        glm::vec4 perspective;
+        glm::decompose(transform, Scale, Rotation, Position, skew, perspective);
+    }
+    
     explicit operator glm::mat4() const
     {
         glm::mat4 transform = glm::IdentityMatrix;
