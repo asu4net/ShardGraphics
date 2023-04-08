@@ -14,9 +14,16 @@ namespace Shard::Graphics
         glfwPollEvents();
     }
 
-    Window* Window::Create()
+    std::shared_ptr<Window> Window::CreateAndInitialize(const Configuration& config)
     {
-        return new Window();
+        auto window = Window::Create();
+        window->Initialize(config);
+        return window;
+    }
+
+    std::shared_ptr<Window> Window::Create()
+    {
+        return std::make_shared<Window>();
     }
 
     void Window::Initialize(const Configuration& config)

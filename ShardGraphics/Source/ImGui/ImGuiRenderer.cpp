@@ -13,6 +13,21 @@ namespace Shard::Graphics
     {
     }
 
+    ImGuiRenderer& ImGuiRenderer::CreateAndInitialize(const std::shared_ptr<Window>& window, bool bSetDefaultConfiguration,
+        const Delegate<void()>& customConfiguration)
+    {
+        ImGuiRenderer& imGuiRenderer = CreateSingleton();
+        imGuiRenderer.Initialize(window, bSetDefaultConfiguration, customConfiguration);
+        return imGuiRenderer;
+    }
+
+    void ImGuiRenderer::FinalizeAndDestroy()
+    {
+        ImGuiRenderer& imGuiRenderer = GetInstance();
+        imGuiRenderer.Finalize();
+        DestroySingleton();
+    }
+
     void ImGuiRenderer::DestroyRootWidget()
     {
         if (!m_RootWidget) return;

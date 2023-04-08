@@ -7,12 +7,16 @@
 namespace Shard::Graphics
 {
     class Camera;
+    class Window;
     
     class Renderer2D : public Singleton<Renderer2D>
     {
     public:
         Renderer2D() = default;
         Renderer2D(Renderer2D&&) = delete;
+
+        static Renderer2D& CreateAndInitialize(const std::shared_ptr<Window>& window);
+        static void FinalizeAndDestroy();
         
         void Initialize();
         void Update();

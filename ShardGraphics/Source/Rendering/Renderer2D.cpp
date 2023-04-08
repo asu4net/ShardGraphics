@@ -1,5 +1,6 @@
 ﻿#include "Renderer2D.h"
 #include "Camera.h"
+#include "Window/Window.h"
 #include "RenderCommand.h"
 #include "RenderCommandQueue.h"
 #include "Data/VertexArray.h"
@@ -7,6 +8,21 @@
 
 namespace Shard::Graphics
 {
+    Renderer2D& Renderer2D::CreateAndInitialize(const std::shared_ptr<Window>& window)
+    {
+        Renderer2D& renderer2D = Renderer2D::CreateSingleton();
+        renderer2D.Initialize();
+        renderer2D.SetViewPort(0, 0, window->GetWidth(), window->GetHeight());
+        return renderer2D;
+    }
+
+    void Renderer2D::FinalizeAndDestroy()
+    {
+        Renderer2D& renderer2D = GetInstance();
+        renderer2D.Finalize();
+        DestroySingleton();
+    }
+
     void Renderer2D::Initialize()
     {
         m_TrianglePrimitive = std::make_unique<TrianglePrimitive>();

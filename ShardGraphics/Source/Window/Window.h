@@ -28,7 +28,8 @@ namespace Shard::Graphics
         
         virtual ~Window() = default;
         
-        static Window* Create();
+        static std::shared_ptr<Window> CreateAndInitialize(const Configuration& config = {});
+        static std::shared_ptr<Window> Create();
         
         virtual void Initialize(const Configuration& config = {});
         virtual void Finalize();

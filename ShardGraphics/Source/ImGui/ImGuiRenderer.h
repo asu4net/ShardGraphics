@@ -15,6 +15,9 @@ namespace Shard::Graphics
         
         ImGuiRenderer();
         ImGuiRenderer(ImGuiRenderer&& other) = delete;
+
+        static ImGuiRenderer& CreateAndInitialize(const std::shared_ptr<Window>& window, bool bSetDefaultConfiguration = true, const Delegate<void()>& customConfiguration = {});
+        static void FinalizeAndDestroy();
         
         template<typename T, typename ...TArgs>
         std::shared_ptr<T> CreateRootWidget(TArgs&& ...args)

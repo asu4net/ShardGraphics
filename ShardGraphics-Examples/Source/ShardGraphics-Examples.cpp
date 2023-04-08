@@ -1,4 +1,3 @@
-#include <iostream>
 #include <ShardGraphics.h>
 #include "ImGui/Widgets/Vector3Widget.h"
 #include "Rendering/Camera.h"
@@ -8,15 +7,9 @@ using namespace Shard;
 
 int main()
 {
-    const std::shared_ptr<Window> window(Window::Create());
-    window->Initialize();
-    
-    Renderer2D& renderer2D = Renderer2D::CreateSingleton();
-    renderer2D.Initialize();
-    renderer2D.SetViewPort(0, 0, window->GetWidth(), window->GetHeight());
-    
-    ImGuiRenderer& imGuiRenderer = ImGuiRenderer::CreateSingleton();
-    imGuiRenderer.Initialize(window);
+    const auto window = Window::CreateAndInitialize();
+    Renderer2D& renderer2D = Renderer2D::CreateAndInitialize(window);
+    ImGuiRenderer& imGuiRenderer = ImGuiRenderer::CreateAndInitialize(window);
     
     Camera camera;
     bool pause = false;
@@ -69,11 +62,7 @@ int main()
         window->Update();
     }
 
-    imGuiRenderer.Finalize();
-    ImGuiRenderer::DestroySingleton();
-    
-    renderer2D.Finalize();
-    Renderer2D::DestroySingleton();
-
+    ImGuiRenderer::FinalizeAndDestroy();
+    Renderer2D::FinalizeAndDestroy();
     window->Finalize();
 }
