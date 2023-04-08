@@ -1,7 +1,6 @@
 ﻿#include "DockSpaceWidget.h"
 
-void Shard::Graphics::DockSpaceWidget::OnUpdate()
+namespace Shard::Graphics
 {
-    ImGuiWidget::OnUpdate();
     
 }

@@ -2,7 +2,7 @@
 
 namespace Shard::Graphics
 {
-    ImGuiWidget::ImGuiWidget(const char* name, bool* opened, const ImGuiWindowFlags flags)
+    ImGuiWidget::ImGuiWidget(const std::string& name, bool* opened, const ImGuiWindowFlags flags)
         : Flags(flags)
         , Opened(opened)
         , Enabled(true)
@@ -10,7 +10,7 @@ namespace Shard::Graphics
     {
         m_BeginDelegate = {[](const ImGuiWidget* widget)
         {
-            ImGui::Begin(widget->GetName(), widget->Opened, widget->Flags);
+            ImGui::Begin(widget->GetName().c_str(), widget->Opened, widget->Flags);
         }};
         m_EndDelegate = {[&](){ ImGui::End(); }};
     }
@@ -30,12 +30,11 @@ namespace Shard::Graphics
     void ImGuiWidget::Update()
     {
         if (!Enabled) return;
-        m_BeginDelegate(this);
+        
         OnUpdate();
         m_WidgetUpdateEvent.Broadcast();
         for (const auto& child : m_ChildWidgets)
             child->Update();
-        m_EndDelegate();
     }
     
     void ImGuiWidget::Destroy()

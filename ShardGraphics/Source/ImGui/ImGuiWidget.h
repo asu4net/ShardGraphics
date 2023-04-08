@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include <memory>
+#include <string>
+
 #include "imgui.h"
 #include "Delegates/MulticastDelegate.h"
 
@@ -16,11 +18,11 @@ namespace Shard::Graphics
         bool* Opened;
         bool Enabled;
         
-        ImGuiWidget(const char* name = "ImGuiWidget", bool* opened = nullptr, ImGuiWindowFlags flags = 0);
+        ImGuiWidget(const std::string& name = "ImGuiWidget", bool* opened = nullptr, ImGuiWindowFlags flags = 0);
         
         virtual ~ImGuiWidget() = default; 
         
-        const char* GetName() const { return m_Name; }
+        const std::string& GetName() const { return m_Name; }
         
         Delegate<void(ImGuiWidget*)> GetBeginDelegate() const { return m_BeginDelegate; }
         Delegate<void()> GetEndDelegate() const { return m_EndDelegate; }
@@ -47,19 +49,14 @@ namespace Shard::Graphics
             return widget;
         }
         
-        template<typename ...TArgs>
-        std::shared_ptr<ImGuiWidget> PushWidget(TArgs&& ...args)
-        {
-            return PushWidget<ImGuiWidget>(std::forward<TArgs>(args)...);
-        }
-        
     protected:
+        const std::string m_Name;
+        
         virtual void OnCreate();
         virtual void OnUpdate();
         virtual void OnDestroy();
     
     private:
-        const char* m_Name;
         Delegate<void(ImGuiWidget*)> m_BeginDelegate;
         Delegate<void()> m_EndDelegate;
         FWidgetCreateEvent m_WidgetCreateEvent;

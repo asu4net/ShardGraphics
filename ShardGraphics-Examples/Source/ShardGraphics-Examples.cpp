@@ -1,4 +1,5 @@
 #include <ShardGraphics.h>
+#include "ImGui/Widgets/Vector3Widget.h"
 #include "Rendering/Camera.h"
 
 using namespace Shard::Graphics;
@@ -16,15 +17,7 @@ int main()
     ImGuiRenderer& imGuiRenderer = ImGuiRenderer::CreateSingleton();
     imGuiRenderer.Initialize(window);
     
-    imGuiRenderer.CreateRootWidget("Camera")->UpdateEvent().Add([]()
-    {
-       ImGui::Button("My button"); 
-    });
-    
-
     Camera camera;
-    
-    
     bool pause = false;
     
     window->Events().KeyPressedEvent.Add([&](const int key, bool)
@@ -51,7 +44,10 @@ int main()
             pause = !pause;
     });
 
-    Transform triangleTransform;
+    Transform triangleTransform = {{2, 0 ,0}};
+    const auto rootWidget = imGuiRenderer.CreateRootWidget<ImGuiWidget>("Settings");
+    Vector3Widget widget(triangleTransform.Position, "Position");
+    rootWidget->PushWidget<Vector3Widget>(widget);
     
     while (window->KeepOpened())
     {
@@ -60,10 +56,12 @@ int main()
 
         renderer2D.SetClearColor(window->GetBackgroundColor());
         renderer2D.Clear();
-
+        
         camera.UpdateMatrix();
         renderer2D.Begin(camera);
+        
         renderer2D.DrawPrimitive(PrimitiveType::Triangle, triangleTransform, glm::LightRedColor);
+        renderer2D.DrawPrimitive(PrimitiveType::Triangle, {}, glm::LightBlueColor);
         
         renderer2D.Update();
         imGuiRenderer.Update();

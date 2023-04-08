@@ -1,13 +1,7 @@
 ﻿#include "RenderCommandQueue.h"
-#include "RenderCommand.h"
 
 namespace Shard::Graphics
 {
-    void RenderCommandQueue::Submit(const std::shared_ptr<RenderCommand>& renderCommand)
-    {
-        m_CommandQueue.push_back(renderCommand);
-    }
-    
     void RenderCommandQueue::ExecuteNext()
     {
         if (m_CommandQueue.empty()) return;

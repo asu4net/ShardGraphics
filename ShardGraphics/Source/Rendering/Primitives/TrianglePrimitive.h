@@ -37,7 +37,7 @@ namespace Shard::Graphics
         void SetVertexData(const glm::mat4 mvpMatrix, const glm::vec4& color);
         
         const std::shared_ptr<Shader>& GetShader() const { return m_Shader; }
-        std::shared_ptr<RenderCommand> CreateRenderCommand();
+        const std::shared_ptr<VertexArray>& GetVertexArray() const { return m_VertexArray; }
         
     private:
         Vertex* m_VertexData;

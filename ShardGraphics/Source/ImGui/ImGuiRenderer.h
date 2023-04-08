@@ -26,21 +26,18 @@ namespace Shard::Graphics
             widget->Create();
             return widget;
         }
-        
-        template<typename ...TArgs>
-        std::shared_ptr<ImGuiWidget> CreateRootWidget(TArgs&& ...args)
-        {
-            return CreateRootWidget<ImGuiWidget>(std::forward<TArgs>(args)...);
-        }
 
         void DestroyRootWidget();
         
-        void Initialize(const std::shared_ptr<Window>& window);
+        void Initialize(const std::shared_ptr<Window>& window, bool bSetDefaultConfiguration = true, Delegate<void()> customConfiguration = {});
         void Update();
         void Finalize();
         
     private:
         std::weak_ptr<Window> m_Window;
         std::shared_ptr<ImGuiWidget> m_RootWidget;
+
+        void ConfigureFlags();
+        void ConfigureStyle();
     };
 }

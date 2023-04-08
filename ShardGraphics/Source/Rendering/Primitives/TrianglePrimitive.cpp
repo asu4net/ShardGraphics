@@ -20,9 +20,9 @@ namespace Shard::Graphics
     {
         constexpr uint32_t indices[3] = { 0, 1, 2 };
 
-        m_VertexData[0] = { glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f), glm::RedColor };
-        m_VertexData[1] = { glm::vec4( 0.5f, -0.5f, 0.0f, 1.0f), glm::RedColor };
-        m_VertexData[2] = { glm::vec4( 0.0f,  0.5f, 0.0f, 1.0f), glm::RedColor };
+        m_VertexData[0] = { glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f), glm::WhiteColor };
+        m_VertexData[1] = { glm::vec4( 0.5f, -0.5f, 0.0f, 1.0f), glm::WhiteColor };
+        m_VertexData[2] = { glm::vec4( 0.0f,  0.5f, 0.0f, 1.0f), glm::WhiteColor };
         
         m_VertexArray.reset(VertexArray::Create());
         m_VertexBuffer.reset(VertexBuffer::Create(reinterpret_cast<const float*>(m_VertexData), VertexDataCount * sizeof(float)));
@@ -40,13 +40,14 @@ namespace Shard::Graphics
              layout(location = 0) in vec3 a_Position;
              layout(location = 1) in vec4 a_Color;
              uniform mat4 u_MvpMatrix;
+             uniform vec4 u_Color;
 
              out vec4 v_Color;
 
              void main()
              {
                  gl_Position = u_MvpMatrix * vec4(a_Position, 1.0);
-                 v_Color = a_Color;
+                 v_Color = u_Color;
              }
          )";
 
@@ -76,10 +77,5 @@ namespace Shard::Graphics
         m_VertexData[1] = { mvpMatrix * glm::vec4( 0.5f, -0.5f, 0.0f, 1.0f), color };
         m_VertexData[2] = { mvpMatrix * glm::vec4( 0.0f,  0.5f, 0.0f, 1.0f), color };
         m_VertexBuffer->SetData(m_VertexData, static_cast<uint32_t>(VertexDataCount * sizeof(float)));
-    }
-
-    std::shared_ptr<RenderCommand> TrianglePrimitive::CreateRenderCommand()
-    {
-        return std::make_shared<DrawElementsCommand>(m_VertexArray);
     }
 }

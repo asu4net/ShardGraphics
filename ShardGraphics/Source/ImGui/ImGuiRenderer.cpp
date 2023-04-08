@@ -21,21 +21,52 @@ namespace Shard::Graphics
         m_RootWidget = nullptr;
     }
 
-    void ImGuiRenderer::Initialize(const std::shared_ptr<Window>& window)
+    void ImGuiRenderer::ConfigureFlags()
     {
-        m_Window = window;
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
+        // Settings configuration
         ImGuiIO& io = ImGui::GetIO();
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
         io.ConfigFlags |= ConfigFlags;
+    }
+
+    void ImGuiRenderer::ConfigureStyle()
+    {
+        // Font
+        const ImGuiIO& io = ImGui::GetIO();
+        io.Fonts->AddFontFromFileTTF(R"(Content\Fonts\AlbertSans-VariableFont_wght.ttf)", 17);
+        
+        // Colors
+        ImGui::StyleColorsDark();
+        ImGuiStyle& style = ImGui::GetStyle();
+        style.Colors[ImGuiCol_WindowBg] = {0.192f, 0.2f, 0.219f, 1.f};
+        style.Colors[ImGuiCol_TabUnfocusedActive] = {0.168f, 0.176f, 0.192f, 1.f};
+        style.Colors[ImGuiCol_Tab] = {0.168f, 0.176f, 0.192f, 1.f};
+        style.Colors[ImGuiCol_TabHovered] = {0.656f, 0.656f, 0.656f, 1.f};
+        style.Colors[ImGuiCol_TabActive] = {0.211f, 0.215f, 0.239f, 1.f};
+        style.Colors[ImGuiCol_TitleBgActive] = {0.168f, 0.176f, 0.192f, 1.f};
+        style.Colors[ImGuiCol_TitleBg] = {0.1f, 0.1f, 0.1f, 1.f};
+        style.FrameRounding = 9.f;
+        style.Colors[ImGuiCol_FrameBg] = {0.1f, 0.1f, 0.1f, 1.f};
+        style.Colors[ImGuiCol_Button] = {0.356f, 0.356f, 0.416f, 1.f};
+    }
+
+    void ImGuiRenderer::Initialize(const std::shared_ptr<Window>& window, bool bSetDefaultConfiguration, Delegate<void()> customConfiguration)
+    {
+        m_Window = window;
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        if (bSetDefaultConfiguration)
+        {
+            ConfigureFlags();
+            ConfigureStyle();
+        }
+        customConfiguration();
         GLFWwindow* windowHandler = static_cast<GLFWwindow*>(window->GetHandler());
         ImGui_ImplGlfw_InitForOpenGL(windowHandler, true);
         ImGui_ImplOpenGL3_Init("#version 410");
-        ImGui::StyleColorsDark();
     }
 
     void ImGuiRenderer::Update()
@@ -44,7 +75,7 @@ namespace Shard::Graphics
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         ImGuizmo::BeginFrame();
-
+        
         // static bool dockSpaceOpen = true;
         // static bool fullscreen = true;
         // static bool padding = false;
@@ -113,6 +144,7 @@ namespace Shard::Graphics
         //---------------------------------------------------------
         // ImGui Dock Space End
         //---------------------------------------------------------
+
         ImGuiIO& io = ImGui::GetIO();
         if (!m_Window.expired())
         {

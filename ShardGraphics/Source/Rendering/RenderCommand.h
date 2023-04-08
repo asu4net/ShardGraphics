@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "RendererAPI.h"
 #include "Data/VertexArray.h"
+#include "Data/Shader.h"
 #include <memory>
 
 namespace Shard::Graphics
@@ -67,6 +68,68 @@ namespace Shard::Graphics
         {
             GetRendererAPI()->Clear();
         }
+    };
+
+    class SetUniformCommand : public RenderCommand
+    {
+    public:
+        
+        SetUniformCommand(const std::shared_ptr<Shader>& shader, const char* uniformName)
+            : RenderCommand()
+            , m_Shader(shader)
+            , m_UniformName(uniformName)
+        {}
+        
+        void Execute() override
+        {
+            m_Shader->Bind();
+        }
+
+    protected:
+        const std::shared_ptr<Shader> m_Shader;
+        const char* m_UniformName;
+    };
+    
+    class SetUniformMat4Command : public SetUniformCommand
+    {
+    public:
+        
+        SetUniformMat4Command(const std::shared_ptr<Shader>& shader, const char* uniformName, const glm::mat4& mat)
+            : SetUniformCommand(shader, uniformName)
+            , m_Mat(mat)
+        {}
+
+        const char* GetName() const override { return "SetUniformMat4"; }
+        
+        void Execute() override
+        {
+            SetUniformCommand::Execute();
+            m_Shader->SetUniformMat4(m_UniformName, m_Mat);
+        }
+
+    private:
+        const glm::mat4 m_Mat;
+    };
+    
+    class SetUniformVec4Command : public SetUniformCommand
+    {
+    public:
+        
+        SetUniformVec4Command(const std::shared_ptr<Shader>& shader, const char* uniformName, const glm::vec4& vec)
+            : SetUniformCommand(shader, uniformName)
+            , m_Vec4(vec)
+        {}
+
+        const char* GetName() const override { return "SetUniformVec4"; }
+        
+        void Execute() override
+        {
+            SetUniformCommand::Execute();
+            m_Shader->SetUniformVec4(m_UniformName, m_Vec4);
+        }
+
+    private:
+        const glm::vec4 m_Vec4;
     };
 
     class DrawElementsCommand : public RenderCommand

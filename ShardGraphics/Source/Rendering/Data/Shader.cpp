@@ -115,10 +115,16 @@ namespace Shard::Graphics
         glDeleteProgram(m_ShaderId);
     }
 
-    void Shader::SetUniformMat4(const char* uniformName, const glm::mat4& mat)
+    void Shader::SetUniformMat4(const char* uniformName, const glm::mat4& mat) const
     {
         const uint32_t id = glGetUniformLocation(m_ShaderId, uniformName);
         glUniformMatrix4fv(id, 1, false, glm::value_ptr(mat));
+    }
+
+    void Shader::SetUniformVec4(const char* uniformName, const glm::vec4& vec) const
+    {
+        const uint32_t id = glGetUniformLocation(m_ShaderId, uniformName);
+        glUniform4fv(id, 1, glm::value_ptr(vec));
     }
 
     void Shader::Bind() const

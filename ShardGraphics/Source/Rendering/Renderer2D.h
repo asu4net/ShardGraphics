@@ -27,7 +27,7 @@ namespace Shard::Graphics
     private:
         struct SceneData
         {
-            glm::mat4 ProjectionViewMatrix;
+            glm::mat4 ProjectionViewMatrix = glm::IdentityMatrix;
         };
         
         SceneData m_SceneData;

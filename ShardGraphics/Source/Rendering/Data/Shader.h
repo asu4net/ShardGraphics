@@ -12,7 +12,8 @@ namespace Shard::Graphics
         Shader(const std::string& vertexSource, const std::string& fragmentSource);
         ~Shader();
         
-        void SetUniformMat4(const char* uniformName, const glm::mat4& mat);
+        void SetUniformMat4(const char* uniformName, const glm::mat4& mat) const;
+        void SetUniformVec4(const char* uniformName, const glm::vec4& vec) const;
         
         void Bind() const;
         void Unbind() const;
