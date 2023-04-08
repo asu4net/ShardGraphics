@@ -12,7 +12,6 @@ int main()
     ImGuiRenderer& imGuiRenderer = ImGuiRenderer::CreateAndInitialize(window);
     
     Camera camera;
-    bool pause = false;
     
     window->Events().KeyPressedEvent.Add([&](const int key, bool)
     {
@@ -33,9 +32,6 @@ int main()
             camTransform.Position.z -= camSpeed;
         if (key == KEY_W)
             camTransform.Position.z += camSpeed;
-
-        if (key == KEY_SPACE)
-            pause = !pause;
     });
 
     Transform triangleTransform = {{2, 0 ,0}};
@@ -46,10 +42,7 @@ int main()
     while (window->KeepOpened())
     {
         window->PollEvents();
-        if (pause) continue;
-
-        renderer2D.SetClearColor(window->GetBackgroundColor());
-        renderer2D.Clear();
+        renderer2D.ClearScreen();
         
         camera.UpdateMatrix();
         renderer2D.Begin(camera);

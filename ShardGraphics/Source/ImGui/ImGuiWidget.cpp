@@ -30,11 +30,13 @@ namespace Shard::Graphics
     void ImGuiWidget::Update()
     {
         if (!Enabled) return;
-        
+
+        m_BeginDelegate(this);
         OnUpdate();
         m_WidgetUpdateEvent.Broadcast();
         for (const auto& child : m_ChildWidgets)
             child->Update();
+        m_EndDelegate();
     }
     
     void ImGuiWidget::Destroy()

@@ -23,6 +23,7 @@ namespace Shard::Graphics
         void Finalize();
 
         void Begin(const Camera& renderCamera);
+        void ClearScreen(const glm::vec4 clearColor = glm::DarkGreyColor);
         void SetClearColor(const glm::vec4 clearColor);
         void Clear();
         void SetViewPort(uint32_t x, uint32_t y, uint32_t width, uint32_t height);

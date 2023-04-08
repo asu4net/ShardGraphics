@@ -44,6 +44,12 @@ namespace Shard::Graphics
         m_SceneData.ProjectionViewMatrix = renderCamera.ProjectionViewMatrix();
     }
 
+    void Renderer2D::ClearScreen(const glm::vec4 clearColor)
+    {
+        SetClearColor(clearColor);
+        Clear();
+    }
+
     void Renderer2D::SetClearColor(const glm::vec4 clearColor)
     {
         m_CommandQueue->Submit<SetClearColorCommand>(clearColor);
