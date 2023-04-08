@@ -33,7 +33,7 @@ namespace Shard::Graphics
         void DestroyRootWidget();
         
         void Initialize(const std::shared_ptr<Window>& window, bool bSetDefaultConfiguration = true, Delegate<void()> customConfiguration = {});
-        void Update();
+        void DrawWidgets();
         void Finalize();
         
     private:

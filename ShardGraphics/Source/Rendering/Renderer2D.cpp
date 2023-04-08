@@ -1,5 +1,5 @@
 ﻿#include "Renderer2D.h"
-#include "Camera.h"
+#include "Camera/Camera.h"
 #include "Window/Window.h"
 #include "RenderCommand.h"
 #include "RenderCommandQueue.h"
@@ -29,7 +29,7 @@ namespace Shard::Graphics
         m_CommandQueue = std::make_unique<RenderCommandQueue>();
     }
 
-    void Renderer2D::Update()
+    void Renderer2D::DrawPrimitives()
     {
         // TODO: Move this to other thread
         while(!m_CommandQueue->IsEmpty()) m_CommandQueue->ExecuteNext();
@@ -43,6 +43,9 @@ namespace Shard::Graphics
     {
         m_SceneData.ProjectionViewMatrix = renderCamera.ProjectionViewMatrix();
     }
+
+    void Renderer2D::Begin()
+    {}
 
     void Renderer2D::ClearScreen(const glm::vec4 clearColor)
     {
@@ -65,7 +68,7 @@ namespace Shard::Graphics
         m_CommandQueue->Submit<SetViewPortCommand>(x, y, width, height);
     }
 
-    void Renderer2D::DrawPrimitive(const PrimitiveType type, const Transform& transform, const glm::vec4& color)
+    void Renderer2D::SubmitPrimitive(const PrimitiveType type, const Transform& transform, const glm::vec4& color)
     {
         const glm::mat4 mvpMatrix = m_SceneData.ProjectionViewMatrix * glm::mat4(transform);
         

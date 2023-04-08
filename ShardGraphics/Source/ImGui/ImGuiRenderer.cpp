@@ -84,7 +84,7 @@ namespace Shard::Graphics
         ImGui_ImplOpenGL3_Init("#version 410");
     }
 
-    void ImGuiRenderer::Update()
+    void ImGuiRenderer::DrawWidgets()
     {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();

@@ -33,8 +33,9 @@ namespace Shard::Graphics
         
         virtual void Initialize(const Configuration& config = {});
         virtual void Finalize();
-        
-        virtual void Update();
+
+        virtual double GetTime();
+        virtual void SwapBuffers();
         
         virtual WindowEvents& Events() { return m_Events; }
         virtual void Close() { m_KeepWindowOpened = false; }
@@ -67,7 +68,7 @@ namespace Shard::Graphics
         Configuration m_Config;
         bool m_bCreated = false;
         bool m_KeepWindowOpened = true;
-
+        
         virtual void SetWindowCallbacks();
     };
 }

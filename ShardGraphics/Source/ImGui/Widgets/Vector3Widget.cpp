@@ -7,7 +7,7 @@ namespace Shard::Graphics
     Vector3Widget::Vector3Widget(glm::vec3& vector, const std::string& name, const float columnWidth, bool* opened, ImGuiWindowFlags flags)
         : ImGuiWidget(name, opened, flags)
         , ResetValue(0.f)
-        , Speed(0.1f)
+        , Speed(0.05f)
         , m_Vector(vector)
         , m_ColumnWidth(columnWidth)
     {

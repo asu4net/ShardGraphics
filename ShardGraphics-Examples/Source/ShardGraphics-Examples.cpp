@@ -1,6 +1,7 @@
 #include <ShardGraphics.h>
 #include "ImGui/Widgets/Vector3Widget.h"
-#include "Rendering/Camera.h"
+#include "Rendering/Camera/Camera.h"
+#include "Rendering/Camera/Controllers/ViewportCameraController.h"
 
 using namespace Shard::Graphics;
 using namespace Shard;
@@ -11,48 +12,34 @@ int main()
     Renderer2D& renderer2D = Renderer2D::CreateAndInitialize(window);
     ImGuiRenderer& imGuiRenderer = ImGuiRenderer::CreateAndInitialize(window);
     
-    Camera camera;
+    Camera viewPortCamera;
+    viewPortCamera.AttachController<ViewportCameraController>();
     
-    window->Events().KeyPressedEvent.Add([&](const int key, bool)
-    {
-        Transform& camTransform = camera.ViewTransform;
-        constexpr float camSpeed = 0.06f;
-        
-        if (key == KEY_LEFT)
-            camTransform.Position.x -= camSpeed;
-        if (key == KEY_RIGHT)
-            camTransform.Position.x += camSpeed;
-
-        if (key == KEY_DOWN)
-            camTransform.Position.y -= camSpeed;
-        if (key == KEY_UP)
-            camTransform.Position.y += camSpeed;
-
-        if (key == KEY_S)
-            camTransform.Position.z -= camSpeed;
-        if (key == KEY_W)
-            camTransform.Position.z += camSpeed;
-    });
-
     Transform triangleTransform = {{2, 0 ,0}};
     const auto rootWidget = imGuiRenderer.CreateRootWidget<ImGuiWidget>("Settings");
     Vector3Widget widget(triangleTransform.Position, "Position");
     rootWidget->PushWidget<Vector3Widget>(widget);
+
+    double lastFrameTime = window->GetTime();
     
     while (window->KeepOpened())
     {
         window->PollEvents();
         renderer2D.ClearScreen();
+
+        double time = window->GetTime();
+        float deltaTime = static_cast<float>(time - lastFrameTime);
+        lastFrameTime = time;
         
-        camera.UpdateMatrix();
-        renderer2D.Begin(camera);
+        viewPortCamera.Update(deltaTime);
         
-        renderer2D.DrawPrimitive(PrimitiveType::Triangle, triangleTransform);
-        renderer2D.DrawPrimitive(PrimitiveType::Triangle, {});
+        renderer2D.Begin(viewPortCamera);
+        renderer2D.SubmitPrimitive(PrimitiveType::Triangle, triangleTransform);
+        renderer2D.SubmitPrimitive(PrimitiveType::Triangle);
+        renderer2D.DrawPrimitives();
         
-        renderer2D.Update();
-        imGuiRenderer.Update();
-        window->Update();
+        imGuiRenderer.DrawWidgets();
+        window->SwapBuffers();
     }
 
     ImGuiRenderer::FinalizeAndDestroy();

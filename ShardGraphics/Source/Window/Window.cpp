@@ -1,10 +1,12 @@
 ﻿#include "Window.h"
 #include <glfw/glfw3.h>
+
+#include "Input/Input.h"
 #include "Rendering/RenderingContext.h"
 
 namespace Shard::Graphics
 {
-    void Window::Update()
+    void Window::SwapBuffers()
     {
         m_Context->SwapBuffers();
     }
@@ -56,6 +58,7 @@ namespace Shard::Graphics
         });
         
         SetWindowCallbacks();
+        Input::Initialize(GetHandler());
         
         Events().CallEndInitializeEvent();
         m_bCreated = true;
@@ -68,6 +71,11 @@ namespace Shard::Graphics
         glfwDestroyWindow(m_WindowHandler);
         m_bCreated = false;
         Events().CallEndFinalizeEvent();
+    }
+
+    double Window::GetTime()
+    {
+        return glfwGetTime();
     }
 
     bool Window::KeepOpened()

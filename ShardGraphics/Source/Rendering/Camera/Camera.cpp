@@ -14,6 +14,13 @@ namespace Shard::Graphics
     {
     }
 
+    void Camera::DetachController()
+    {
+        if (m_Controller)
+            m_Controller->Detach();
+        m_Controller.reset();
+    }
+
     void Camera::UpdateMatrix()
     {
         glm::mat4 viewMatrix = glm::IdentityMatrix;
@@ -28,6 +35,13 @@ namespace Shard::Graphics
         }
 
         m_ProjectionViewMatrix = projectionMatrix * viewMatrix;
+    }
+
+    void Camera::Update(const float deltaTime)
+    {
+        UpdateMatrix();
+        if (m_Controller)
+            m_Controller->Update(deltaTime);
     }
 
     void Camera::CalculateView(glm::mat4& viewMatrix)
