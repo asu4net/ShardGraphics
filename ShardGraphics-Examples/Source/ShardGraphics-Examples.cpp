@@ -15,9 +15,9 @@ int main()
     Camera viewPortCamera;
     viewPortCamera.AttachController<ViewportCameraController>();
     
-    Transform triangleTransform = {{2, 0 ,0}};
+    glm::vec3 trianglePosition = glm::RightVector * 2.f;
     const auto rootWidget = imGuiRenderer.CreateRootWidget<ImGuiWidget>("Settings");
-    Vector3Widget widget(triangleTransform.Position, "Position");
+    Vector3Widget widget(trianglePosition, "Position");
     rootWidget->PushWidget<Vector3Widget>(widget);
 
     double lastFrameTime = window->GetTime();
@@ -27,14 +27,14 @@ int main()
         window->PollEvents();
         renderer2D.ClearScreen();
 
-        double time = window->GetTime();
-        float deltaTime = static_cast<float>(time - lastFrameTime);
+        const double time = window->GetTime();
+        const float deltaTime = static_cast<float>(time - lastFrameTime);
         lastFrameTime = time;
         
         viewPortCamera.Update(deltaTime);
         
-        renderer2D.Begin(viewPortCamera);
-        renderer2D.SubmitPrimitive(PrimitiveType::Triangle, triangleTransform);
+        renderer2D.SetProjectionViewMatrix(viewPortCamera.ProjectionViewMatrix());
+        renderer2D.SubmitPrimitive(PrimitiveType::Triangle, glm::translate(glm::IdentityMatrix, trianglePosition));
         renderer2D.SubmitPrimitive(PrimitiveType::Triangle);
         renderer2D.DrawPrimitives();
         

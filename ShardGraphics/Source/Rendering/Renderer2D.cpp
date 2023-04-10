@@ -39,13 +39,10 @@ namespace Shard::Graphics
     {
     }
 
-    void Renderer2D::Begin(const Camera& renderCamera)
+    void Renderer2D::SetProjectionViewMatrix(const glm::mat4& projectionViewMatrix)
     {
-        m_SceneData.ProjectionViewMatrix = renderCamera.ProjectionViewMatrix();
+        m_SceneData.ProjectionViewMatrix = projectionViewMatrix;
     }
-
-    void Renderer2D::Begin()
-    {}
 
     void Renderer2D::ClearScreen(const glm::vec4 clearColor)
     {
@@ -68,9 +65,9 @@ namespace Shard::Graphics
         m_CommandQueue->Submit<SetViewPortCommand>(x, y, width, height);
     }
 
-    void Renderer2D::SubmitPrimitive(const PrimitiveType type, const Transform& transform, const glm::vec4& color)
+    void Renderer2D::SubmitPrimitive(const PrimitiveType type, const glm::mat4& modelMatrix, const glm::vec4& color)
     {
-        const glm::mat4 mvpMatrix = m_SceneData.ProjectionViewMatrix * glm::mat4(transform);
+        const glm::mat4 mvpMatrix = m_SceneData.ProjectionViewMatrix * modelMatrix;
         
         switch (type)
         {

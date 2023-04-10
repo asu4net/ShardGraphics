@@ -22,14 +22,13 @@ namespace Shard::Graphics
         void DrawPrimitives();
         void Finalize();
 
-        void Begin(const Camera& renderCamera);
-        void Begin();
+        void SetProjectionViewMatrix(const glm::mat4& projectionViewMatrix);
         
         void ClearScreen(const glm::vec4 clearColor = glm::DarkGreyColor);
         void SetClearColor(const glm::vec4 clearColor);
         void Clear();
         void SetViewPort(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
-        void SubmitPrimitive(PrimitiveType type, const Transform& transform = {}, const glm::vec4& color = glm::WhiteColor);
+        void SubmitPrimitive(PrimitiveType type, const glm::mat4& modelMatrix = glm::IdentityMatrix, const glm::vec4& color = glm::WhiteColor);
 
     private:
         struct SceneData

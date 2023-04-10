@@ -4,12 +4,13 @@ namespace Shard::Graphics
 {
     Camera::Camera(const Projection startProjection)
         : CurrentProjection(startProjection)
-        , ViewTransform({glm::ForwardVector * -1.f })
         , Size(3.f)
         , Fov(85.f)
         , NearPlane(0.1f)
         , FarPlane(1000.f)
         , AspectRatio(1280.f / 720.f)
+        , Position(glm::ForwardVector * -2.f)
+        , Rotation(glm::IdentityMatrix)
         , m_ProjectionViewMatrix(glm::IdentityMatrix)
     {
     }
@@ -46,9 +47,10 @@ namespace Shard::Graphics
 
     void Camera::CalculateView(glm::mat4& viewMatrix)
     {
-        glm::vec3 position = ViewTransform.Position;
-        position.z *= -1;
-        viewMatrix = glm::lookAt(position, (position - ViewTransform.Forward()), ViewTransform.Up());
+        glm::vec3 tweakedPosition = Position;
+        tweakedPosition.z *= -1;
+        viewMatrix = glm::translate(glm::mat4(1.0f), tweakedPosition) * glm::toMat4(Rotation);
+        viewMatrix = glm::inverse(viewMatrix);
     }
 
     void Camera::CalculatePerspectiveProjection(glm::mat4& projectionMatrix)

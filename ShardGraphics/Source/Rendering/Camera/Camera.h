@@ -1,8 +1,7 @@
 ﻿#pragma once
 #include <memory>
-#include <glm/glm.hpp>
-#include "Math/Transform.h"
 #include "CameraController.h"
+#include "Math/Math.h"
 
 namespace Shard::Graphics
 {
@@ -12,12 +11,13 @@ namespace Shard::Graphics
         enum class Projection { None, Perspective, Orthographic };
         
         Projection CurrentProjection;
-        Transform ViewTransform;
         float Size;
         float Fov;
         float NearPlane;
         float FarPlane;
         float AspectRatio;
+        glm::vec3 Position;
+        glm::quat Rotation;
         
         Camera(Projection startProjection = Projection::Perspective);
 

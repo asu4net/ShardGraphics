@@ -68,6 +68,23 @@
 /* The unknown key */
 #define KEY_UNKNOWN            -1
 
+enum class KeyCode : uint32_t
+{
+ Space = 32,
+ Apostrophe = 39,
+ Coma = 44,
+ Minus = 45,
+ Period = 46,
+ Slash = 47,
+ Num0 = 48,
+ Num1 = 49,
+ W = 87,
+ A = 65,
+ S = 83,
+ D = 68,
+ LeftShift = 340,
+};
+
 /* Printable keys */
 #define KEY_SPACE              32
 #define KEY_APOSTROPHE         39  /* ' */
