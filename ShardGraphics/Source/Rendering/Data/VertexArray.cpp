@@ -26,9 +26,9 @@ namespace Shard::Graphics
         }
     }
     
-    VertexArray* VertexArray::Create()
+    std::shared_ptr<VertexArray> VertexArray::Create()
     {
-        return new VertexArray();
+        return std::make_shared<VertexArray>();
     }
 
     VertexArray::VertexArray()

@@ -8,9 +8,9 @@
 
 namespace Shard::Graphics
 {
-    Shader* Shader::Create(const std::string& fileLocation)
+    std::shared_ptr<Shader> Shader::Create(const std::string& fileLocation)
     {
-        return new Shader(fileLocation);
+        return std::make_shared<Shader>(fileLocation);
     }
 
     Shader::Shader(const std::string& fileLocation)

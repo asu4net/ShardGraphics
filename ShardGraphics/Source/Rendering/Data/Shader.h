@@ -1,6 +1,6 @@
 ﻿#pragma once
+#include <memory>
 #include <string>
-
 #include "glm/fwd.hpp"
 
 namespace Shard::Graphics
@@ -8,7 +8,7 @@ namespace Shard::Graphics
     class Shader
     {
     public:
-        static Shader* Create(const std::string& fileLocation);
+        static std::shared_ptr<Shader> Create(const std::string& fileLocation);
         Shader(const std::string& fileLocation);
         ~Shader();
 

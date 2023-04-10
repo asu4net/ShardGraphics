@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include <array>
 #include <memory>
 #include "Math/Math.h"
 
@@ -9,18 +8,12 @@ namespace Shard::Graphics
     class VertexArray;
     class VertexBuffer;
     class IndexBuffer;
-    class Shader;
-
-    enum class PrimitiveType
-    {
-        Triangle
-    };
 
     /////////////////////////
     /// TEST TRIANGLE
     ////////////////////////
     
-    class TrianglePrimitive
+    class Triangle
     {
     public:
         struct Vertex
@@ -31,17 +24,15 @@ namespace Shard::Graphics
 
         static const uint32_t VertexDataCount;
         
-        TrianglePrimitive();
-        ~TrianglePrimitive();
-        
-        const std::shared_ptr<Shader>& GetShader() const { return m_Shader; }
-        const std::shared_ptr<VertexArray>& GetVertexArray() const { return m_VertexArray; }
+        Triangle();
+        ~Triangle();
+
+        std::shared_ptr<VertexArray> GetVertexArray() const { return m_VertexArray; }
         
     private:
         Vertex* m_VertexData;
         std::shared_ptr<VertexArray> m_VertexArray;
         std::shared_ptr<VertexBuffer> m_VertexBuffer;
         std::shared_ptr<IndexBuffer> m_IndexBuffer;
-        std::shared_ptr<Shader> m_Shader;
     };
 }

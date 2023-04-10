@@ -3,14 +3,14 @@
 
 namespace Shard::Graphics
 {
-    VertexBuffer* VertexBuffer::Create(const float* vertices, const uint32_t size)
+    std::shared_ptr<VertexBuffer> VertexBuffer::Create(const float* vertices, const uint32_t size)
     {
-        return new VertexBuffer(vertices, size);
+        return std::make_shared<VertexBuffer>(vertices, size);
     }
 
-    VertexBuffer* VertexBuffer::Create(const uint32_t size)
+    std::shared_ptr<VertexBuffer> VertexBuffer::Create(const uint32_t size)
     {
-        return new VertexBuffer(size);
+        return std::make_shared<VertexBuffer>(size);
     }
 
     VertexBuffer::VertexBuffer(const float* vertices, const uint32_t size)

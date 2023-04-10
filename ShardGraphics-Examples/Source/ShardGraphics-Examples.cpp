@@ -34,7 +34,7 @@ int main()
         
         renderer2D.SetProjectionViewMatrix(viewPortCamera.ProjectionViewMatrix());
         renderer2D.SubmitPrimitive(PrimitiveType::Triangle, glm::translate(Global::IdentityMatrix, trianglePosition));
-        renderer2D.SubmitPrimitive(PrimitiveType::Triangle);
+        renderer2D.SubmitPrimitive(PrimitiveType::Quad, Global::IdentityMatrix, Global::YellowColor, renderer2D.TextedQuadShader());
         renderer2D.DrawPrimitives();
         
         imGuiRenderer.DrawWidgets();
