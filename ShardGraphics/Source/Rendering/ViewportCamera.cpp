@@ -1,8 +1,10 @@
-﻿#include "Camera.h"
+﻿#include "ViewportCamera.h"
+#include "Input/Input.h"
+#include "Input/KeyCodes.h"
 
 namespace Shard::Graphics
 {
-    Camera::Camera(const Projection startProjection)
+    ViewportCamera::ViewportCamera(const Projection startProjection)
         : CurrentProjection(startProjection)
         , Size(3.f)
         , Fov(85.f)
@@ -11,18 +13,12 @@ namespace Shard::Graphics
         , AspectRatio(1280.f / 720.f)
         , Position(Global::ForwardVector * -2.f)
         , Rotation(Global::IdentityMatrix)
+        , MoveSpeed(2.f)
         , m_ProjectionViewMatrix(Global::IdentityMatrix)
     {
     }
 
-    void Camera::DetachController()
-    {
-        if (m_Controller)
-            m_Controller->Detach();
-        m_Controller.reset();
-    }
-
-    void Camera::UpdateMatrix()
+    void ViewportCamera::UpdateMatrix()
     {
         glm::mat4 viewMatrix = Global::IdentityMatrix;
         CalculateView(viewMatrix);
@@ -38,14 +34,29 @@ namespace Shard::Graphics
         m_ProjectionViewMatrix = projectionMatrix * viewMatrix;
     }
 
-    void Camera::Update(const float deltaTime)
+    void ViewportCamera::Update(const float deltaTime)
     {
         UpdateMatrix();
-        if (m_Controller)
-            m_Controller->Update(deltaTime);
+        
+        const float displacement = MoveSpeed * deltaTime;
+       
+        if (Input::IsKeyPressed(KEY_S))
+            Position.z -= displacement;
+        if (Input::IsKeyPressed(KEY_W))
+            Position.z += displacement;
+            
+        if (Input::IsKeyPressed(KEY_A))
+            Position.x -= displacement;
+        if (Input::IsKeyPressed(KEY_D))
+            Position.x += displacement;
+
+        if (Input::IsKeyPressed(KEY_LEFT_SHIFT))
+            Position.y -= displacement;
+        if (Input::IsKeyPressed(KEY_SPACE))
+            Position.y += displacement;
     }
 
-    void Camera::CalculateView(glm::mat4& viewMatrix)
+    void ViewportCamera::CalculateView(glm::mat4& viewMatrix)
     {
         glm::vec3 tweakedPosition = Position;
         tweakedPosition.z *= -1;
@@ -53,13 +64,13 @@ namespace Shard::Graphics
         viewMatrix = glm::inverse(viewMatrix);
     }
 
-    void Camera::CalculatePerspectiveProjection(glm::mat4& projectionMatrix)
+    void ViewportCamera::CalculatePerspectiveProjection(glm::mat4& projectionMatrix)
     {
         projectionMatrix = glm::perspective(glm::radians(Fov), AspectRatio,
             NearPlane, FarPlane);
     }
 
-    void Camera::CalculateOrthographicProjection(glm::mat4& projectionMatrix)
+    void ViewportCamera::CalculateOrthographicProjection(glm::mat4& projectionMatrix)
     {
         const float right = AspectRatio * Size; //update aspect ratio
         const float left = -right;

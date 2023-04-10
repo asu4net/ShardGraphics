@@ -1,11 +1,9 @@
 ﻿#pragma once
-#include <memory>
-#include "CameraController.h"
 #include "Math/Math.h"
 
 namespace Shard::Graphics
 {
-    class Camera
+    class ViewportCamera
     {
     public:
         enum class Projection { None, Perspective, Orthographic };
@@ -18,28 +16,11 @@ namespace Shard::Graphics
         float AspectRatio;
         glm::vec3 Position;
         glm::quat Rotation;
+        float MoveSpeed;
         
-        Camera(Projection startProjection = Projection::Perspective);
+        ViewportCamera(Projection startProjection = Projection::Perspective);
 
         glm::mat4 ProjectionViewMatrix() const { return m_ProjectionViewMatrix; }
-
-        template<typename T>
-        std::shared_ptr<T> AttachController()
-        {
-            DetachController();
-            auto controller = std::make_shared<T>(this);
-            m_Controller = controller;
-            m_Controller->Attach();
-            return controller;
-        }
-
-        void DetachController();
-        
-        template<typename T>
-        std::shared_ptr<T> GetController()
-        {
-            return static_cast<T>(m_Controller);
-        }
         
         void UpdateMatrix();
         void Update(float deltaTime);
@@ -49,7 +30,6 @@ namespace Shard::Graphics
         void CalculateOrthographicProjection(glm::mat4& projectionMatrix);
         
     private:
-        std::shared_ptr<CameraController> m_Controller;
         glm::mat4 m_ProjectionViewMatrix;
     };
 }

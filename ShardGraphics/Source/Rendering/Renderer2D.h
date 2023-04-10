@@ -6,7 +6,7 @@
 
 namespace Shard::Graphics
 {
-    class Camera;
+    class ViewportCamera;
     class Window;
     
     class Renderer2D : public Singleton<Renderer2D>

@@ -1,7 +1,6 @@
 #include <ShardGraphics.h>
 #include "ImGui/Widgets/Vector3Widget.h"
-#include "Rendering/Camera/Camera.h"
-#include "Rendering/Camera/Controllers/ViewportCameraController.h"
+#include "Rendering/ViewportCamera.h"
 
 using namespace Shard::Graphics;
 using namespace Shard;
@@ -12,8 +11,7 @@ int main()
     Renderer2D& renderer2D = Renderer2D::CreateAndInitialize(window);
     ImGuiRenderer& imGuiRenderer = ImGuiRenderer::CreateAndInitialize(window);
     
-    Camera viewPortCamera;
-    viewPortCamera.AttachController<ViewportCameraController>();
+    ViewportCamera viewPortCamera;
     
     glm::vec3 trianglePosition = Global::RightVector * 2.f;
     const auto rootWidget = imGuiRenderer.CreateRootWidget<ImGuiWidget>("Settings");
