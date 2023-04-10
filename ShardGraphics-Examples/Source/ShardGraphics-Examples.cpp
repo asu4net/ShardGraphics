@@ -15,7 +15,7 @@ int main()
     Camera viewPortCamera;
     viewPortCamera.AttachController<ViewportCameraController>();
     
-    glm::vec3 trianglePosition = glm::RightVector * 2.f;
+    glm::vec3 trianglePosition = Global::RightVector * 2.f;
     const auto rootWidget = imGuiRenderer.CreateRootWidget<ImGuiWidget>("Settings");
     Vector3Widget widget(trianglePosition, "Position");
     rootWidget->PushWidget<Vector3Widget>(widget);
@@ -34,7 +34,7 @@ int main()
         viewPortCamera.Update(deltaTime);
         
         renderer2D.SetProjectionViewMatrix(viewPortCamera.ProjectionViewMatrix());
-        renderer2D.SubmitPrimitive(PrimitiveType::Triangle, glm::translate(glm::IdentityMatrix, trianglePosition));
+        renderer2D.SubmitPrimitive(PrimitiveType::Triangle, glm::translate(Global::IdentityMatrix, trianglePosition));
         renderer2D.SubmitPrimitive(PrimitiveType::Triangle);
         renderer2D.DrawPrimitives();
         

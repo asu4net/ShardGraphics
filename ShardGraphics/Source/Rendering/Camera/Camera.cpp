@@ -9,9 +9,9 @@ namespace Shard::Graphics
         , NearPlane(0.1f)
         , FarPlane(1000.f)
         , AspectRatio(1280.f / 720.f)
-        , Position(glm::ForwardVector * -2.f)
-        , Rotation(glm::IdentityMatrix)
-        , m_ProjectionViewMatrix(glm::IdentityMatrix)
+        , Position(Global::ForwardVector * -2.f)
+        , Rotation(Global::IdentityMatrix)
+        , m_ProjectionViewMatrix(Global::IdentityMatrix)
     {
     }
 
@@ -24,15 +24,15 @@ namespace Shard::Graphics
 
     void Camera::UpdateMatrix()
     {
-        glm::mat4 viewMatrix = glm::IdentityMatrix;
+        glm::mat4 viewMatrix = Global::IdentityMatrix;
         CalculateView(viewMatrix);
 
-        glm::mat4 projectionMatrix = glm::IdentityMatrix;
+        glm::mat4 projectionMatrix = Global::IdentityMatrix;
         switch (CurrentProjection)
         {
         case Projection::Perspective: CalculatePerspectiveProjection(projectionMatrix); break;
         case Projection::Orthographic: CalculateOrthographicProjection(projectionMatrix); break;
-        case Projection::None: projectionMatrix = glm::IdentityMatrix; break;
+        case Projection::None: projectionMatrix = Global::IdentityMatrix; break;
         }
 
         m_ProjectionViewMatrix = projectionMatrix * viewMatrix;

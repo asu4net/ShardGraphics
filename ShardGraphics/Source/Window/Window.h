@@ -20,7 +20,7 @@ namespace Shard::Graphics
         {
             std::string Title{"Shard Window"};
             int Width{1280}, Height{720};
-            glm::vec4 Color{glm::DarkGreyColor};
+            glm::vec4 Color{Global::DarkGreyColor};
             int OpenGlMajorVersion{4}, OpenGlMinorVersion{6};
             bool VSync{true};
             CursorMode CursorMode{CursorMode::Normal};

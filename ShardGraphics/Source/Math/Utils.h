@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 #include "glm/gtx/quaternion.hpp"
 
-namespace glm
+namespace Math
 {
     inline glm::vec3 LookAt(const glm::quat& rot, const glm::vec3& axis)
     {

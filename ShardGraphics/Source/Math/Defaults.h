@@ -2,8 +2,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-namespace glm
+namespace Global
 {
+    using namespace glm;   
+    
     /////////////////////////
     /// COLORS
     ////////////////////////
