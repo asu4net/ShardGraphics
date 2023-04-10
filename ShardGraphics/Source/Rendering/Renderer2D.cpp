@@ -30,7 +30,7 @@ namespace Shard::Graphics
         
         m_FlatColorShader = Shader::Create("Content/Shaders/FlatColor.glsl");
         m_VertexColorShader = Shader::Create("Content/Shaders/VertexColor.glsl");
-        m_TextedQuadShader = Shader::Create("Content/Shaders/TextedQuad.glsl");
+        m_TextureShader = Shader::Create("Content/Shaders/Texture.glsl");
     }
 
     void Renderer2D::DrawPrimitives()
@@ -69,8 +69,12 @@ namespace Shard::Graphics
         m_CommandQueue->Submit<SetViewPortCommand>(x, y, width, height);
     }
 
-    void Renderer2D::SubmitPrimitive(const PrimitiveType type, const glm::mat4& modelMatrix, const glm::vec4& color
-        , const std::shared_ptr<Shader>& shader)
+    void Renderer2D::SubmitPrimitive(
+        const PrimitiveType type,
+        const glm::mat4& modelMatrix,
+        const glm::vec4& color,
+        const std::shared_ptr<Shader>& shader,
+        const std::shared_ptr<Texture>& texture)
     {
         const glm::mat4 mvpMatrix = m_SceneData.ProjectionViewMatrix * modelMatrix;
         const std::shared_ptr<Shader> shaderToUse = shader ? shader : m_FlatColorShader;
@@ -86,6 +90,15 @@ namespace Shard::Graphics
             m_CommandQueue->Submit<SetUniformMat4Command>(shaderToUse, "u_MvpMatrix", mvpMatrix);
             m_CommandQueue->Submit<SetUniformVec4Command>(shaderToUse, "u_Color", color);
             m_CommandQueue->Submit<DrawElementsCommand>(m_QuadPrimitive->GetVertexArray());
+            return;
+            
+        case PrimitiveType::TextedQuad:
+            m_CommandQueue->Submit<SetUniformMat4Command>(shaderToUse, "u_MvpMatrix", mvpMatrix);
+            m_CommandQueue->Submit<SetUniformVec4Command>(shaderToUse, "u_Color", color);
+            m_CommandQueue->Submit<BindTextureCommand>(texture);
+            m_CommandQueue->Submit<SetUniformIntCommand>(shaderToUse, "u_TextureSlot", 0);
+            m_CommandQueue->Submit<DrawElementsCommand>(m_QuadPrimitive->GetVertexArray());
+            return;
         }
     }
 }

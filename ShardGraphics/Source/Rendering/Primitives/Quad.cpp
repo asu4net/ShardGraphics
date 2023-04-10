@@ -18,10 +18,10 @@ namespace Shard::Graphics
         
         m_VertexArray = VertexArray::Create();
         
-        m_VertexData[0] = {glm::vec3(-0.5, -0.5, 0.0f), { 0.0f, 1.0f } };
-        m_VertexData[1] = {glm::vec3( 0.5, -0.5, 0.0f), { 1.0f, 1.0f } };
-        m_VertexData[2] = {glm::vec3( 0.5,  0.5, 0.0f), { 1.0f, 0.0f } };
-        m_VertexData[3] = {glm::vec3(-0.5,  0.5, 0.0f), { 0.0f, 0.0f } };
+        m_VertexData[0] = {glm::vec3(-0.5, -0.5, 0.0f), { 0.0f, 0.0f } };
+        m_VertexData[1] = {glm::vec3( 0.5, -0.5, 0.0f), { 1.0f, 0.0f } };
+        m_VertexData[2] = {glm::vec3( 0.5,  0.5, 0.0f), { 1.0f, 1.0f } };
+        m_VertexData[3] = {glm::vec3(-0.5,  0.5, 0.0f), { 0.0f, 1.0f } };
         
         m_VertexBuffer = VertexBuffer::Create(reinterpret_cast<const float*>(m_VertexData), VertexDataCount * sizeof(float));
 

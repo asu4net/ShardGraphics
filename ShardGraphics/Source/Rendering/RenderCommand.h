@@ -2,6 +2,7 @@
 #include "RendererAPI.h"
 #include "Data/VertexArray.h"
 #include "Data/Shader.h"
+#include "Data/Texture.h"
 #include <memory>
 
 namespace Shard::Graphics
@@ -130,6 +131,47 @@ namespace Shard::Graphics
 
     private:
         const glm::vec4 m_Vec4;
+    };
+    
+    class SetUniformIntCommand : public SetUniformCommand
+    {
+    public:
+        
+        SetUniformIntCommand(const std::shared_ptr<Shader>& shader, const char* uniformName, const int num)
+            : SetUniformCommand(shader, uniformName)
+            , m_Num(num)
+        {}
+
+        const char* GetName() const override { return "SetUniformInt"; }
+        
+        void Execute() override
+        {
+            SetUniformCommand::Execute();
+            m_Shader->SetUniformInt(m_UniformName, m_Num);
+        }
+
+    private:
+        const int m_Num;
+    };
+
+    class BindTextureCommand : public RenderCommand
+    {
+    public:
+        BindTextureCommand(const std::shared_ptr<Texture>& texture, const uint32_t slot = 0)
+            : m_Texture(texture)
+            , m_Slot(slot)
+        {}
+
+        const char* GetName() const override { return "BindTexture"; }
+
+        void Execute() override
+        {
+            m_Texture->Bind(m_Slot);
+        }
+        
+    private:
+        const std::shared_ptr<Texture> m_Texture;
+        const uint32_t m_Slot;
     };
 
     class DrawElementsCommand : public RenderCommand

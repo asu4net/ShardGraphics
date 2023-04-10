@@ -12,7 +12,7 @@ namespace Shard::Graphics
 
     enum class PrimitiveType
     {
-        Triangle, Quad
+        Triangle, Quad, TextedQuad
     };
     
     class Renderer2D : public Singleton<Renderer2D>
@@ -28,9 +28,9 @@ namespace Shard::Graphics
             return m_VertexColorShader;
         }
 
-        std::shared_ptr<Shader> TextedQuadShader() const
+        std::shared_ptr<Shader> TextureShader() const
         {
-            return m_TextedQuadShader;
+            return m_TextureShader;
         }
 
         Renderer2D() = default;
@@ -44,6 +44,8 @@ namespace Shard::Graphics
         void Finalize();
 
         void SetProjectionViewMatrix(const glm::mat4& projectionViewMatrix);
+
+        const std::unique_ptr<RenderCommandQueue>& CommandQueue() const { return m_CommandQueue; } 
         
         void ClearScreen(const glm::vec4 clearColor = Global::DarkGreyColor);
         void SetClearColor(const glm::vec4 clearColor);
@@ -53,7 +55,8 @@ namespace Shard::Graphics
             PrimitiveType type,
             const glm::mat4& modelMatrix = Global::IdentityMatrix,
             const glm::vec4& color = Global::WhiteColor,
-            const std::shared_ptr<Shader>& shader = nullptr);
+            const std::shared_ptr<Shader>& shader = nullptr,
+            const std::shared_ptr<Texture>& texture = nullptr);
 
         
 
@@ -70,6 +73,6 @@ namespace Shard::Graphics
         
         std::shared_ptr<Shader> m_FlatColorShader;
         std::shared_ptr<Shader> m_VertexColorShader;
-        std::shared_ptr<Shader> m_TextedQuadShader;
+        std::shared_ptr<Shader> m_TextureShader;
     };
 }

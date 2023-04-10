@@ -13,8 +13,10 @@ namespace Shard::Graphics
         ~Shader();
 
         void ReadFromFile(const std::string& fileLocation, std::string& vertexSource, std::string& fragmentSource);
+        
         void SetUniformMat4(const char* uniformName, const glm::mat4& mat) const;
         void SetUniformVec4(const char* uniformName, const glm::vec4& vec) const;
+        void SetUniformInt(const char* uniformName, int num);
         
         void Bind() const;
         void Unbind() const;

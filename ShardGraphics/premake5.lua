@@ -22,7 +22,8 @@ project "ShardGraphics"
         "%{prj.location}/ThirdParty/glfw/Source/**.h",
         "%{prj.location}/ThirdParty/imgui/Source/**.h",
         "%{prj.location}/ThirdParty/imguizmo/Source/**.h",
-        "%{prj.location}/ThirdParty/imguizmo/Source/**.cpp"
+        "%{prj.location}/ThirdParty/imguizmo/Source/**.cpp",
+        "%{prj.location}/ThirdParty/stb/Source/**.h"
     }
 
     includedirs
@@ -34,7 +35,8 @@ project "ShardGraphics"
         "%{prj.location}/ThirdParty/glad/Source",
         "%{prj.location}/ThirdParty/glfw/Source",
         "%{prj.location}/ThirdParty/imgui/Source",
-        "%{prj.location}/ThirdParty/imguizmo/Source"
+        "%{prj.location}/ThirdParty/imguizmo/Source",
+        "%{prj.location}/ThirdParty/stb/Source"
     }
 
     libdirs

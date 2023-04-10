@@ -177,6 +177,12 @@ namespace Shard::Graphics
         glUniform4fv(id, 1, glm::value_ptr(vec));
     }
 
+    void Shader::SetUniformInt(const char* uniformName, const int num)
+    {
+        const uint32_t id = glGetUniformLocation(m_ShaderId, uniformName);
+        glUniform1i(id, num);
+    }
+
     void Shader::Bind() const
     {
         glUseProgram(m_ShaderId);
