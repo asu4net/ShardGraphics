@@ -1,6 +1,5 @@
 ﻿#include "ViewportCamera.h"
-#include "Input/Input.h"
-#include "Input/KeyCodes.h"
+#include "Window/Input/Input.h"
 
 namespace Shard::Graphics
 {

@@ -34,7 +34,6 @@ namespace Shard::Graphics
         virtual void Initialize(const Configuration& config = {});
         virtual void Finalize();
 
-        virtual double GetTime();
         virtual void SwapBuffers();
         
         virtual WindowEvents& Events() { return m_Events; }

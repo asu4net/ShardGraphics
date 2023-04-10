@@ -73,11 +73,6 @@ namespace Shard::Graphics
         Events().CallEndFinalizeEvent();
     }
 
-    double Window::GetTime()
-    {
-        return glfwGetTime();
-    }
-
     bool Window::KeepOpened()
     {
         return !glfwWindowShouldClose(m_WindowHandler) && m_KeepWindowOpened;

@@ -1,6 +1,7 @@
 #include <ShardGraphics.h>
 #include "ImGui/Widgets/Vector3Widget.h"
 #include "Rendering/ViewportCamera.h"
+#include "Window/Time/Time.h"
 
 using namespace Shard::Graphics;
 using namespace Shard;
@@ -18,14 +19,14 @@ int main()
     Vector3Widget widget(trianglePosition, "Position");
     rootWidget->PushWidget<Vector3Widget>(widget);
 
-    double lastFrameTime = window->GetTime();
+    double lastFrameTime = Time::GetTime();
     
     while (window->KeepOpened())
     {
         window->PollEvents();
         renderer2D.ClearScreen();
 
-        const double time = window->GetTime();
+        const double time = Time::GetTime();
         const float deltaTime = static_cast<float>(time - lastFrameTime);
         lastFrameTime = time;
         
