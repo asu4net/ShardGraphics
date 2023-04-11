@@ -5,11 +5,12 @@
 
 namespace Shard::Graphics
 {
-    const uint32_t Quad::VertexCount = 4;
-    const uint32_t Quad::VertexDataCount = 4 * 5;
-    
     Quad::Quad()
-        : m_VertexData(new Vertex[VertexCount])
+        : m_VertexCount(4)
+        , m_VertexElementsCount(6)
+        , m_VertexDataCount(m_VertexCount * m_VertexElementsCount)
+        , m_VertexDataSize(m_VertexDataCount * sizeof(float))
+        , m_VertexData(new Vertex[m_VertexCount])
     {
         constexpr uint32_t indices[6] = {
             0, 1, 2,
@@ -23,7 +24,7 @@ namespace Shard::Graphics
         m_VertexData[2] = {glm::vec3( 0.5,  0.5, 0.0f), { 1.0f, 1.0f } };
         m_VertexData[3] = {glm::vec3(-0.5,  0.5, 0.0f), { 0.0f, 1.0f } };
         
-        m_VertexBuffer = VertexBuffer::Create(reinterpret_cast<const float*>(m_VertexData), VertexDataCount * sizeof(float));
+        m_VertexBuffer = VertexBuffer::Create(reinterpret_cast<const float*>(m_VertexData), m_VertexDataSize);
 
         m_VertexBuffer->SetLayout({
             {ShaderDataType::Float3, "a_Position"},

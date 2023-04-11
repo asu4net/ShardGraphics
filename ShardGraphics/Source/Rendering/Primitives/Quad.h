@@ -21,9 +21,6 @@ namespace Shard::Graphics
             glm::vec3 Position;
             glm::vec2 UV;
         };
-
-        static const uint32_t VertexCount;
-        static const uint32_t VertexDataCount;
         
         Quad();
         ~Quad();
@@ -31,6 +28,11 @@ namespace Shard::Graphics
         const std::shared_ptr<VertexArray>& GetVertexArray() const { return m_VertexArray; }
         
     private:
+        const uint32_t m_VertexCount;
+        const uint32_t m_VertexElementsCount;
+        const uint32_t m_VertexDataCount;
+        const uint32_t m_VertexDataSize;
+        
         Vertex* m_VertexData;
         std::shared_ptr<VertexArray> m_VertexArray;
         std::shared_ptr<VertexBuffer> m_VertexBuffer;

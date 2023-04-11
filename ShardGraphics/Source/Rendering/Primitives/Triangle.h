@@ -21,8 +21,6 @@ namespace Shard::Graphics
             glm::vec3 Position;
             glm::vec4 Color;
         };
-
-        static const uint32_t VertexDataCount;
         
         Triangle();
         ~Triangle();
@@ -30,7 +28,12 @@ namespace Shard::Graphics
         std::shared_ptr<VertexArray> GetVertexArray() const { return m_VertexArray; }
         
     private:
+        const uint32_t m_VertexCount;
+        const uint32_t m_VertexElementsCount;
+        const uint32_t m_VertexDataCount;
+
         Vertex* m_VertexData;
+
         std::shared_ptr<VertexArray> m_VertexArray;
         std::shared_ptr<VertexBuffer> m_VertexBuffer;
         std::shared_ptr<IndexBuffer> m_IndexBuffer;
