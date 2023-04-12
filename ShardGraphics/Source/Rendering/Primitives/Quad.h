@@ -22,6 +22,7 @@ namespace Shard::Graphics
             glm::vec4 Color;
             glm::vec2 UV;
             glm::vec2 UVScale;
+            float TextureSlot;
         };
         
         Quad();
@@ -29,14 +30,15 @@ namespace Shard::Graphics
 
         const std::shared_ptr<VertexArray>& GetVertexArray() const { return m_VertexArray; }
 
-        void AddVertexData(const glm::mat4& modelMatrix, const glm::vec4& color, const glm::vec2& uvScale);
+        void AddVertexData(const glm::mat4& modelMatrix, const glm::vec4& color, float textureSlot, const glm::vec2& uvScale);
         const void* GetVertexData() const { return m_VertexData; }
         uint32_t GetIndexCount() const { return m_IndexCount; }
         
         uint32_t GetVertexDataSize() const
         {
-            return static_cast<uint32_t>(reinterpret_cast<uint8_t*>(m_CurrentVertex) - reinterpret_cast<uint8_t*>(
-                m_VertexData));
+            const uint32_t dataSize = static_cast<uint32_t>(reinterpret_cast<uint8_t*>(m_CurrentVertex) -
+                reinterpret_cast<uint8_t*>(m_VertexData));
+            return dataSize;
         }
         
         void ResetVertexData();
@@ -44,7 +46,6 @@ namespace Shard::Graphics
     private:
         const uint32_t m_MaxQuads;
         const uint32_t m_VertexCount;
-        uint32_t m_IndexCount;
         const uint32_t m_VertexElementsCount;
         const uint32_t m_VertexDataCount;
         const uint32_t m_VertexDataSize;
@@ -52,6 +53,7 @@ namespace Shard::Graphics
         Vertex* m_VertexData;
         Vertex* m_CurrentVertex;
         uint32_t m_QuadCount;
+        uint32_t m_IndexCount;
         
         glm::vec3 m_VertexPositions[4];
         glm::vec2 m_VertexUV[4];
