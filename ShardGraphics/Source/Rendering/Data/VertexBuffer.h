@@ -18,7 +18,7 @@ namespace Shard::Graphics
         
         void Bind() const;
         void Unbind() const;
-        void SetData(const void* data, uint32_t size);
+        void SetData(const void* data, uint32_t size) const;
         
         void SetLayout(const BufferLayout& bufferLayout);
         const BufferLayout& GetLayout() const { return m_Layout; }

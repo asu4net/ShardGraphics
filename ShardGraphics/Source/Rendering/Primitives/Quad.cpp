@@ -6,34 +6,60 @@
 namespace Shard::Graphics
 {
     Quad::Quad()
-        : m_VertexCount(4)
+        : m_MaxQuads(10000)
+        , m_VertexCount(m_MaxQuads * 4)
+        , m_IndexCount(0)
         , m_VertexElementsCount(6)
         , m_VertexDataCount(m_VertexCount * m_VertexElementsCount)
         , m_VertexDataSize(m_VertexDataCount * sizeof(float))
         , m_VertexData(new Vertex[m_VertexCount])
+        , m_CurrentVertex(m_VertexData)
+        , m_QuadCount(0)
+        , m_VertexPositions{
+            {-0.5, -0.5, 0.0f},
+            {0.5, -0.5, 0.0f},
+            {0.5, 0.5, 0.0f},
+            {-0.5, 0.5, 0.0f}
+        }
+        , m_VertexUV{
+            {0.0f, 0.0f},
+            {1.0f, 0.0f},
+            {1.0f, 1.0f},
+            {0.0f, 1.0f}
+        }
     {
-        constexpr uint32_t indices[6] = {
-            0, 1, 2,
-            2, 3, 0
-        };
-        
         m_VertexArray = VertexArray::Create();
-        
-        m_VertexData[0] = {glm::vec3(-0.5, -0.5, 0.0f), { 0.0f, 0.0f } };
-        m_VertexData[1] = {glm::vec3( 0.5, -0.5, 0.0f), { 1.0f, 0.0f } };
-        m_VertexData[2] = {glm::vec3( 0.5,  0.5, 0.0f), { 1.0f, 1.0f } };
-        m_VertexData[3] = {glm::vec3(-0.5,  0.5, 0.0f), { 0.0f, 1.0f } };
-        
-        m_VertexBuffer = VertexBuffer::Create(reinterpret_cast<const float*>(m_VertexData), m_VertexDataSize);
+        m_VertexBuffer = VertexBuffer::Create(m_VertexDataSize);
 
         m_VertexBuffer->SetLayout({
             {ShaderDataType::Float3, "a_Position"},
-            {ShaderDataType::Float2, "a_UV"}
+            {ShaderDataType::Float4, "a_Color"},
+            {ShaderDataType::Float2, "a_UV"},
+            {ShaderDataType::Float2, "a_UVScale"},
         });
 
         m_VertexArray->AddVertexBuffer(m_VertexBuffer);
-        m_IndexBuffer = IndexBuffer::Create(indices, static_cast<uint32_t>(sizeof(indices) / sizeof(uint32_t)));
+
+        const uint32_t maxIndices = m_MaxQuads * 6;
+        uint32_t* indices = new uint32_t[maxIndices];
+
+        uint32_t offset = 0;
+        for (uint32_t i = 0; i < maxIndices; i += 6)
+        {
+            indices[i + 0] = offset + 0;
+            indices[i + 1] = offset + 1;
+            indices[i + 2] = offset + 2;
+
+            indices[i + 3] = offset + 2;
+            indices[i + 4] = offset + 3;
+            indices[i + 5] = offset + 0;
+
+            offset += 4;
+        }
+        
+        m_IndexBuffer = IndexBuffer::Create(indices, maxIndices);
         m_VertexArray->SetIndexBuffer(m_IndexBuffer);
+        delete[] indices;
 
         m_VertexArray->Unbind();
     }
@@ -41,5 +67,27 @@ namespace Shard::Graphics
     Quad::~Quad()
     {
         delete[] m_VertexData;
+    }
+
+    void Quad::AddVertexData(const glm::mat4& modelMatrix, const glm::vec4& color, const glm::vec2& uvScale)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            m_CurrentVertex->Position = glm::vec4(m_VertexPositions[i], 1.0f) * modelMatrix;
+            m_CurrentVertex->Color = color;
+            m_CurrentVertex->UV = m_VertexUV[i];
+            m_CurrentVertex->UVScale = uvScale;
+            m_CurrentVertex++;
+        }
+
+        m_IndexCount += 6;
+        m_QuadCount++;
+    }
+
+    void Quad::ResetVertexData()
+    {
+        m_CurrentVertex = m_VertexData;
+        m_QuadCount = 0;
+        m_IndexCount = 0;
     }
 }

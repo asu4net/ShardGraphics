@@ -43,7 +43,7 @@ namespace Shard::Graphics
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    void VertexBuffer::SetData(const void* data, const uint32_t size)
+    void VertexBuffer::SetData(const void* data, const uint32_t size) const
     {
         glBindBuffer(GL_ARRAY_BUFFER, m_BufferId);
         glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);

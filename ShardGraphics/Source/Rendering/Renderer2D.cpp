@@ -2,8 +2,10 @@
 #include "Window/Window.h"
 #include "RenderCommand.h"
 #include "RenderCommandQueue.h"
+#include "Data/IndexBuffer.h"
 #include "Data/VertexArray.h"
 #include "Data/Shader.h"
+#include "Data/VertexBuffer.h"
 
 namespace Shard::Graphics
 {
@@ -35,6 +37,13 @@ namespace Shard::Graphics
 
     void Renderer2D::DrawPrimitives()
     {
+        const auto& quadBuffers = m_TrianglePrimitive->GetVertexArray()->GetVertexBuffers();
+        const auto& quadBuffer = quadBuffers[0];
+        quadBuffer->SetData(m_QuadPrimitive->GetVertexData(), m_QuadPrimitive->GetVertexDataSize());
+        m_CommandQueue->Submit<SetUniformMat4Command>(m_FlatColorShader, "u_ProjectionViewMatrix", m_SceneData.ProjectionViewMatrix);
+        m_CommandQueue->Submit<DrawElementsCommand>(m_QuadPrimitive->GetVertexArray(), m_QuadPrimitive->GetIndexCount());
+        m_QuadPrimitive->ResetVertexData();
+        
         // TODO: Move this to other thread
         while(!m_CommandQueue->IsEmpty()) m_CommandQueue->ExecuteNext();
     }
@@ -83,13 +92,12 @@ namespace Shard::Graphics
         {
         case PrimitiveType::Triangle:
             m_CommandQueue->Submit<SetUniformMat4Command>(m_VertexColorShader, "u_MvpMatrix", mvpMatrix);
-            m_CommandQueue->Submit<DrawElementsCommand>(m_TrianglePrimitive->GetVertexArray());
+            m_CommandQueue->Submit<DrawElementsCommand>(m_TrianglePrimitive->GetVertexArray(),
+                m_TrianglePrimitive->GetVertexArray()->GetIndexBuffer()->GetCount());
             return;
 
         case PrimitiveType::Quad:
-            m_CommandQueue->Submit<SetUniformMat4Command>(shaderToUse, "u_MvpMatrix", mvpMatrix);
-            m_CommandQueue->Submit<SetUniformVec4Command>(shaderToUse, "u_Color", color);
-            m_CommandQueue->Submit<DrawElementsCommand>(m_QuadPrimitive->GetVertexArray());
+            m_QuadPrimitive->AddVertexData(modelMatrix, color, Global::OneVector);
             return;
             
         case PrimitiveType::TextedQuad:
@@ -97,7 +105,8 @@ namespace Shard::Graphics
             m_CommandQueue->Submit<SetUniformVec4Command>(shaderToUse, "u_Color", color);
             m_CommandQueue->Submit<BindTextureCommand>(texture);
             m_CommandQueue->Submit<SetUniformIntCommand>(shaderToUse, "u_TextureSlot", 0);
-            m_CommandQueue->Submit<DrawElementsCommand>(m_QuadPrimitive->GetVertexArray());
+            m_CommandQueue->Submit<DrawElementsCommand>(m_QuadPrimitive->GetVertexArray(),
+                m_TrianglePrimitive->GetVertexArray()->GetIndexBuffer()->GetCount());
             return;
         }
     }
