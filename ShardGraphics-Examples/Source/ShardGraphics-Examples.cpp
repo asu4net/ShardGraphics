@@ -21,7 +21,8 @@ int main()
     rootWidget->PushWidget<Vector3Widget>(widget);
 
     double lastFrameTime = Time::GetTime();
-    auto texture = Texture2D::Create("Content/Textures/Checkerboard.png");
+    const auto texture1 = Texture2D::Create("Content/Textures/Checkerboard.png");
+    const auto texture2 = Texture2D::Create("Content/Textures/bola.jpg");
     
     while (window->KeepOpened())
     {
@@ -34,15 +35,13 @@ int main()
         
         viewPortCamera.Update(deltaTime);
         renderer2D.SetProjectionViewMatrix(viewPortCamera.ProjectionViewMatrix());
-        // renderer2D.SubmitPrimitive(PrimitiveType::Triangle, glm::translate(Global::IdentityMatrix, trianglePosition));
-        // renderer2D.SubmitPrimitive(PrimitiveType::TextedQuad, Global::IdentityMatrix, Global::WhiteColor, renderer2D.TextureShader()
-        //     , texture);
-        // renderer2D.SubmitPrimitive(PrimitiveType::Quad, glm::translate(Global::IdentityMatrix, {0, 1, 0}),
-        //     Global::YellowColor);
-        // renderer2D.SubmitPrimitive(PrimitiveType::Quad, glm::translate(Global::IdentityMatrix, {0, 0, 0}),
-        //     Global::BlueColor);
+        renderer2D.SubmitPrimitive(PrimitiveType::Triangle, glm::translate(Global::IdentityMatrix, trianglePosition));
+        renderer2D.SubmitPrimitive(PrimitiveType::Quad, glm::translate(Global::IdentityMatrix, {0, 1, 0}),
+            Global::YellowColor);
+        renderer2D.SubmitPrimitive(PrimitiveType::Quad, glm::translate(Global::IdentityMatrix, {0, 0, 0}),
+            Global::WhiteColor, texture1);
         renderer2D.SubmitPrimitive(PrimitiveType::Quad, glm::translate(Global::IdentityMatrix, {1, 0, 0}),
-           Global::WhiteColor, nullptr, texture);
+           Global::WhiteColor,  texture2);
         renderer2D.DrawPrimitives();
         
         imGuiRenderer.DrawWidgets();

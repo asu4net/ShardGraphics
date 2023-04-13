@@ -17,6 +17,7 @@ namespace Shard::Graphics
         void SetUniformMat4(const char* uniformName, const glm::mat4& mat) const;
         void SetUniformVec4(const char* uniformName, const glm::vec4& vec) const;
         void SetUniformInt(const char* uniformName, int num);
+        void SetUniformIntArray(const char* uniformName, const int32_t* array, int32_t size);
         
         void Bind() const;
         void Unbind() const;

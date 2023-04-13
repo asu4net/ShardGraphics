@@ -183,6 +183,12 @@ namespace Shard::Graphics
         glUniform1i(id, num);
     }
 
+    void Shader::SetUniformIntArray(const char* uniformName, const int32_t* array, const int32_t size)
+    {
+        const uint32_t id = glGetUniformLocation(m_ShaderId, uniformName);
+        glUniform1iv(id, size, array);
+    }
+
     void Shader::Bind() const
     {
         glUseProgram(m_ShaderId);

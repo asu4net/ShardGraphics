@@ -33,14 +33,20 @@ namespace Shard::Graphics
         m_FlatColorShader = Shader::Create("Content/Shaders/FlatColor.glsl");
         m_VertexColorShader = Shader::Create("Content/Shaders/VertexColor.glsl");
         m_TextureShader = Shader::Create("Content/Shaders/Texture.glsl");
+
+        for (uint32_t i = 0; i < 32; i++)
+            samplers[i] = i;
     }
 
     void Renderer2D::DrawPrimitives()
     {
         const auto& quadBuffers = m_QuadPrimitive->GetVertexArray()->GetVertexBuffers();
         const auto& quadBuffer = quadBuffers[0];
+        m_TextureShader->Bind();
+        m_TextureShader->SetUniformIntArray("u_TextureIndex", samplers, 32);
         quadBuffer->SetData(m_QuadPrimitive->GetVertexData(), m_QuadPrimitive->GetVertexDataSize());
-
+        
+        
         m_QuadPrimitive->SubmitBindTextures(m_CommandQueue);
         m_CommandQueue->Submit<SetUniformMat4Command>(m_TextureShader, "u_ProjectionViewMatrix", m_SceneData.ProjectionViewMatrix);
         m_CommandQueue->Submit<DrawElementsCommand>(m_QuadPrimitive->GetVertexArray(), m_QuadPrimitive->GetIndexCount());
@@ -84,11 +90,9 @@ namespace Shard::Graphics
         const PrimitiveType type,
         const glm::mat4& modelMatrix,
         const glm::vec4& color,
-        const std::shared_ptr<Shader>& shader,
         const std::shared_ptr<Texture>& texture)
     {
         const glm::mat4 mvpMatrix = m_SceneData.ProjectionViewMatrix * modelMatrix;
-        const std::shared_ptr<Shader> shaderToUse = shader ? shader : m_FlatColorShader;
         
         switch (type)
         {
@@ -100,14 +104,6 @@ namespace Shard::Graphics
 
         case PrimitiveType::Quad:
             m_QuadPrimitive->AddVertexData(modelMatrix, color, texture, Global::OneVector);
-            return;
-            
-        case PrimitiveType::TextedQuad:
-            m_CommandQueue->Submit<SetUniformMat4Command>(shaderToUse, "u_MvpMatrix", mvpMatrix);
-            m_CommandQueue->Submit<SetUniformVec4Command>(shaderToUse, "u_Color", color);
-            m_CommandQueue->Submit<BindTextureCommand>(texture);
-            // m_CommandQueue->Submit<DrawElementsCommand>(m_QuadPrimitive->GetVertexArray(),
-            //     m_TrianglePrimitive->GetVertexArray()->GetIndexBuffer()->GetCount());
             return;
         }
     }

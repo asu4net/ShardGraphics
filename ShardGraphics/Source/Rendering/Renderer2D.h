@@ -12,7 +12,7 @@ namespace Shard::Graphics
 
     enum class PrimitiveType
     {
-        Triangle, Quad, TextedQuad
+        Triangle, Quad
     };
     
     class Renderer2D : public Singleton<Renderer2D>
@@ -55,7 +55,6 @@ namespace Shard::Graphics
             PrimitiveType type,
             const glm::mat4& modelMatrix = Global::IdentityMatrix,
             const glm::vec4& color = Global::WhiteColor,
-            const std::shared_ptr<Shader>& shader = nullptr,
             const std::shared_ptr<Texture>& texture = nullptr);
 
         
@@ -65,7 +64,7 @@ namespace Shard::Graphics
         {
             glm::mat4 ProjectionViewMatrix = Global::IdentityMatrix;
         };
-        
+        int32_t samplers[32];
         SceneData m_SceneData;
         std::unique_ptr<RenderCommandQueue> m_CommandQueue;
         std::unique_ptr<Triangle> m_TrianglePrimitive;

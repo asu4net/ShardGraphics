@@ -28,7 +28,7 @@ void main()
 #type fragment
 #version 410 core
 
-layout(location = 0) out vec4 gl_Color;
+layout(location = 0) out vec4 color;
 
 // Vertex input
 in vec4 v_Color;
@@ -36,19 +36,20 @@ in float v_TextureSlot;
 in vec2 v_UV;
 in vec2 v_UVScale;
 
-uniform sampler2D u_TextureIndex;
+uniform sampler2D u_TextureIndex[32];
 
 void main()
 {
+    int slot = int(v_TextureSlot);
+    if (slot == 0)
+    {
+        color = v_Color;
+        return;
+    }
+
     vec2 uv;
     uv.x = v_UV.x * v_UVScale.x;
     uv.y = v_UV.y * v_UVScale.y;
-    
-    if (v_TextureSlot != 0.f)
-    {
-        gl_Color = texture(u_TextureIndex, uv) * v_Color;
-        return;
-    }
-    
-    gl_Color = v_Color;
+
+    color = texture(u_TextureIndex[slot], uv) * v_Color;
 }

@@ -37,7 +37,10 @@ namespace Shard::Graphics
 
         bool AddVertexData(const glm::mat4& modelMatrix, const glm::vec4& color, const std::shared_ptr<Texture>& texture,
             const glm::vec2& uvScale);
-        const void* GetVertexData() const { return m_VertexData; }
+        const void* GetVertexData() const
+        {
+            return m_VertexData;
+        }
         uint32_t GetIndexCount() const { return m_IndexCount; }
         
         uint32_t GetVertexDataSize() const
