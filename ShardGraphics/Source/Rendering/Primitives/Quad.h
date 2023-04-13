@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <array>
 #include <memory>
 #include "Math/Math.h"
 
@@ -8,7 +9,9 @@ namespace Shard::Graphics
     class VertexArray;
     class VertexBuffer;
     class IndexBuffer;
-
+    class Texture;
+    class RenderCommandQueue;
+    
     /////////////////////////
     /// QUAD PRIMITIVE
     ////////////////////////
@@ -24,13 +27,16 @@ namespace Shard::Graphics
             glm::vec2 UVScale;
             float TextureSlot;
         };
+
+        inline static constexpr uint32_t MaxTextureSlots = 32;
         
         Quad();
         ~Quad();
 
         const std::shared_ptr<VertexArray>& GetVertexArray() const { return m_VertexArray; }
 
-        void AddVertexData(const glm::mat4& modelMatrix, const glm::vec4& color, float textureSlot, const glm::vec2& uvScale);
+        bool AddVertexData(const glm::mat4& modelMatrix, const glm::vec4& color, const std::shared_ptr<Texture>& texture,
+            const glm::vec2& uvScale);
         const void* GetVertexData() const { return m_VertexData; }
         uint32_t GetIndexCount() const { return m_IndexCount; }
         
@@ -42,6 +48,8 @@ namespace Shard::Graphics
         }
         
         void ResetVertexData();
+
+        void SubmitBindTextures(const std::unique_ptr<RenderCommandQueue>& commandQueue);
         
     private:
         const uint32_t m_MaxQuads;
@@ -57,6 +65,9 @@ namespace Shard::Graphics
         
         glm::vec3 m_VertexPositions[4];
         glm::vec2 m_VertexUV[4];
+
+        std::array<std::shared_ptr<Texture>, MaxTextureSlots> m_Textures;
+        uint32_t m_LastTextureIndex;
         
         std::shared_ptr<VertexArray> m_VertexArray;
         std::shared_ptr<VertexBuffer> m_VertexBuffer;

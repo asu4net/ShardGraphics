@@ -40,6 +40,8 @@ namespace Shard::Graphics
         const auto& quadBuffers = m_QuadPrimitive->GetVertexArray()->GetVertexBuffers();
         const auto& quadBuffer = quadBuffers[0];
         quadBuffer->SetData(m_QuadPrimitive->GetVertexData(), m_QuadPrimitive->GetVertexDataSize());
+
+        m_QuadPrimitive->SubmitBindTextures(m_CommandQueue);
         m_CommandQueue->Submit<SetUniformMat4Command>(m_TextureShader, "u_ProjectionViewMatrix", m_SceneData.ProjectionViewMatrix);
         m_CommandQueue->Submit<DrawElementsCommand>(m_QuadPrimitive->GetVertexArray(), m_QuadPrimitive->GetIndexCount());
         m_QuadPrimitive->ResetVertexData();
@@ -97,7 +99,7 @@ namespace Shard::Graphics
             return;
 
         case PrimitiveType::Quad:
-            m_QuadPrimitive->AddVertexData(modelMatrix, color, 1.0f, Global::OneVector);
+            m_QuadPrimitive->AddVertexData(modelMatrix, color, texture, Global::OneVector);
             return;
             
         case PrimitiveType::TextedQuad:

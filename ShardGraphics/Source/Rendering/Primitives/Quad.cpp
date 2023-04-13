@@ -2,6 +2,7 @@
 #include "Rendering/Data/IndexBuffer.h"
 #include "Rendering/Data/VertexArray.h"
 #include "Rendering/Data/VertexBuffer.h"
+#include "Rendering/RenderCommandQueue.h"
 
 namespace Shard::Graphics
 {
@@ -27,6 +28,7 @@ namespace Shard::Graphics
             {1.0f, 1.0f},
             {0.0f, 1.0f}
         }
+        , m_LastTextureIndex(1)
     {
         m_VertexArray = VertexArray::Create();
         m_VertexBuffer = VertexBuffer::Create(m_VertexDataSize);
@@ -70,8 +72,33 @@ namespace Shard::Graphics
         delete[] m_VertexData;
     }
 
-    void Quad::AddVertexData(const glm::mat4& modelMatrix, const glm::vec4& color, const float textureSlot, const glm::vec2& uvScale)
+    bool Quad::AddVertexData(const glm::mat4& modelMatrix, const glm::vec4& color, const std::shared_ptr<Texture>& texture,
+        const glm::vec2& uvScale)
     {
+        float textureSlot = 0.f;
+
+        if (texture)
+        {
+            for (uint32_t i = 1; i < m_LastTextureIndex; i++)
+            {
+                if (m_Textures[i] == texture)
+                {
+                    textureSlot = static_cast<float>(i);
+                    break;
+                }
+            }
+            
+            if (textureSlot == 0.f)
+            {
+                if (m_LastTextureIndex > MaxTextureSlots)
+                    return false; //TODO: Next batch ?
+                
+                m_Textures[m_LastTextureIndex] = texture;
+                textureSlot = static_cast<float>(m_LastTextureIndex);
+                m_LastTextureIndex++;
+            }
+        }
+        
         for (int i = 0; i < 4; i++)
         {
             m_CurrentVertex->Position =  modelMatrix * glm::vec4(m_VertexPositions[i], 1.0f);
@@ -84,6 +111,7 @@ namespace Shard::Graphics
 
         m_IndexCount += 6;
         m_QuadCount++;
+        return true;
     }
 
     void Quad::ResetVertexData()
@@ -91,5 +119,18 @@ namespace Shard::Graphics
         m_CurrentVertex = m_VertexData;
         m_QuadCount = 0;
         m_IndexCount = 0;
+
+        for (uint32_t i = 1; i < m_LastTextureIndex; i++)
+        {
+            m_Textures[i] = nullptr;
+        }
+
+        m_LastTextureIndex = 1;
+    }
+    
+    void Quad::SubmitBindTextures(const std::unique_ptr<RenderCommandQueue>& commandQueue)
+    {
+        for (uint32_t i = 1; i < m_LastTextureIndex; i++)
+            m_Textures[i]->Bind(i);
     }
 }

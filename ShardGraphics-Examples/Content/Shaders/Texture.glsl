@@ -28,7 +28,7 @@ void main()
 #type fragment
 #version 410 core
 
-layout(location = 0) out vec4 color;
+layout(location = 0) out vec4 gl_Color;
 
 // Vertex input
 in vec4 v_Color;
@@ -43,6 +43,12 @@ void main()
     vec2 uv;
     uv.x = v_UV.x * v_UVScale.x;
     uv.y = v_UV.y * v_UVScale.y;
-    //color = texture(u_TextureIndex, uv) * v_Color;
-    color = v_Color;
+    
+    if (v_TextureSlot != 0.f)
+    {
+        gl_Color = texture(u_TextureIndex, uv) * v_Color;
+        return;
+    }
+    
+    gl_Color = v_Color;
 }
