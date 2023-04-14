@@ -1,4 +1,7 @@
 ﻿#include "Renderer2D.h"
+
+#include <array>
+
 #include "Window/Window.h"
 #include "RenderCommand.h"
 #include "RenderCommandQueue.h"
@@ -7,6 +10,53 @@
 
 namespace Shard::Graphics
 {
+    struct QuadData
+    {
+        struct Vertex
+        {
+            glm::vec3 Position;
+            glm::vec4 Color;
+            glm::vec2 UV;
+            glm::vec2 UVScale;
+            float TextureSlot;
+        };
+
+        static constexpr uint32_t MaxQuads = 10000;
+        static constexpr uint32_t MaxTextureSlots = 32;
+        
+        static constexpr uint32_t MaxVertices = MaxQuads * 4;
+        
+        static constexpr glm::vec3 QuadVertexPositions[] = {
+            {-0.5, -0.5, 0.0f},
+            {0.5, -0.5, 0.0f},
+            {0.5, 0.5, 0.0f},
+            {-0.5, 0.5, 0.0f}
+        };
+
+        static constexpr glm::vec2 QuadVertexUV[] = {
+            {0.0f, 0.0f},
+            {1.0f, 0.0f},
+            {1.0f, 1.0f},
+            {0.0f, 1.0f}
+        };
+
+        std::shared_ptr<VertexArray> VertexArray;
+        std::shared_ptr<VertexBuffer> VertexBuffer;
+        std::shared_ptr<IndexBuffer> IndexBuffer;
+
+        Vertex* VertexData = nullptr;
+        Vertex* LastVertex = nullptr;
+        uint32_t QuadCount = 0;
+        
+        std::array<std::shared_ptr<Texture>, MaxTextureSlots> Indices;
+        uint32_t LastIndex = 1;
+        uint32_t IndexCount = 0;
+
+        uint32_t Samplers[MaxTextureSlots];
+    };
+
+    static QuadData g_QuadData;
+    
     Renderer2D& Renderer2D::CreateAndInitialize(const std::shared_ptr<Window>& window)
     {
         Renderer2D& renderer2D = Renderer2D::CreateSingleton();
@@ -26,11 +76,18 @@ namespace Shard::Graphics
     {
         m_CommandQueue = std::make_unique<RenderCommandQueue>();
         m_TrianglePrimitive = std::make_unique<Triangle>();
-        m_QuadPrimitive = std::make_unique<Quad>();
         
         m_FlatColorShader = Shader::Create("Content/Shaders/FlatColor.glsl");
         m_VertexColorShader = Shader::Create("Content/Shaders/VertexColor.glsl");
         m_TextureShader = Shader::Create("Content/Shaders/Texture.glsl");
+<<<<<<< Updated upstream
+=======
+
+        g_QuadData.VertexArray = VertexArray::Create();
+        g_QuadData.VertexBuffer = VertexBuffer::Create(QuadData::MaxVertices * sizeof(QuadData::Vertex));
+        
+        g_QuadData.VertexData = new QuadData::Vertex[QuadData::MaxVertices];
+>>>>>>> Stashed changes
     }
 
     void Renderer2D::DrawPrimitives()
@@ -42,6 +99,8 @@ namespace Shard::Graphics
     void Renderer2D::Finalize()
     {
     }
+
+    
 
     void Renderer2D::SetProjectionViewMatrix(const glm::mat4& projectionViewMatrix)
     {

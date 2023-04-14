@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "Utility/Singleton.h"
 #include "Primitives/Triangle.h"
-#include "Primitives/Quad.h"
 #include "RenderCommandQueue.h"
 #include <memory>
 
@@ -10,6 +9,11 @@ namespace Shard::Graphics
     class ViewportCamera;
     class Window;
 
+    struct SceneData
+    {
+        glm::mat4 ProjectionViewMatrix = Global::IdentityMatrix;
+    };
+    
     enum class PrimitiveType
     {
         Triangle, Quad, TextedQuad
@@ -18,24 +22,15 @@ namespace Shard::Graphics
     class Renderer2D : public Singleton<Renderer2D>
     {
     public:
-        std::shared_ptr<Shader> FlatColorShader() const
-        {
-            return m_FlatColorShader;
-        }
-
-        std::shared_ptr<Shader> VertexColorShader() const
-        {
-            return m_VertexColorShader;
-        }
-
-        std::shared_ptr<Shader> TextureShader() const
-        {
-            return m_TextureShader;
-        }
-
         Renderer2D() = default;
         Renderer2D(Renderer2D&&) = delete;
 
+        void SetProjectionViewMatrix(const glm::mat4& projectionViewMatrix);
+
+        std::shared_ptr<Shader> FlatColorShader() const { return m_FlatColorShader; }
+        std::shared_ptr<Shader> VertexColorShader() const { return m_VertexColorShader; }
+        std::shared_ptr<Shader> TextureShader() const { return m_TextureShader; }
+        
         static Renderer2D& CreateAndInitialize(const std::shared_ptr<Window>& window);
         static void FinalizeAndDestroy();
         
@@ -43,7 +38,6 @@ namespace Shard::Graphics
         void DrawPrimitives();
         void Finalize();
 
-        void SetProjectionViewMatrix(const glm::mat4& projectionViewMatrix);
 
         const std::unique_ptr<RenderCommandQueue>& CommandQueue() const { return m_CommandQueue; } 
         
@@ -58,18 +52,18 @@ namespace Shard::Graphics
             const std::shared_ptr<Shader>& shader = nullptr,
             const std::shared_ptr<Texture>& texture = nullptr);
 
-        
-
     private:
+<<<<<<< Updated upstream
         struct SceneData
         {
             glm::mat4 ProjectionViewMatrix = Global::IdentityMatrix;
         };
         
+=======
+>>>>>>> Stashed changes
         SceneData m_SceneData;
         std::unique_ptr<RenderCommandQueue> m_CommandQueue;
         std::unique_ptr<Triangle> m_TrianglePrimitive;
-        std::unique_ptr<Quad> m_QuadPrimitive;
         
         std::shared_ptr<Shader> m_FlatColorShader;
         std::shared_ptr<Shader> m_VertexColorShader;
