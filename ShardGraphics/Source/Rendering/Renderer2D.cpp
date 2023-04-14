@@ -19,7 +19,7 @@ namespace Shard::Graphics
         glm::vec4 Color;
         glm::vec2 UV;
         glm::vec2 UVScale;
-        float TextureSlot;
+        uint32_t TextureSlot;
     };
     
     struct QuadData
@@ -129,9 +129,9 @@ namespace Shard::Graphics
 
     void Renderer2D::Finalize() {}
 
-    float GetTextureSlot(const std::shared_ptr<Texture>& texture)
+    int GetTextureSlot(const std::shared_ptr<Texture>& texture)
     {
-        float textureSlot = 0.f;
+        int textureSlot = 0.f;
 
         if (texture)
         {
@@ -140,16 +140,16 @@ namespace Shard::Graphics
             {
                 if (g_QuadData.Textures[i]->GetTextureID() == texture->GetTextureID())
                 {
-                    textureSlot = static_cast<float>(i);
+                    textureSlot = i;
                     break;
                 }
             }
 
             // If not exists save the new texture
-            if (textureSlot == 0.f)
+            if (textureSlot == 0)
             {
                 g_QuadData.Textures[g_QuadData.LastTextureSlot] = texture;
-                textureSlot = static_cast<float>(g_QuadData.LastTextureSlot);
+                textureSlot = g_QuadData.LastTextureSlot;
                 g_QuadData.LastTextureSlot++;
             }
         }

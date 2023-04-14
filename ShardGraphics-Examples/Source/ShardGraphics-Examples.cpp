@@ -21,8 +21,8 @@ int main()
     rootWidget->PushWidget<Vector3Widget>(widget);
 
     double lastFrameTime = Time::GetTime();
-    const auto texture1 = Texture2D::Create("Content/Textures/Checkerboard.png");
-    const auto texture2 = Texture2D::Create("Content/Textures/bola.jpg");
+    const auto grid = Texture2D::Create("Content/Textures/Checkerboard.png");
+    const auto bola = Texture2D::Create("Content/Textures/bola.jpg");
     
     while (window->KeepOpened())
     {
@@ -38,9 +38,9 @@ int main()
         renderer2D.SubmitPrimitive(PrimitiveType::Quad, glm::translate(Global::IdentityMatrix, {0, 1, 0}),
             Global::YellowColor);
         renderer2D.SubmitPrimitive(PrimitiveType::Quad, glm::translate(Global::IdentityMatrix, {0, 0, 0}),
-            Global::WhiteColor, texture1);
+            Global::WhiteColor, grid);
         renderer2D.SubmitPrimitive(PrimitiveType::Quad, glm::translate(Global::IdentityMatrix, {1, 0, 0}),
-           Global::WhiteColor,  texture2);
+           Global::WhiteColor,  bola);
         renderer2D.End();
         viewPortCamera.Update(deltaTime);
         
