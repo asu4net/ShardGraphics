@@ -7,6 +7,7 @@
 #include "RenderCommandQueue.h"
 #include "Data/VertexArray.h"
 #include "Data/Shader.h"
+#include "Data/VertexBuffer.h"
 
 namespace Shard::Graphics
 {
@@ -80,14 +81,11 @@ namespace Shard::Graphics
         m_FlatColorShader = Shader::Create("Content/Shaders/FlatColor.glsl");
         m_VertexColorShader = Shader::Create("Content/Shaders/VertexColor.glsl");
         m_TextureShader = Shader::Create("Content/Shaders/Texture.glsl");
-<<<<<<< Updated upstream
-=======
-
+        
         g_QuadData.VertexArray = VertexArray::Create();
         g_QuadData.VertexBuffer = VertexBuffer::Create(QuadData::MaxVertices * sizeof(QuadData::Vertex));
         
         g_QuadData.VertexData = new QuadData::Vertex[QuadData::MaxVertices];
->>>>>>> Stashed changes
     }
 
     void Renderer2D::DrawPrimitives()
