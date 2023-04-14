@@ -36,20 +36,14 @@ in float v_TextureSlot;
 in vec2 v_UV;
 in vec2 v_UVScale;
 
-uniform sampler2D u_TextureIndex[32];
+uniform sampler2D u_TextureSlots[32];
 
 void main()
 {
-    int slot = int(v_TextureSlot);
-    if (slot == 0)
-    {
-        color = v_Color;
-        return;
-    }
-
     vec2 uv;
     uv.x = v_UV.x * v_UVScale.x;
     uv.y = v_UV.y * v_UVScale.y;
 
-    color = texture(u_TextureIndex[slot], uv) * v_Color;
+    int slot = int(v_TextureSlot);
+    color = texture(u_TextureSlots[slot], uv) * v_Color;
 }

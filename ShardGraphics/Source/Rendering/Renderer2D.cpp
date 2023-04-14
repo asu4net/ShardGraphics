@@ -8,6 +8,7 @@
 #include "Data/IndexBuffer.h"
 #include "Data/VertexArray.h"
 #include "Data/Shader.h"
+#include "Data/Texture2D.h"
 #include "Data/VertexBuffer.h"
 
 namespace Shard::Graphics
@@ -51,12 +52,13 @@ namespace Shard::Graphics
         uint32_t QuadCount = 0;
         
         std::array<std::shared_ptr<Texture>, MaxTextureSlots> Textures;
-        uint32_t LastIndex = 1;
+        std::shared_ptr<Texture> WhiteTexture;
+        uint32_t LastTextureSlot = 1;
         uint32_t IndexCount = 0;
     };
 
     static QuadData g_QuadData;
-    static int32_t g_Samplers[QuadData::MaxTextureSlots];
+    static int32_t g_TextureSlots[QuadData::MaxTextureSlots];
     
     Renderer2D& Renderer2D::CreateAndInitialize(const std::shared_ptr<Window>& window)
     {
@@ -84,7 +86,9 @@ namespace Shard::Graphics
 
         g_QuadData.VertexData = new QuadVertex[QuadData::MaxVertices];
         g_QuadData.LastVertex = g_QuadData.VertexData;
-
+        g_QuadData.WhiteTexture = Texture2D::Create("Content/Textures/blank.png");
+        g_QuadData.Textures[0] = g_QuadData.WhiteTexture;
+        
         g_QuadData.VertexArray = VertexArray::Create();
         g_QuadData.VertexBuffer = VertexBuffer::Create(QuadData::MaxVertices * sizeof(QuadVertex));
         g_QuadData.VertexBuffer->SetLayout({
@@ -120,7 +124,7 @@ namespace Shard::Graphics
         delete[] indices;
 
         for (uint32_t i = 0; i < QuadData::MaxTextureSlots; i++)
-            g_Samplers[i] = i;
+            g_TextureSlots[i] = i;
     }
 
     void Renderer2D::Finalize() {}
@@ -132,9 +136,9 @@ namespace Shard::Graphics
         if (texture)
         {
             // Search existing texture
-            for (uint32_t i = 1; i < g_QuadData.LastIndex; i++)
+            for (uint32_t i = 1; i < g_QuadData.LastTextureSlot; i++)
             {
-                if (g_QuadData.Textures[i] == texture)
+                if (g_QuadData.Textures[i]->GetTextureID() == texture->GetTextureID())
                 {
                     textureSlot = static_cast<float>(i);
                     break;
@@ -144,9 +148,9 @@ namespace Shard::Graphics
             // If not exists save the new texture
             if (textureSlot == 0.f)
             {
-                g_QuadData.Textures[g_QuadData.LastIndex] = texture;
-                textureSlot = static_cast<float>(g_QuadData.LastIndex);
-                g_QuadData.LastIndex++;
+                g_QuadData.Textures[g_QuadData.LastTextureSlot] = texture;
+                textureSlot = static_cast<float>(g_QuadData.LastTextureSlot);
+                g_QuadData.LastTextureSlot++;
             }
         }
 
@@ -156,7 +160,7 @@ namespace Shard::Graphics
     void Renderer2D::SubmitQuad(const glm::mat4& modelMatrix, const glm::vec4& color,
         const std::shared_ptr<Texture>& texture, const glm::vec2& uvScale)
     {
-        if (g_QuadData.QuadCount > QuadData::MaxQuads || g_QuadData.LastIndex > QuadData::MaxTextureSlots)
+        if (g_QuadData.QuadCount > QuadData::MaxQuads || g_QuadData.LastTextureSlot > QuadData::MaxTextureSlots)
             NextBatch();
         
         for (int i = 0; i < 4; i++)
@@ -200,7 +204,7 @@ namespace Shard::Graphics
         g_QuadData.VertexBuffer->SetData(g_QuadData.VertexData, static_cast<uint32_t>(reinterpret_cast<uint8_t*>(g_QuadData.LastVertex) -
                         reinterpret_cast<uint8_t*>(g_QuadData.VertexData)));
         
-        for (uint32_t i = 1; i < g_QuadData.LastIndex; i++)
+        for (uint32_t i = 0; i < g_QuadData.LastTextureSlot; i++)
                     g_QuadData.Textures[i]->Bind(i);
         
         m_CommandQueue->Submit<SetUniformMat4Command>(m_TextureShader, "u_ProjectionViewMatrix", m_SceneData.ProjectionViewMatrix);
@@ -221,7 +225,7 @@ namespace Shard::Graphics
         m_SceneData.ProjectionViewMatrix = projectionViewMatrix;
         m_TextureShader->Bind();
         m_TextureShader->SetUniformMat4("u_ProjectionViewMatrix", m_SceneData.ProjectionViewMatrix);
-        m_TextureShader->SetUniformIntArray("u_TextureIndex", g_Samplers, QuadData::MaxQuads);
+        m_TextureShader->SetUniformIntArray("u_TextureSlots", g_TextureSlots, QuadData::MaxQuads);
 
         StartBatch();
     }
@@ -231,7 +235,7 @@ namespace Shard::Graphics
         g_QuadData.LastVertex = g_QuadData.VertexData;
         g_QuadData.QuadCount = 0;
         g_QuadData.IndexCount = 0;
-        g_QuadData.LastIndex = 1;
+        g_QuadData.LastTextureSlot = 1;
     }
 
     void Renderer2D::End()

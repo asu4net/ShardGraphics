@@ -33,8 +33,6 @@ int main()
         const float deltaTime = static_cast<float>(time - lastFrameTime);
         lastFrameTime = time;
         
-        viewPortCamera.Update(deltaTime);
-        
         renderer2D.Begin(viewPortCamera.ProjectionViewMatrix());
         renderer2D.SubmitPrimitive(PrimitiveType::Triangle, glm::translate(Global::IdentityMatrix, trianglePosition));
         renderer2D.SubmitPrimitive(PrimitiveType::Quad, glm::translate(Global::IdentityMatrix, {0, 1, 0}),
@@ -44,6 +42,7 @@ int main()
         renderer2D.SubmitPrimitive(PrimitiveType::Quad, glm::translate(Global::IdentityMatrix, {1, 0, 0}),
            Global::WhiteColor,  texture2);
         renderer2D.End();
+        viewPortCamera.Update(deltaTime);
         
         imGuiRenderer.DrawWidgets();
         window->SwapBuffers();
