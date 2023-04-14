@@ -34,7 +34,8 @@ int main()
         lastFrameTime = time;
         
         viewPortCamera.Update(deltaTime);
-        renderer2D.SetProjectionViewMatrix(viewPortCamera.ProjectionViewMatrix());
+        
+        renderer2D.Begin(viewPortCamera.ProjectionViewMatrix());
         renderer2D.SubmitPrimitive(PrimitiveType::Triangle, glm::translate(Global::IdentityMatrix, trianglePosition));
         renderer2D.SubmitPrimitive(PrimitiveType::Quad, glm::translate(Global::IdentityMatrix, {0, 1, 0}),
             Global::YellowColor);
@@ -42,7 +43,7 @@ int main()
             Global::WhiteColor, texture1);
         renderer2D.SubmitPrimitive(PrimitiveType::Quad, glm::translate(Global::IdentityMatrix, {1, 0, 0}),
            Global::WhiteColor,  texture2);
-        renderer2D.DrawPrimitives();
+        renderer2D.End();
         
         imGuiRenderer.DrawWidgets();
         window->SwapBuffers();
