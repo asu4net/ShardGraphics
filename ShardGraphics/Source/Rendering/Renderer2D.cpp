@@ -128,11 +128,11 @@ namespace Shard::Graphics
     }
 
     void Renderer2D::Finalize() {}
-
+    
     int GetTextureSlot(const std::shared_ptr<Texture>& texture)
     {
-        int textureSlot = 0.f;
-
+        int textureSlot = 0;
+        
         if (texture)
         {
             // Search existing texture

@@ -43,6 +43,11 @@ project "ShardGraphics-Examples"
     {
         "ShardGraphics"
     }
+
+    postbuildcommands
+	{
+		("{COPY} ../%{file.relpath}/Content ../Binaries/" .. outputdir .. "/%{prj.name}/Content")
+	}
     
     filter "system:windows"
         systemversion "latest"
