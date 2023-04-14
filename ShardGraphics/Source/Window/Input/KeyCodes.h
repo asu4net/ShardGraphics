@@ -1,3 +1,5 @@
+#pragma once
+
 /*! @name Key and button actions
  *  @{ */
 /*! @brief The key or mouse button was released.

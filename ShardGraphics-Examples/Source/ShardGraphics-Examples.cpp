@@ -1,8 +1,4 @@
 #include <ShardGraphics.h>
-#include "ImGui/Widgets/Vector3Widget.h"
-#include "Rendering/ViewportCamera.h"
-#include "Rendering/Data/Texture2D.h"
-#include "Window/Time/Time.h"
 
 using namespace Shard::Graphics;
 using namespace Shard;
