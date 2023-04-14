@@ -21,7 +21,8 @@ int main()
     rootWidget->PushWidget<Vector3Widget>(widget);
 
     double lastFrameTime = Time::GetTime();
-    auto texture = Texture2D::Create("Content/Textures/Checkerboard.png");
+    const auto grid = Texture2D::Create("Content/Textures/Checkerboard.png");
+    const auto bola = Texture2D::Create("Content/Textures/bola.jpg");
     
     while (window->KeepOpened())
     {
@@ -32,14 +33,16 @@ int main()
         const float deltaTime = static_cast<float>(time - lastFrameTime);
         lastFrameTime = time;
         
-        viewPortCamera.Update(deltaTime);
-        renderer2D.SetProjectionViewMatrix(viewPortCamera.ProjectionViewMatrix());
+        renderer2D.Begin(viewPortCamera.ProjectionViewMatrix());
         renderer2D.SubmitPrimitive(PrimitiveType::Triangle, glm::translate(Global::IdentityMatrix, trianglePosition));
-        renderer2D.SubmitPrimitive(PrimitiveType::TextedQuad, Global::IdentityMatrix, Global::WhiteColor, renderer2D.TextureShader()
-            , texture);
         renderer2D.SubmitPrimitive(PrimitiveType::Quad, glm::translate(Global::IdentityMatrix, {0, 1, 0}),
             Global::YellowColor);
-        renderer2D.DrawPrimitives();
+        renderer2D.SubmitPrimitive(PrimitiveType::Quad, glm::translate(Global::IdentityMatrix, {0, 0, 0}),
+            Global::WhiteColor, grid);
+        renderer2D.SubmitPrimitive(PrimitiveType::Quad, glm::translate(Global::IdentityMatrix, {1, 0, 0}),
+           Global::WhiteColor,  bola);
+        renderer2D.End();
+        viewPortCamera.Update(deltaTime);
         
         imGuiRenderer.DrawWidgets();
         window->SwapBuffers();

@@ -37,6 +37,6 @@ namespace Shard::Graphics
 
     void Texture2D::Bind(const uint32_t slot) const
     {
-        glBindTextureUnit(0, m_TextureID);
+        glBindTextureUnit(slot, m_TextureID);
     }
 }

@@ -177,19 +177,21 @@ namespace Shard::Graphics
     class DrawElementsCommand : public RenderCommand
     {
     public:
-        DrawElementsCommand(const std::shared_ptr<VertexArray>& vertexArray)
+        DrawElementsCommand(const std::shared_ptr<VertexArray>& vertexArray, const uint32_t elementCount)
             : RenderCommand()
             , m_VertexArray(vertexArray)
+            , m_ElementCount(elementCount)
         {}
 
         const char* GetName() const override { return "DrawElements"; }
         
         void Execute() override
         {
-            GetRendererAPI()->DrawElements(m_VertexArray);
+            GetRendererAPI()->DrawElements(m_VertexArray, m_ElementCount);
         }
 
     private:
         std::shared_ptr<VertexArray> m_VertexArray;
+        const uint32_t m_ElementCount;
     };
 }

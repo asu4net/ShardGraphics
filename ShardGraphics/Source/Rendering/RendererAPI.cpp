@@ -25,10 +25,10 @@ namespace Shard::Graphics
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void RendererAPI::DrawElements(const std::shared_ptr<VertexArray>& vertexArray)
+    void RendererAPI::DrawElements(const std::shared_ptr<VertexArray>& vertexArray, const uint32_t elementCount)
     {
         vertexArray->Bind();
-        glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, elementCount, GL_UNSIGNED_INT, nullptr);
         vertexArray->Unbind();
     }
 }

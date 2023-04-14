@@ -12,7 +12,10 @@ namespace Shard::Graphics
         public:
 #ifdef SH_DEBUG
         inline static bool EnableDebugMessages = false;
-        inline static std::function<void(const std::string& message)> OnDebugMessage = [](const std::string& message){};
+        inline static std::function<void(const std::string& message)> OnDebugMessage = [](const std::string& message)
+        {
+            printf("%s \n", message.c_str());
+        };
 #endif
         RenderingContext(void* windowHandler);
         
