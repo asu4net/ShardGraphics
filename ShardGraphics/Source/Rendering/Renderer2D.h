@@ -53,14 +53,6 @@ namespace Shard::Graphics
             const std::shared_ptr<Texture>& texture = nullptr);
 
     private:
-<<<<<<< Updated upstream
-        struct SceneData
-        {
-            glm::mat4 ProjectionViewMatrix = Global::IdentityMatrix;
-        };
-        
-=======
->>>>>>> Stashed changes
         SceneData m_SceneData;
         std::unique_ptr<RenderCommandQueue> m_CommandQueue;
         std::unique_ptr<Triangle> m_TrianglePrimitive;
