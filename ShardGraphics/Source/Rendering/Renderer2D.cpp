@@ -86,7 +86,10 @@ namespace Shard::Graphics
     {
         Renderer2D& renderer2D = Renderer2D::CreateSingleton();
         renderer2D.Initialize();
-        renderer2D.SetViewPort(0, 0, window->GetWidth(), window->GetHeight());
+        window->Events().ResizeEvent.Add([](const int width, const int height)
+        {
+            Renderer2D::GetInstance().SetViewPort(0, 0, width, height);
+        });
         return renderer2D;
     }
 

@@ -35,8 +35,8 @@ namespace Shard::Graphics
     void GraphicApplication::Update(const float deltaTime)
     {
         m_Window->PollEvents();
-        
         Renderer2D.ClearScreen();
+        m_ViewportCamera->AspectRatio = m_Window->GetAspect();
         m_ViewportCamera->Update(deltaTime);
         Renderer2D.Begin(m_ViewportCamera->ProjectionViewMatrix());
         OnUpdate(deltaTime);
