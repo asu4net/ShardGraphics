@@ -1,50 +1,41 @@
-#include <ShardGraphics.h>
+#include "GraphicApplication.h"
 
 using namespace Shard::Graphics;
 using namespace Shard;
 
-int main()
+class ExampleApplication : public GraphicApplication
 {
-    const auto window = Window::CreateAndInitialize();
-    Renderer2D& renderer2D = Renderer2D::CreateAndInitialize(window);
-    ImGuiRenderer& imGuiRenderer = ImGuiRenderer::CreateAndInitialize(window);
-    
-    ViewportCamera viewPortCamera;
-    
-    glm::vec3 trianglePosition = Global::RightVector * 2.f;
-    const auto rootWidget = imGuiRenderer.CreateRootWidget<ImGuiWidget>("Settings");
-    Vector3Widget widget(trianglePosition, "Position");
-    rootWidget->PushWidget<Vector3Widget>(widget);
+public:
+    std::shared_ptr<Texture> GridTexture;
+    std::shared_ptr<Texture> BallTexture;
+    glm::vec3 BallPosition = Global::RightVector * 2.f;
+    Quad Grid;
 
-    double lastFrameTime = Time::GetTime();
-    const auto grid = Texture2D::Create("Content/Textures/Checkerboard.png");
-    const auto bola = Texture2D::Create("Content/Textures/bola.jpg");
-    
-    while (window->KeepOpened())
+protected:
+    void OnCreate() override
     {
-        window->PollEvents();
-        renderer2D.ClearScreen();
+        GridTexture = Texture2D::Create("Content/Textures/Checkerboard.png");
+        BallTexture = Texture2D::Create("Content/Textures/bola.jpg");
+        GetRootWidget()->PushWidget<Vector3Widget>(BallPosition, "Ball Position");
 
-        const double time = Time::GetTime();
-        const float deltaTime = static_cast<float>(time - lastFrameTime);
-        lastFrameTime = time;
-        
-        renderer2D.Begin(viewPortCamera.ProjectionViewMatrix());
-        renderer2D.SubmitPrimitive(PrimitiveType::Triangle, glm::translate(Global::IdentityMatrix, trianglePosition));
-        renderer2D.SubmitPrimitive(PrimitiveType::Quad, glm::translate(Global::IdentityMatrix, {0, 1, 0}),
-            Global::YellowColor);
-        renderer2D.SubmitPrimitive(PrimitiveType::Quad, glm::translate(Global::IdentityMatrix, {0, 0, 0}),
-            Global::WhiteColor, grid);
-        renderer2D.SubmitPrimitive(PrimitiveType::Quad, glm::translate(Global::IdentityMatrix, {1, 0, 0}),
-           Global::WhiteColor,  bola);
-        renderer2D.End();
-        viewPortCamera.Update(deltaTime);
-        
-        imGuiRenderer.DrawWidgets();
-        window->SwapBuffers();
+        Grid.Texture = GridTexture;
+        Grid.Size *= 30;
+        Grid.UVScale *= 30;
+        Grid.Color = Global::DarkGreyColor;
     }
 
-    ImGuiRenderer::FinalizeAndDestroy();
-    Renderer2D::FinalizeAndDestroy();
-    window->Finalize();
+    void OnUpdate(float deltaTime) override
+    {
+        Renderer2D.SubmitQuad(Grid);
+        Renderer2D.SubmitQuad({glm::translate(Global::IdentityMatrix, {1, 0, 0}), Global::LightRedColor});
+        Renderer2D.SubmitQuad({glm::translate(Global::IdentityMatrix, {0, 1, 0}), Global::YellowColor});
+        Renderer2D.SubmitQuad({Global::IdentityMatrix, Global::LightBlueColor});
+        Renderer2D.SubmitQuad({glm::translate(Global::IdentityMatrix, BallPosition), Global::WhiteColor,  BallTexture});
+    }
+};
+
+int main()
+{
+    ExampleApplication exampleApplication;
+    exampleApplication.Create();
 }

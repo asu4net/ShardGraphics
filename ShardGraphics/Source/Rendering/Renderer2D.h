@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "Utility/Singleton.h"
-#include "Primitives/Triangle.h"
 #include "RenderCommandQueue.h"
+#include "Math/Math.h"
 #include <memory>
 
 namespace Shard::Graphics
@@ -9,9 +9,16 @@ namespace Shard::Graphics
     class ViewportCamera;
     class Window;
 
-    enum class PrimitiveType
+    struct Quad
     {
-        Triangle, Quad
+        glm::mat4 ModelMatrix = Global::IdentityMatrix;
+        glm::vec4 Color = Global::WhiteColor;
+        std::shared_ptr<Texture> Texture = nullptr;
+        bool bIsSubTexture = false;
+        glm::vec2 SubTextureSize = Global::OneVector;
+        glm::vec2 LocationInAtlas = Global::ZeroVector;
+        glm::vec2 UVScale = Global::OneVector;
+        glm::vec2 Size = Global::OneVector;
     };
     
     class Renderer2D : public Singleton<Renderer2D>
@@ -50,15 +57,7 @@ namespace Shard::Graphics
         void SetClearColor(const glm::vec4 clearColor);
         void Clear();
         void SetViewPort(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
-        void SubmitQuad(const glm::mat4& modelMatrix, const glm::vec4& color, const std::shared_ptr<Texture>& texture,
-        const glm::vec2& uvScale);
-        void SubmitPrimitive(
-            PrimitiveType type,
-            const glm::mat4& modelMatrix = Global::IdentityMatrix,
-            const glm::vec4& color = Global::WhiteColor,
-            const std::shared_ptr<Texture>& texture = nullptr);
-
-        
+        void SubmitQuad(const Quad& quadProperties);
 
     private:
         struct SceneData
@@ -67,7 +66,6 @@ namespace Shard::Graphics
         };
         SceneData m_SceneData;
         std::unique_ptr<RenderCommandQueue> m_CommandQueue;
-        std::unique_ptr<Triangle> m_TrianglePrimitive;
         
         std::shared_ptr<Shader> m_FlatColorShader;
         std::shared_ptr<Shader> m_VertexColorShader;

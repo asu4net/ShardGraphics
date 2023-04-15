@@ -22,8 +22,6 @@
 #include "Rendering/Data/VertexArray.h"
 #include "Rendering/Data/VertexBuffer.h"
 
-#include "Rendering/Primitives/Triangle.h"
-
 #include "Rendering/RenderCommand.h"
 #include "Rendering/RenderCommandQueue.h"
 #include "Rendering/Renderer2D.h"
