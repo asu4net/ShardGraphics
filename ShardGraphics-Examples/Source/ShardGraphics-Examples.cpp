@@ -14,7 +14,7 @@ public:
 protected:
     void OnCreate() override
     {
-        GridTexture = Texture2D::Create("Content/Textures/Checkerboard.png");
+        GridTexture = Texture2D::Create("Content/Textures/Checkerboard.png", {MagFilter::Nearest});
         BallTexture = Texture2D::Create("Content/Textures/bola.jpg");
         GetRootWidget()->PushWidget<Vector3Widget>(BallPosition, "Ball Position");
 

@@ -20,24 +20,19 @@ namespace Shard::Graphics
         glm::vec2 UVScale = Global::OneVector;
         glm::vec2 Size = Global::OneVector;
     };
+
+    struct Renderer2DSettings
+    {
+        bool bReadShadersFromFiles = true;
+        std::string FlatColorShaderLocation = "Content/Shaders/FlatColor.glsl";
+        std::string TextureShaderLocation = "Content/Shaders/Texture.glsl";
+    };
     
     class Renderer2D : public Singleton<Renderer2D>
     {
     public:
-        std::shared_ptr<Shader> FlatColorShader() const
-        {
-            return m_FlatColorShader;
-        }
-
-        std::shared_ptr<Shader> VertexColorShader() const
-        {
-            return m_VertexColorShader;
-        }
-
-        std::shared_ptr<Shader> TextureShader() const
-        {
-            return m_TextureShader;
-        }
+        std::shared_ptr<Shader> FlatColorShader() const { return m_FlatColorShader; }
+        std::shared_ptr<Shader> TextureShader() const { return m_TextureShader; }
 
         Renderer2D() = default;
         Renderer2D(Renderer2D&&) = delete;
@@ -45,7 +40,7 @@ namespace Shard::Graphics
         static Renderer2D& CreateAndInitialize(const std::shared_ptr<Window>& window);
         static void FinalizeAndDestroy();
         
-        void Initialize();
+        void Initialize(const Renderer2DSettings& rendererSettings = {});
         void Finalize();
 
         void Begin(const glm::mat4& projectionViewMatrix = Global::IdentityMatrix);
@@ -68,12 +63,11 @@ namespace Shard::Graphics
         std::unique_ptr<RenderCommandQueue> m_CommandQueue;
         
         std::shared_ptr<Shader> m_FlatColorShader;
-        std::shared_ptr<Shader> m_VertexColorShader;
         std::shared_ptr<Shader> m_TextureShader;
 
         void StartBatch();
         void Flush();
-
         void NextBatch();
+        void CreateShaders(const Renderer2DSettings& rendererSettings);
     };
 }

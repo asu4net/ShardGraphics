@@ -28,6 +28,7 @@
 #include "Rendering/RendererAPI.h"
 #include "Rendering/RenderingContext.h"
 #include "Rendering/ViewportCamera.h"
+#include "Rendering/RawShaderStrings.h"
 
 // Window
 

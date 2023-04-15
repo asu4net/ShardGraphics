@@ -3,7 +3,6 @@
 #include <fstream>
 #include <vector>
 #include <glad/glad.h>
-
 #include "glm/gtc/type_ptr.hpp"
 
 namespace Shard::Graphics
@@ -13,11 +12,29 @@ namespace Shard::Graphics
         return std::make_shared<Shader>(fileLocation);
     }
 
+    std::shared_ptr<Shader> Shader::Create()
+    {
+        return std::make_shared<Shader>();
+    }
+
     Shader::Shader(const std::string& fileLocation)
         : m_ShaderId(0)
+        , m_bInitialized(false)
     {
         std::string vertexSource, fragmentSource;
-        ReadFromFile(fileLocation, vertexSource, fragmentSource);
+        if (ReadFromFile(fileLocation, vertexSource, fragmentSource))
+            Compile(vertexSource, fragmentSource);
+    }
+
+    Shader::Shader()
+        : m_ShaderId(0)
+        , m_bInitialized(false)
+    {
+    }
+
+    void Shader::Compile(const std::string& vertexSource, const std::string& fragmentSource)
+    {
+        if (m_bInitialized) return;
         
         // Create an empty vertex shader handle
         const GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -40,7 +57,8 @@ namespace Shard::Graphics
             // The maxLength includes the NULL character
             std::vector<GLchar> infoLog(maxLength);
             glGetShaderInfoLog(vertexShader, maxLength, &maxLength, infoLog.data());
-
+            printf("Error compiling the vertex shader: '%s'\n", infoLog.data());
+            
             // We don't need the shader anymore.
             glDeleteShader(vertexShader);
 
@@ -67,7 +85,8 @@ namespace Shard::Graphics
             // The maxLength includes the NULL character
             std::vector<GLchar> infoLog(maxLength);
             glGetShaderInfoLog(fragmentShader, maxLength, &maxLength, infoLog.data());
-
+            printf("Error compiling the fragment shader: '%s'\n", infoLog.data());
+            
             // We don't need the shader anymore.
             glDeleteShader(fragmentShader);
             // Either of them. Don't leak shaders.
@@ -112,22 +131,24 @@ namespace Shard::Graphics
         // Always detach shaders after a successful link.
         glDetachShader(m_ShaderId, vertexShader);
         glDetachShader(m_ShaderId, fragmentShader);
+
+        m_bInitialized = true;
     }
-    
+
     Shader::~Shader()
     {
         glDeleteProgram(m_ShaderId);
     }
     
-    void Shader::ReadFromFile(const std::string& fileLocation, std::string& vertexSource, std::string& fragmentSource)
+    bool Shader::ReadFromFile(const std::string& fileLocation, std::string& vertexSource, std::string& fragmentSource)
     {
         static std::string content;
         std::ifstream fileStream(fileLocation, std::ios::in);
 
         if (!fileStream.is_open())
         {
-            printf("Failed to read %s! File doesn't exist.", fileLocation.c_str());
-            return;
+            printf("Failed to read %s! File doesn't exist.\n", fileLocation.c_str());
+            return false;
         }
         
         std::string line;
@@ -163,6 +184,7 @@ namespace Shard::Graphics
         }
 
         fileStream.close();
+        return true;
     }
 
     void Shader::SetUniformMat4(const char* uniformName, const glm::mat4& mat) const

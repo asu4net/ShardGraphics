@@ -9,6 +9,7 @@
 #include "Data/Shader.h"
 #include "Data/Texture2D.h"
 #include "Data/VertexBuffer.h"
+#include "RawShaderStrings.h"
 
 namespace Shard::Graphics
 {
@@ -100,14 +101,39 @@ namespace Shard::Graphics
         DestroySingleton();
     }
 
-    void Renderer2D::Initialize()
+    void Renderer2D::CreateShaders(const Renderer2DSettings& rendererSettings)
+    {
+        if (rendererSettings.bReadShadersFromFiles)
+        {
+            m_FlatColorShader = Shader::Create(rendererSettings.FlatColorShaderLocation);
+            if (!m_FlatColorShader->Initialized())
+            {
+                m_FlatColorShader->Compile(g_FlatColorVertexShaderSource, g_FlatColorFragmentShaderSource);
+                printf("FlatColorShader: Using raw string shader source.\n");
+            }
+        
+            m_TextureShader = Shader::Create(rendererSettings.TextureShaderLocation);
+            if (!m_TextureShader->Initialized())
+            {
+                m_TextureShader->Compile(g_TextureVertexShaderSource, g_TextureFragmentShaderSource);
+                printf("TextureShader: Using raw string shader source.\n");
+            }
+            return;
+        }
+
+        m_FlatColorShader = Shader::Create();
+        m_FlatColorShader->Compile(g_FlatColorVertexShaderSource, g_FlatColorFragmentShaderSource);
+        
+        m_TextureShader = Shader::Create();
+        m_TextureShader->Compile(g_TextureVertexShaderSource, g_TextureFragmentShaderSource);
+    }
+    
+    void Renderer2D::Initialize(const Renderer2DSettings& rendererSettings)
     {
         m_CommandQueue = std::make_unique<RenderCommandQueue>();
-
-        m_FlatColorShader = Shader::Create("Content/Shaders/FlatColor.glsl");
-        m_VertexColorShader = Shader::Create("Content/Shaders/VertexColor.glsl");
-        m_TextureShader = Shader::Create("Content/Shaders/Texture.glsl");
-
+        
+        CreateShaders(rendererSettings);
+        
         g_QuadRenderData.VertexData = new QuadVertex[QuadRenderData::MaxVertices];
         g_QuadRenderData.LastVertex = g_QuadRenderData.VertexData;
         g_QuadRenderData.WhiteTexture = Texture2D::Create("Content/Textures/blank.png");
