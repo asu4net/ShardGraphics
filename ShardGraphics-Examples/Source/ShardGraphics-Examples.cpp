@@ -7,7 +7,8 @@ class ExampleApplication : public GraphicApplication
 {
 public:
     std::shared_ptr<Texture> GridTexture;
-    std::shared_ptr<Texture> BallTexture;
+    std::shared_ptr<Texture> CatTexture;
+    std::shared_ptr<Texture> CppTexture;
     glm::vec3 BallPosition = Global::RightVector * 2.f;
     Quad Grid;
 
@@ -15,7 +16,9 @@ protected:
     void OnCreate() override
     {
         GridTexture = Texture2D::Create("Content/Textures/Checkerboard.png", {MagFilter::Nearest});
-        BallTexture = Texture2D::Create("Content/Textures/bola.jpg");
+        CatTexture = Texture2D::Create("Content/Textures/bola.jpg");
+        CppTexture = Texture2D::Create("Content/Textures/cpp.png");
+        
         GetRootWidget()->PushWidget<Vector3Widget>(BallPosition, "Cat Pos");
         
         Grid.Texture = GridTexture;
@@ -30,7 +33,8 @@ protected:
         Renderer2D.SubmitQuad({glm::translate(Global::IdentityMatrix, {1, 0, 0}), Global::LightRedColor});
         Renderer2D.SubmitQuad({glm::translate(Global::IdentityMatrix, {0, 1, 0}), Global::YellowColor});
         Renderer2D.SubmitQuad({Global::IdentityMatrix, Global::LightBlueColor});
-        Renderer2D.SubmitQuad({glm::translate(Global::IdentityMatrix, BallPosition), Global::WhiteColor,  BallTexture});
+        Renderer2D.SubmitQuad({glm::translate(Global::IdentityMatrix, BallPosition), Global::WhiteColor,  CatTexture});
+        Renderer2D.SubmitQuad({glm::translate(Global::IdentityMatrix, {0, -1, 0}), Global::WhiteColor,  CppTexture});
     }
 };
 

@@ -1,5 +1,6 @@
 ﻿#include "Renderer2D.h"
 #include <array>
+
 #include "Window/Window.h"
 #include "RenderCommand.h"
 #include "RenderCommandQueue.h"
@@ -130,7 +131,7 @@ namespace Shard::Graphics
     void Renderer2D::Initialize(const Renderer2DSettings& rendererSettings)
     {
         m_CommandQueue = std::make_unique<RenderCommandQueue>();
-        
+        SetBlendingMode(BlendingMode::Alpha);
         CreateShaders(rendererSettings);
         
         g_QuadRenderData.VertexData = new QuadVertex[QuadRenderData::MaxVertices];
@@ -176,6 +177,7 @@ namespace Shard::Graphics
 
         for (uint32_t i = 0; i < QuadRenderData::MaxTextureSlots; i++)
             g_TextureSlots[i] = i;
+
     }
 
     void Renderer2D::Finalize()
@@ -291,5 +293,10 @@ namespace Shard::Graphics
     void Renderer2D::SetViewPort(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
     {
         m_CommandQueue->Submit<SetViewPortCommand>(x, y, width, height);
+    }
+
+    void Renderer2D::SetBlendingMode(const BlendingMode blendingMode)
+    {
+        m_CommandQueue->Submit<SetBlendingModeCommand>(blendingMode);
     }
 }

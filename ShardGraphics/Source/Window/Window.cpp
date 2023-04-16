@@ -26,10 +26,10 @@ namespace Shard::Graphics
         
         assert(glfwInit() && "GLFW initialisation failed!");
         
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_Config.OpenGlMajorVersion);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, m_Config.OpenGlMinorVersion);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
+        // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_Config.OpenGlMajorVersion);
+        // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, m_Config.OpenGlMinorVersion);
+        // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
         
         m_WindowHandler = glfwCreateWindow(m_Config.Width, m_Config.Height, m_Config.Title.c_str(), nullptr, nullptr);
         assert(m_WindowHandler && "Window creation failed!");

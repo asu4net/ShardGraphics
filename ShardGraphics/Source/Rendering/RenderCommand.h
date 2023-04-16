@@ -71,6 +71,25 @@ namespace Shard::Graphics
         }
     };
 
+    class SetBlendingModeCommand : public RenderCommand
+    {
+        const char* GetName() const override { return "Set Blending mode"; }
+
+    public:
+        SetBlendingModeCommand(const BlendingMode blendingMode)
+            : RenderCommand()
+            , m_BlendingMode(blendingMode)
+        {}
+        
+        void Execute() override
+        {
+            GetRendererAPI()->SetBlendingMode(m_BlendingMode);
+        }
+
+    private:
+        BlendingMode m_BlendingMode;
+    };
+
     class SetUniformCommand : public RenderCommand
     {
     public:

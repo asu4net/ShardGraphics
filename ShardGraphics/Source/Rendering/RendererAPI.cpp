@@ -25,6 +25,25 @@ namespace Shard::Graphics
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
+    void RendererAPI::SetBlendingMode(const BlendingMode blendingMode)
+    {
+        glEnable(GL_BLEND);
+        switch (blendingMode) {
+        case BlendingMode::Solid:
+            glBlendFunc(GL_ONE, GL_ZERO);
+            break;
+        case BlendingMode::Alpha:
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            break;
+        case BlendingMode::Add:
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+            break;
+        case BlendingMode::Multiply:
+            glBlendFunc(GL_DST_COLOR, GL_ZERO);
+            break;
+        }
+    }
+
     void RendererAPI::DrawElements(const std::shared_ptr<VertexArray>& vertexArray, const uint32_t elementCount)
     {
         vertexArray->Bind();
