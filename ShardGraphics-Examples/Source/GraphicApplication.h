@@ -1,10 +1,11 @@
 ﻿#pragma once
 #include <ShardGraphics.h>
+#include "Camera/LogicCamera.h"
 
 namespace Shard::Graphics
 {
     class Window;
-    class ViewportCamera;
+    class Camera;
     class ImGuiWidget;
     
     class GraphicApplication
@@ -18,7 +19,7 @@ namespace Shard::Graphics
         GraphicApplication();
         virtual ~GraphicApplication();
 
-        const std::shared_ptr<ViewportCamera>& GetViewportCamera() const { return m_ViewportCamera; }
+        const std::shared_ptr<LogicCamera>& GetCamera() const { return m_LogicCamera; }
         const std::shared_ptr<Window>& GetWindow() const { return m_Window; }
         const std::shared_ptr<ImGuiWidget>& GetRootWidget() const { return m_RootWidget; }
 
@@ -29,7 +30,7 @@ namespace Shard::Graphics
         virtual void OnUpdate(float deltaTime) {}
         
     private:
-        std::shared_ptr<ViewportCamera> m_ViewportCamera;
+        std::shared_ptr<LogicCamera> m_LogicCamera;
         std::shared_ptr<ImGuiWidget> m_RootWidget;
         double m_LastFrameTime;
         

@@ -41,7 +41,7 @@ namespace Shard::Graphics
 #endif
     }
 
-    void RenderingContext::SwapBuffers()
+    void RenderingContext::SwapBuffers() const
     {
         glfwSwapBuffers(GetGlfWwindow(m_WindowHandler));
     }

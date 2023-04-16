@@ -6,16 +6,6 @@
 
 namespace Shard::Graphics
 {
-    void Window::SwapBuffers()
-    {
-        m_Context->SwapBuffers();
-    }
-
-    void Window::PollEvents() const
-    {
-        glfwPollEvents();
-    }
-
     std::shared_ptr<Window> Window::CreateAndInitialize(const Configuration& config)
     {
         auto window = Window::Create();
@@ -73,7 +63,7 @@ namespace Shard::Graphics
         Events().CallEndFinalizeEvent();
     }
 
-    bool Window::KeepOpened()
+    bool Window::IsOpened()
     {
         return !glfwWindowShouldClose(m_WindowHandler) && m_KeepWindowOpened;
     }
@@ -128,6 +118,12 @@ namespace Shard::Graphics
     void WindowMouseButtonPressedCallback(GLFWwindow* windowHandler, const int mouseButton, const bool pressed) { GetEvents(windowHandler).CallMouseButtonPressedEvent(mouseButton, pressed); }
     void WindowMouseButtonReleasedCallback(GLFWwindow* windowHandler, const int mouseButton) { GetEvents(windowHandler).CallMouseButtonReleasedEvent(mouseButton); }
     void WindowScrollCallback(GLFWwindow* windowHandler, const glm::vec2& offset) { GetEvents(windowHandler).CallScrollEvent(offset); }
+
+    void Window::Update()
+    {
+        glfwPollEvents();
+        m_Context->SwapBuffers();
+    }
 
     void Window::SetWindowCallbacks()
     {

@@ -1,23 +1,23 @@
-﻿#include "ViewportCamera.h"
+﻿#include "Camera.h"
+#include "Window/Window.h"
 #include "Window/Input/Input.h"
 
 namespace Shard::Graphics
 {
-    ViewportCamera::ViewportCamera(const Projection startProjection)
+    Camera::Camera(const Projection startProjection)
         : CurrentProjection(startProjection)
         , Size(3.f)
         , Fov(85.f)
         , NearPlane(0.1f)
         , FarPlane(1000.f)
-        , AspectRatio(1280.f / 720.f)
         , Position(Global::ForwardVector * -2.f)
         , Rotation(Global::IdentityMatrix)
-        , MoveSpeed(2.f)
+        , AspectRatio(1280.f / 720.f)
         , m_ProjectionViewMatrix(Global::IdentityMatrix)
     {
     }
 
-    void ViewportCamera::UpdateMatrix()
+    void Camera::UpdateMatrix()
     {
         glm::mat4 viewMatrix = Global::IdentityMatrix;
         CalculateView(viewMatrix);
@@ -33,29 +33,7 @@ namespace Shard::Graphics
         m_ProjectionViewMatrix = projectionMatrix * viewMatrix;
     }
 
-    void ViewportCamera::Update(const float deltaTime)
-    {
-        UpdateMatrix();
-        
-        const float displacement = MoveSpeed * deltaTime;
-       
-        if (Input::IsKeyPressed(KEY_S))
-            Position.z -= displacement;
-        if (Input::IsKeyPressed(KEY_W))
-            Position.z += displacement;
-            
-        if (Input::IsKeyPressed(KEY_A))
-            Position.x -= displacement;
-        if (Input::IsKeyPressed(KEY_D))
-            Position.x += displacement;
-
-        if (Input::IsKeyPressed(KEY_LEFT_SHIFT))
-            Position.y -= displacement;
-        if (Input::IsKeyPressed(KEY_SPACE))
-            Position.y += displacement;
-    }
-
-    void ViewportCamera::CalculateView(glm::mat4& viewMatrix)
+    void Camera::CalculateView(glm::mat4& viewMatrix)
     {
         glm::vec3 tweakedPosition = Position;
         tweakedPosition.z *= -1;
@@ -63,13 +41,13 @@ namespace Shard::Graphics
         viewMatrix = glm::inverse(viewMatrix);
     }
 
-    void ViewportCamera::CalculatePerspectiveProjection(glm::mat4& projectionMatrix)
+    void Camera::CalculatePerspectiveProjection(glm::mat4& projectionMatrix)
     {
         projectionMatrix = glm::perspective(glm::radians(Fov), AspectRatio,
             NearPlane, FarPlane);
     }
 
-    void ViewportCamera::CalculateOrthographicProjection(glm::mat4& projectionMatrix)
+    void Camera::CalculateOrthographicProjection(glm::mat4& projectionMatrix)
     {
         const float right = AspectRatio * Size; //update aspect ratio
         const float left = -right;

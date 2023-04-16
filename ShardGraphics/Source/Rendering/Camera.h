@@ -1,9 +1,13 @@
 ﻿#pragma once
+#include <memory>
+
 #include "Math/Math.h"
 
 namespace Shard::Graphics
 {
-    class ViewportCamera
+    class Window;
+    
+    class Camera
     {
     public:
         enum class Projection { None, Perspective, Orthographic };
@@ -13,17 +17,16 @@ namespace Shard::Graphics
         float Fov;
         float NearPlane;
         float FarPlane;
-        float AspectRatio;
         glm::vec3 Position;
         glm::quat Rotation;
-        float MoveSpeed;
+        float AspectRatio;
         
-        ViewportCamera(Projection startProjection = Projection::Perspective);
-
+        Camera(Projection startProjection = Projection::Perspective);
+        virtual ~Camera() = default;
+        
         glm::mat4 ProjectionViewMatrix() const { return m_ProjectionViewMatrix; }
-        
+
         void UpdateMatrix();
-        void Update(float deltaTime);
 
         void CalculateView(glm::mat4& viewMatrix);
         void CalculatePerspectiveProjection(glm::mat4& projectionMatrix);

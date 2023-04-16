@@ -33,12 +33,10 @@ namespace Shard::Graphics
         
         virtual void Initialize(const Configuration& config = {});
         virtual void Finalize();
-
-        virtual void SwapBuffers();
         
         virtual WindowEvents& Events() { return m_Events; }
         virtual void Close() { m_KeepWindowOpened = false; }
-        virtual bool KeepOpened();
+        virtual bool IsOpened();
         
         virtual void SetVSync(bool enabled);
         virtual bool IsVSync() const { return m_Config.VSync; }
@@ -58,7 +56,8 @@ namespace Shard::Graphics
 
         void* GetHandler() const { return m_WindowHandler; }
 
-        virtual void PollEvents() const;
+        virtual void Update();
+
         
     private:
         std::shared_ptr<RenderingContext> m_Context;

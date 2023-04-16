@@ -1,5 +1,4 @@
 ﻿#include "Renderer2D.h"
-
 #include <array>
 #include "Window/Window.h"
 #include "RenderCommand.h"
@@ -248,7 +247,7 @@ namespace Shard::Graphics
             g_QuadRenderData.Textures[i]->Bind(i);
         
         m_CommandQueue->Submit<SetUniformMat4Command>(m_TextureShader, "u_ProjectionViewMatrix",
-                                                      m_SceneData.ProjectionViewMatrix);
+            m_RenderData.RenderCamera.ProjectionViewMatrix());
         m_CommandQueue->Submit<DrawElementsCommand>(g_QuadRenderData.VertexArray, g_QuadRenderData.IndexCount);
 
         // TODO: Move this to other thread
@@ -261,11 +260,11 @@ namespace Shard::Graphics
         StartBatch();
     }
 
-    void Renderer2D::Begin(const glm::mat4& projectionViewMatrix)
+    void Renderer2D::Begin(const RenderData& renderData)
     {
-        m_SceneData.ProjectionViewMatrix = projectionViewMatrix;
+        m_RenderData = renderData;
         m_TextureShader->Bind();
-        m_TextureShader->SetUniformMat4("u_ProjectionViewMatrix", m_SceneData.ProjectionViewMatrix);
+        m_TextureShader->SetUniformMat4("u_ProjectionViewMatrix", m_RenderData.RenderCamera.ProjectionViewMatrix());
         m_TextureShader->SetUniformIntArray("u_TextureSlots", g_TextureSlots, QuadRenderData::MaxQuads);
 
         StartBatch();
@@ -286,17 +285,7 @@ namespace Shard::Graphics
 
     void Renderer2D::ClearScreen(const glm::vec4 clearColor)
     {
-        SetClearColor(clearColor);
-        Clear();
-    }
-
-    void Renderer2D::SetClearColor(const glm::vec4 clearColor)
-    {
         m_CommandQueue->Submit<SetClearColorCommand>(clearColor);
-    }
-
-    void Renderer2D::Clear()
-    {
         m_CommandQueue->Submit<ClearCommand>();
     }
 

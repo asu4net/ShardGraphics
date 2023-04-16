@@ -1,4 +1,5 @@
 ﻿#include "GraphicApplication.h"
+#include "Camera/ViewportCameraController.h"
 
 namespace Shard::Graphics
 {
@@ -6,11 +7,11 @@ namespace Shard::Graphics
         : m_Window(Window::CreateAndInitialize())
         , Renderer2D(Renderer2D::CreateAndInitialize(m_Window))
         , ImGuiRenderer(ImGuiRenderer::CreateAndInitialize(m_Window))
-        , m_ViewportCamera(std::make_shared<ViewportCamera>())
+        , m_LogicCamera(std::make_shared<LogicCamera>(m_Window))
         , m_LastFrameTime(Time::GetTime())
     {
     }
-
+    
     GraphicApplication::~GraphicApplication()
     {
         Renderer2D::FinalizeAndDestroy();
@@ -21,9 +22,10 @@ namespace Shard::Graphics
     void GraphicApplication::Create()
     {
         m_RootWidget = ImGuiRenderer::GetInstance().CreateRootWidget<ImGuiWidget>("Settings:");
+        m_LogicCamera->AddController<ViewportCameraController>();
         OnCreate();
         
-        while (m_Window->KeepOpened())
+        while (m_Window->IsOpened())
         {
             const double time = Time::GetTime();
             const float deltaTime = static_cast<float>(time - m_LastFrameTime);
@@ -34,14 +36,12 @@ namespace Shard::Graphics
 
     void GraphicApplication::Update(const float deltaTime)
     {
-        m_Window->PollEvents();
         Renderer2D.ClearScreen();
-        m_ViewportCamera->AspectRatio = m_Window->GetAspect();
-        m_ViewportCamera->Update(deltaTime);
-        Renderer2D.Begin(m_ViewportCamera->ProjectionViewMatrix());
+        m_LogicCamera->Update(deltaTime);
+        Renderer2D.Begin({m_LogicCamera->GetBaseCamera()});
         OnUpdate(deltaTime);
         Renderer2D.End();
         ImGuiRenderer.DrawWidgets();
-        m_Window->SwapBuffers();
+        m_Window->Update();
     }
 }

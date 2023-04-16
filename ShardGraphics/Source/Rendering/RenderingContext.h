@@ -20,7 +20,7 @@ namespace Shard::Graphics
         RenderingContext(void* windowHandler);
         
         void Initialize();
-        void SwapBuffers();
+        void SwapBuffers() const;
 
     private:
         void* m_WindowHandler = nullptr;

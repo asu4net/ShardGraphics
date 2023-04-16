@@ -17,7 +17,7 @@ protected:
         GridTexture = Texture2D::Create("Content/Textures/Checkerboard.png", {MagFilter::Nearest});
         BallTexture = Texture2D::Create("Content/Textures/bola.jpg");
         GetRootWidget()->PushWidget<Vector3Widget>(BallPosition, "Cat Pos");
-
+        
         Grid.Texture = GridTexture;
         Grid.Size *= 30;
         Grid.UVScale *= 30;
