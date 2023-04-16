@@ -1,6 +1,4 @@
 ﻿#pragma once
-#include <memory>
-
 #include "Math/Math.h"
 
 namespace Shard::Graphics
