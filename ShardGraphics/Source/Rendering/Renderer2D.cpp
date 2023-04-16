@@ -305,8 +305,13 @@ namespace Shard::Graphics
         m_CommandQueue->Submit<SetBlendingModeCommand>(blendingMode);
     }
 
-    void Renderer2D::SetBlendingEnabled(const bool enabled)
+    void Renderer2D::SetDepthTestEnabled(const bool bEnabled)
     {
-        m_CommandQueue->Submit<SetBlendingEnabledCommand>(enabled);
+        m_CommandQueue->Submit<SetDepthTestEnabledCommand>(bEnabled);
+    }
+
+    void Renderer2D::SetBlendingEnabled(const bool bEnabled)
+    {
+        m_CommandQueue->Submit<SetBlendingEnabledCommand>(bEnabled);
     }
 }

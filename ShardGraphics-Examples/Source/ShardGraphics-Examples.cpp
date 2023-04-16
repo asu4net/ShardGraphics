@@ -9,7 +9,7 @@ public:
     std::shared_ptr<Texture> GridTexture;
     std::shared_ptr<Texture> CatTexture;
     std::shared_ptr<Texture> CppTexture;
-    glm::vec3 BallPosition = Global::RightVector * 2.f;
+    glm::vec3 BallPosition = {.5f, .3f, 0.f};
     Quad Grid;
 
 protected:

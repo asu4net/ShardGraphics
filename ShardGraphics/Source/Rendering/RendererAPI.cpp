@@ -25,9 +25,9 @@ namespace Shard::Graphics
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void RendererAPI::SetBlendingEnabled(const bool enabled)
+    void RendererAPI::SetBlendingEnabled(const bool bEnabled)
     {
-        if (enabled) glEnable(GL_BLEND);
+        if (bEnabled) glEnable(GL_BLEND);
         else glDisable(GL_BLEND);
     }
 
@@ -54,5 +54,11 @@ namespace Shard::Graphics
         vertexArray->Bind();
         glDrawElements(GL_TRIANGLES, elementCount, GL_UNSIGNED_INT, nullptr);
         vertexArray->Unbind();
+    }
+
+    void RendererAPI::SetDepthTestEnabled(const bool bEnabled)
+    {
+        if (bEnabled) glEnable(GL_DEPTH_TEST);  
+        else glDisable(GL_DEPTH_TEST);
     }
 }

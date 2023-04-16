@@ -109,6 +109,25 @@ namespace Shard::Graphics
         bool m_Enabled;
     };
 
+    class SetDepthTestEnabledCommand : public RenderCommand
+    {
+        const char* GetName() const override { return "Set Blending enabled"; }
+
+    public:
+        SetDepthTestEnabledCommand(const bool enabled)
+            : RenderCommand()
+            , m_Enabled(enabled)
+        {}
+        
+        void Execute() override
+        {
+            GetRendererAPI()->SetDepthTestEnabled(m_Enabled);
+        }
+
+    private:
+        bool m_Enabled;
+    };
+
     class SetUniformCommand : public RenderCommand
     {
     public:

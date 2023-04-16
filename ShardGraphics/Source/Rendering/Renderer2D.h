@@ -60,7 +60,8 @@ namespace Shard::Graphics
         void ClearScreen(const glm::vec4 clearColor = Global::DarkGreyColor);
         void SetViewPort(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
         void SetBlendingMode(const BlendingMode blendingMode);
-        void SetBlendingEnabled(const bool enabled);
+        void SetDepthTestEnabled(const bool bEnabled);
+        void SetBlendingEnabled(const bool bEnabled);
         void SubmitQuad(const Quad& quadProperties);
 
     private:
