@@ -25,9 +25,14 @@ namespace Shard::Graphics
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
+    void RendererAPI::SetBlendingEnabled(const bool enabled)
+    {
+        if (enabled) glEnable(GL_BLEND);
+        else glDisable(GL_BLEND);
+    }
+
     void RendererAPI::SetBlendingMode(const BlendingMode blendingMode)
     {
-        glEnable(GL_BLEND);
         switch (blendingMode) {
         case BlendingMode::Solid:
             glBlendFunc(GL_ONE, GL_ZERO);

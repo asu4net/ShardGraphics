@@ -131,6 +131,7 @@ namespace Shard::Graphics
     void Renderer2D::Initialize(const Renderer2DSettings& rendererSettings)
     {
         m_CommandQueue = std::make_unique<RenderCommandQueue>();
+        SetBlendingEnabled(true);
         SetBlendingMode(BlendingMode::Alpha);
         CreateShaders(rendererSettings);
         
@@ -298,5 +299,10 @@ namespace Shard::Graphics
     void Renderer2D::SetBlendingMode(const BlendingMode blendingMode)
     {
         m_CommandQueue->Submit<SetBlendingModeCommand>(blendingMode);
+    }
+
+    void Renderer2D::SetBlendingEnabled(const bool enabled)
+    {
+        m_CommandQueue->Submit<SetBlendingEnabledCommand>(enabled);
     }
 }

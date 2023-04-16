@@ -89,6 +89,25 @@ namespace Shard::Graphics
     private:
         BlendingMode m_BlendingMode;
     };
+    
+    class SetBlendingEnabledCommand : public RenderCommand
+    {
+        const char* GetName() const override { return "Set Blending enabled"; }
+
+    public:
+        SetBlendingEnabledCommand(const bool enabled)
+            : RenderCommand()
+            , m_Enabled(enabled)
+        {}
+        
+        void Execute() override
+        {
+            GetRendererAPI()->SetBlendingEnabled(m_Enabled);
+        }
+
+    private:
+        bool m_Enabled;
+    };
 
     class SetUniformCommand : public RenderCommand
     {
