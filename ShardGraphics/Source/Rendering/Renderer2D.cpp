@@ -135,7 +135,9 @@ namespace Shard::Graphics
         
         g_QuadRenderData.VertexData = new QuadVertex[QuadRenderData::MaxVertices];
         g_QuadRenderData.LastVertex = g_QuadRenderData.VertexData;
-        g_QuadRenderData.WhiteTexture = Texture2D::Create("Content/Textures/blank.png");
+        g_QuadRenderData.WhiteTexture = Texture2D::Create(1, 1);
+        constexpr uint32_t whiteTextureData = 0xffffffff;
+        std::static_pointer_cast<Texture2D>(g_QuadRenderData.WhiteTexture)->SetData(&whiteTextureData, sizeof(uint32_t));
         g_QuadRenderData.Textures[0] = g_QuadRenderData.WhiteTexture;
 
         g_QuadRenderData.VertexArray = VertexArray::Create();
@@ -246,8 +248,6 @@ namespace Shard::Graphics
         for (uint32_t i = 0; i < g_QuadRenderData.LastTextureSlot; i++)
             g_QuadRenderData.Textures[i]->Bind(i);
         
-        m_CommandQueue->Submit<SetUniformMat4Command>(m_TextureShader, "u_ProjectionViewMatrix",
-            m_RenderData.RenderCamera.ProjectionViewMatrix());
         m_CommandQueue->Submit<DrawElementsCommand>(g_QuadRenderData.VertexArray, g_QuadRenderData.IndexCount);
 
         // TODO: Move this to other thread
@@ -266,7 +266,6 @@ namespace Shard::Graphics
         m_TextureShader->Bind();
         m_TextureShader->SetUniformMat4("u_ProjectionViewMatrix", m_RenderData.RenderCamera.ProjectionViewMatrix());
         m_TextureShader->SetUniformIntArray("u_TextureSlots", g_TextureSlots, QuadRenderData::MaxQuads);
-
         StartBatch();
     }
 
