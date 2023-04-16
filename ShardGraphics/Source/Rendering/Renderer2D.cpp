@@ -185,6 +185,11 @@ namespace Shard::Graphics
     {
     }
 
+    void Renderer2D::SetRenderData(const RenderData& renderData)
+    {
+        m_RenderData = renderData;
+    }
+
     int GetTextureSlot(const std::shared_ptr<Texture>& texture)
     {
         int textureSlot = 0;
@@ -263,9 +268,8 @@ namespace Shard::Graphics
         StartBatch();
     }
 
-    void Renderer2D::Begin(const RenderData& renderData)
+    void Renderer2D::Begin()
     {
-        m_RenderData = renderData;
         m_TextureShader->Bind();
         m_TextureShader->SetUniformMat4("u_ProjectionViewMatrix", m_RenderData.RenderCamera.ProjectionViewMatrix());
         m_TextureShader->SetUniformIntArray("u_TextureSlots", g_TextureSlots, QuadRenderData::MaxQuads);

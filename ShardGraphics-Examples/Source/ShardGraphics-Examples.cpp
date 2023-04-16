@@ -29,12 +29,24 @@ protected:
 
     void OnUpdate(float deltaTime) override
     {
+        Renderer2D.SetRenderData({GetCamera()->GetRenderData()});
+
+        Renderer2D.SetBlendingMode(BlendingMode::Alpha);
+        
+        Renderer2D.Begin();
         Renderer2D.SubmitQuad(Grid);
         Renderer2D.SubmitQuad({glm::translate(Global::IdentityMatrix, {1, 0, 0}), Global::LightRedColor});
         Renderer2D.SubmitQuad({glm::translate(Global::IdentityMatrix, {0, 1, 0}), Global::YellowColor});
         Renderer2D.SubmitQuad({Global::IdentityMatrix, Global::LightBlueColor});
-        Renderer2D.SubmitQuad({glm::translate(Global::IdentityMatrix, BallPosition), Global::WhiteColor,  CatTexture});
         Renderer2D.SubmitQuad({glm::translate(Global::IdentityMatrix, {0, -1, 0}), Global::WhiteColor,  CppTexture});
+        Renderer2D.End();
+
+        Renderer2D.SetBlendingMode(BlendingMode::Add);
+        
+        Renderer2D.Begin();
+        Renderer2D.SubmitQuad({glm::translate(Global::IdentityMatrix, BallPosition), Global::WhiteColor,  CatTexture});
+        Renderer2D.End();
+        
     }
 };
 

@@ -38,9 +38,7 @@ namespace Shard::Graphics
     {
         Renderer2D.ClearScreen();
         m_LogicCamera->Update(deltaTime);
-        Renderer2D.Begin({m_LogicCamera->GetBaseCamera()});
         OnUpdate(deltaTime);
-        Renderer2D.End();
         ImGuiRenderer.DrawWidgets();
         m_Window->Update();
     }

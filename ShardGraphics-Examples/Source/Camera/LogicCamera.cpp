@@ -23,7 +23,7 @@ void LogicCamera::Update(const float deltaTime)
         controller->Update(deltaTime);
 }
 
-Shard::Graphics::Camera LogicCamera::GetBaseCamera()
+Shard::Graphics::Camera LogicCamera::GetRenderData()
 {
     return static_cast<Camera>(*this);
 }

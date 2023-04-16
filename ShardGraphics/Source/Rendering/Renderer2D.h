@@ -50,7 +50,9 @@ namespace Shard::Graphics
         void Initialize(const Renderer2DSettings& rendererSettings = {});
         void Finalize();
 
-        void Begin(const RenderData& renderData = {});
+        void SetRenderData(const RenderData& renderData);
+        
+        void Begin();
         void End();
         
         const std::unique_ptr<RenderCommandQueue>& CommandQueue() const { return m_CommandQueue; } 

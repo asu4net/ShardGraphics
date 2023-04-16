@@ -13,7 +13,7 @@ public:
 
     void Update(const float deltaTime = 0.02f);
 
-    Camera GetBaseCamera();
+    Camera GetRenderData();
     
     template<typename T>
     void AddController()
