@@ -1,4 +1,4 @@
-include "Dependencies.lua"
+include "Libraries.lua"
 
 project "ShardGraphics"
     kind "StaticLib"
@@ -13,36 +13,35 @@ project "ShardGraphics"
     {
         "%{prj.location}/Source/**.h",
         "%{prj.location}/Source/**.cpp",
-        "%{prj.location}/Dependencies/ShardCore/ShardCore/Source/**.h",
-        "%{wks.location}/Dependencies/ThirdParty/glm/Source/**.h",
-        "%{wks.location}/Dependencies/ThirdParty/glm/Source/**.cpp",
-        "%{wks.location}/Dependencies/ThirdParty/glm/Source/**.hpp",
-        "%{wks.location}/Dependencies/ThirdParty/imgui/Source/**.h",
-        "%{wks.location}/Dependencies/ThirdParty/imguizmo/Source/**.h",
-        "%{wks.location}/Dependencies/ThirdParty/imguizmo/Source/**.cpp",
-        "%{prj.location}/Dependencies/ThirdParty/glad/Source/**.h",
-        "%{prj.location}/Dependencies/ThirdParty/glad/Source/**.c",
-        "%{prj.location}/Dependencies/ThirdParty/glfw/Source/**.h",
-        "%{prj.location}/Dependencies/ThirdParty/stb/Source/**.h"
+        "%{SourceDirs.ShardCore}/**.h",
+        "%{SourceDirs.glm}/**.h",
+        "%{SourceDirs.glm}/**.cpp",
+        "%{SourceDirs.glm}/**.hpp",
+        "%{SourceDirs.imgui}/**.h",
+        "%{SourceDirs.imguizmo}/**.h",
+        "%{SourceDirs.imguizmo}/**.cpp",
+        "%{SourceDirs.glad}/**.h",
+        "%{SourceDirs.glad}/**.c",
+        "%{SourceDirs.glfw}/**.h",
+        "%{SourceDirs.stb}/**.h"
     }
 
     includedirs
     {
         "%{prj.location}/Source",
-        "%{Include.ShardCore}",
-        "%{Include.glm}",
-        "%{Include.imgui}",
-        "%{Include.imguizmo}",
-        "%{Include.glad}",
-        "%{Include.glad}",
-        "%{Include.glfw}",
-        "%{Include.stb}"
+        "%{SourceDirs.ShardCore}",
+        "%{SourceDirs.glm}",
+        "%{SourceDirs.imgui}",
+        "%{SourceDirs.imguizmo}",
+        "%{SourceDirs.glad}",
+        "%{SourceDirs.glfw}",
+        "%{SourceDirs.stb}"
     }
 
     libdirs
     {
-        "%{Library.glfw}",
-        "%{Library.imgui}"
+        "%{BinaryDirs.glfw}",
+        "%{BinaryDirs.imgui}"
     }
 
     links

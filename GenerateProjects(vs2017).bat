@@ -1,1 +1,1 @@
-call ThirdParty\premake\Binaries\premake5.exe vs2017
+call Libraries\ThirdParty\premake\Binaries\premake5.exe vs2017

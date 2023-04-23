@@ -1,1 +1,1 @@
-call Dependencies\ThirdParty\premake\Binaries\premake5.exe vs2022
+call Libraries\ThirdParty\premake\Binaries\premake5.exe vs2022
