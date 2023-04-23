@@ -10,7 +10,15 @@ workspace "ShardGraphics"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
-include "ShardGraphics/premake5.lua"
+group "Engine/Dependencies"
+    include "Dependencies/ShardCore/ShardCore/premake5.lua"
+group ""
+
+group "Engine"
+    include "ShardGraphics/premake5.lua"
+group ""
+
+group "Game"
 
 project "ShardGraphics-Examples"
     location "ShardGraphics-Examples"
@@ -28,15 +36,15 @@ project "ShardGraphics-Examples"
         "%{prj.name}/Source/**.cpp",
         "%{prj.name}/Content/**.glsl"
     }
-    
+
     includedirs
     {
         "%{prj.name}/Source",
         "ShardGraphics/Source",
-        "ShardGraphics/Thirdparty/ShardCore/ShardCore/Source",
-        "ShardGraphics/Thirdparty/glm/Source",
-        "ShardGraphics/Thirdparty/imgui/Source",
-        "ShardGraphics/Thirdparty/imguizmo/Source"
+        "%{Include.ShardCore}",
+        "%{Include.glm}",
+        "%{Include.imgui}",
+        "%{Include.imguizmo}"
     }
 
     links
@@ -61,3 +69,5 @@ project "ShardGraphics-Examples"
         defines "SH_RELEASE"
         runtime "Release"
         optimize "on"
+
+group ""

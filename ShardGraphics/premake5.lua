@@ -1,4 +1,4 @@
-include "ThirdParty/ShardCore/ShardCore/premake5.lua"
+include "Dependencies.lua"
 
 project "ShardGraphics"
     kind "StaticLib"
@@ -13,36 +13,36 @@ project "ShardGraphics"
     {
         "%{prj.location}/Source/**.h",
         "%{prj.location}/Source/**.cpp",
-        "%{prj.location}/ThirdParty/ShardCore/ShardCore/Source/**.h",
-        "%{prj.location}/ThirdParty/glm/Source/**.h",
-        "%{prj.location}/ThirdParty/glm/Source/**.cpp",
-        "%{prj.location}/ThirdParty/glm/Source/**.hpp",
-        "%{prj.location}/ThirdParty/glad/Source/**.h",
-        "%{prj.location}/ThirdParty/glad/Source/**.c",
-        "%{prj.location}/ThirdParty/glfw/Source/**.h",
-        "%{prj.location}/ThirdParty/imgui/Source/**.h",
-        "%{prj.location}/ThirdParty/imguizmo/Source/**.h",
-        "%{prj.location}/ThirdParty/imguizmo/Source/**.cpp",
-        "%{prj.location}/ThirdParty/stb/Source/**.h"
+        "%{prj.location}/Dependencies/ShardCore/ShardCore/Source/**.h",
+        "%{wks.location}/Dependencies/ThirdParty/glm/Source/**.h",
+        "%{wks.location}/Dependencies/ThirdParty/glm/Source/**.cpp",
+        "%{wks.location}/Dependencies/ThirdParty/glm/Source/**.hpp",
+        "%{wks.location}/Dependencies/ThirdParty/imgui/Source/**.h",
+        "%{wks.location}/Dependencies/ThirdParty/imguizmo/Source/**.h",
+        "%{wks.location}/Dependencies/ThirdParty/imguizmo/Source/**.cpp",
+        "%{prj.location}/Dependencies/ThirdParty/glad/Source/**.h",
+        "%{prj.location}/Dependencies/ThirdParty/glad/Source/**.c",
+        "%{prj.location}/Dependencies/ThirdParty/glfw/Source/**.h",
+        "%{prj.location}/Dependencies/ThirdParty/stb/Source/**.h"
     }
 
     includedirs
     {
         "%{prj.location}/Source",
-        "%{prj.location}/ThirdParty/ShardCore/ShardCore/Source",
-        "%{prj.location}/ThirdParty/glm/Source",
-        "%{prj.location}/ThirdParty/glad/Source",
-        "%{prj.location}/ThirdParty/glad/Source",
-        "%{prj.location}/ThirdParty/glfw/Source",
-        "%{prj.location}/ThirdParty/imgui/Source",
-        "%{prj.location}/ThirdParty/imguizmo/Source",
-        "%{prj.location}/ThirdParty/stb/Source"
+        "%{Include.ShardCore}",
+        "%{Include.glm}",
+        "%{Include.imgui}",
+        "%{Include.imguizmo}",
+        "%{Include.glad}",
+        "%{Include.glad}",
+        "%{Include.glfw}",
+        "%{Include.stb}"
     }
 
     libdirs
     {
-        "%{prj.location}/ThirdParty/glfw/Binaries",
-        "%{prj.location}/ThirdParty/imgui/Binaries"
+        "%{Library.glfw}",
+        "%{Library.imgui}"
     }
 
     links

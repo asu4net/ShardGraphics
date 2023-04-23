@@ -4,6 +4,8 @@
 
 struct GLFWwindow;
 
+#define MACRO 
+
 namespace Shard::Graphics
 {
     DECLARE_EVENT(class WindowEvents, WindowBeginInitializeEvent);

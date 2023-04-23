@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include <memory>
 #include <string>
-
 #include "imgui.h"
 #include "Delegates/MulticastDelegate.h"
 
